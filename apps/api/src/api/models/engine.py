@@ -26,6 +26,9 @@ AdaptationType = Enum(
 )
 
 
+ModeType = Enum("exposure", "root_zone", name="mode_t", create_type=False)
+
+
 class Job(Base):
     """engine.job (README §13.6). Estado de trabajos persistido en PostgreSQL."""
 
@@ -60,7 +63,7 @@ class AnalysisRun(Base):
     parcel_id: Mapped[UUID | None] = mapped_column(ForeignKey("farm.parcel.parcel_id"))
     period_start: Mapped[date] = mapped_column(Date)
     period_end: Mapped[date] = mapped_column(Date)
-    mode: Mapped[str] = mapped_column(Text)
+    mode: Mapped[str] = mapped_column(ModeType)
     mode_reasons: Mapped[list[str]] = mapped_column(ARRAY(Text))
     params: Mapped[dict[str, Any]] = mapped_column(JSONB)
     params_hash: Mapped[str] = mapped_column(Text)

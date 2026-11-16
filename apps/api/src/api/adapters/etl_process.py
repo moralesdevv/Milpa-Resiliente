@@ -1,8 +1,8 @@
 """Disparo de la ingesta de una zona (R1) como PROCESO externo: la API nunca importa ``milpa_etl``.
 
 Pasos (CLI ``milpa-etl``, README §9), solo los que escriben archivos bajo ``DATA_DIR``:
-``fetch power`` → [``fetch imerg`` → ``merge imerg``, solo con ``EARTHDATA_TOKEN``] → ``curate`` →
-``validate``. El registro de zona, manifiesto y procedencia en PostgreSQL (``milpa-etl register …``)
+``fetch power`` → ``curate`` → ``validate`` → [``fetch imerg`` → ``merge imerg``, solo con
+``EARTHDATA_TOKEN``; el merge exige la serie curada]. El registro de zona, manifiesto y procedencia en PostgreSQL (``milpa-etl register …``)
 exige el rol **propietario**, que el proceso de la API no tiene a propósito (ADR-006): lo ejecuta el
 operador (``make register``). El resultado del trabajo lo informa en ``next_steps``.
 
@@ -147,6 +147,13 @@ class ProcessIngest:
             ],
             log,
         )
+        # Orden de R1 (su README): la curación va ANTES del merge; `merge imerg` exige la serie curada.
+        self._step(
+            "curate",
+            ["curate", "--zone", spec.name, "--lat", lat, "--lon", lon, "--elev", elev],
+            log,
+        )
+        self._step("validate", ["validate", "--zone", spec.name, "--lat", lat, "--elev", elev], log)
         if self.token:
             with tempfile.TemporaryDirectory() as tmp:
                 gj = Path(tmp) / "zone.geojson"
@@ -171,12 +178,6 @@ class ProcessIngest:
                     log,
                 )
             self._step("merge imerg", ["merge", "imerg", "--zone", spec.name], log)
-        self._step(
-            "curate",
-            ["curate", "--zone", spec.name, "--lat", lat, "--lon", lon, "--elev", elev],
-            log,
-        )
-        self._step("validate", ["validate", "--zone", spec.name, "--lat", lat, "--elev", elev], log)
         meta_path = self.data_dir / "curated" / spec.name / "curated_meta.json"
         data_hash = None
         if meta_path.is_file():

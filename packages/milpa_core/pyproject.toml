@@ -1,0 +1,21 @@
+[project]
+name = "milpa-core"
+version = "0.1.0"
+description = "Núcleo científico de MILPA RESILIENTE 3.3 (R2): ET0 FAO-56, Pef por decena, exposición (Modo A), balance (Modo B), cohortes, riesgo, escenarios, ranking, estabilidad y Soil VoI. Sin E/S."
+requires-python = ">=3.11"
+dependencies = ["numpy>=1.26"]
+
+[project.optional-dependencies]
+test = ["pytest>=8"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "tests"]
+filterwarnings = ["error::DeprecationWarning"]

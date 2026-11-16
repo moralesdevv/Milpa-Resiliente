@@ -33,3 +33,6 @@ node_modules/
 
 # Entregas originales de R1 y R4: son repositorios git propios (no se anidan aquí; siguen en disco como referencia)
 references/
+
+# TypeScript incremental build info
+*.tsbuildinfo

@@ -49,6 +49,9 @@ class NotIntegratedEngine:
     def climate_history(self, run: RunRef, params: Mapping[str, Any]) -> Mapping[str, Any]:
         raise self._fail("El historial climático")
 
+    def cycle_table(self, run: RunRef, scenario_id: str, adaptation: str) -> list[dict[str, Any]]:
+        raise self._fail("La tabla de resultados por ciclo")
+
 
 class NotIntegratedEvidence:
     component = "R2 (milpa_core.provenance: reglas de evidencia A/B/C)"

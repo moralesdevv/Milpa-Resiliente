@@ -1,0 +1,61 @@
+# Catálogo de cultivos — SANDBOX.
+# Los números vienen de valores típicos de FAO-56 (Tablas 11, 12 y 22) como CANDIDATOS:
+# citation queda null hasta que R1 + asesor agrónomo verifiquen la tabla y el clima comparable.
+# Con citation null el motor corre y rotula todo como provisional (evidencia máxima C).
+crops:
+  - { code: maiz,   name_es: Maíz,   family: Poaceae,  is_legume: false }
+  - { code: frijol, name_es: Frijol, family: Fabaceae, is_legume: true, fixes_n_conditions: null }   # [Pendiente] condiciones con cita
+  - { code: sorgo,  name_es: Sorgo,  family: Poaceae,  is_legume: false }
+
+varieties:
+  - code: maiz_corto
+    crop: maiz
+    name: "Maíz grano ciclo 125 d (genérico)"
+    phenology_basis: days
+    citation_candidate: "FAO-56 Tabla 11 (maíz grano, clima árido 20/35/40/30) y Tabla 12 [Verificar]"
+    stages:
+      - { code: INI,  seq: 1, length_days: 20, kc_start: 0.30, kc_end: 0.30, critical: false, citation: null }
+      - { code: DEV,  seq: 2, length_days: 35, kc_start: 0.30, kc_end: 1.20, critical: false, citation: null }
+      - { code: MID,  seq: 3, length_days: 40, kc_start: 1.20, kc_end: 1.20, critical: true,  citation: null }   # floración + llenado [Pendiente ventana crítica con cita]
+      - { code: LATE, seq: 4, length_days: 30, kc_start: 1.20, kc_end: 0.35, critical: false, citation: null }
+    root_depth: { z_min_m: 0.15, z_max_m: 1.0, citation: null }       # Tabla 22 [Verificar]
+    depletion_fraction_p: { value: 0.55, citation: null }
+
+  - code: maiz_intermedio
+    crop: maiz
+    name: "Maíz grano ciclo 140 d (genérico)"
+    phenology_basis: days
+    citation_candidate: "FAO-56 Tabla 11 (25/40/45/30) [Verificar]"
+    stages:
+      - { code: INI,  seq: 1, length_days: 25, kc_start: 0.30, kc_end: 0.30, critical: false, citation: null }
+      - { code: DEV,  seq: 2, length_days: 40, kc_start: 0.30, kc_end: 1.20, critical: false, citation: null }
+      - { code: MID,  seq: 3, length_days: 45, kc_start: 1.20, kc_end: 1.20, critical: true,  citation: null }
+      - { code: LATE, seq: 4, length_days: 30, kc_start: 1.20, kc_end: 0.35, critical: false, citation: null }
+    root_depth: { z_min_m: 0.15, z_max_m: 1.0, citation: null }
+    depletion_fraction_p: { value: 0.55, citation: null }
+
+  - code: frijol_negro
+    crop: frijol
+    name: "Frijol seco ciclo 95 d (genérico)"
+    phenology_basis: days
+    citation_candidate: "FAO-56 Tabla 11 (frijol seco 15/25/35/20) y Tabla 12 [Verificar]"
+    stages:
+      - { code: INI,  seq: 1, length_days: 15, kc_start: 0.40, kc_end: 0.40, critical: false, citation: null }
+      - { code: DEV,  seq: 2, length_days: 25, kc_start: 0.40, kc_end: 1.15, critical: false, citation: null }
+      - { code: MID,  seq: 3, length_days: 35, kc_start: 1.15, kc_end: 1.15, critical: true,  citation: null }
+      - { code: LATE, seq: 4, length_days: 20, kc_start: 1.15, kc_end: 0.35, critical: false, citation: null }
+    root_depth: { z_min_m: 0.15, z_max_m: 0.6, citation: null }
+    depletion_fraction_p: { value: 0.45, citation: null }
+
+  - code: sorgo_grano
+    crop: sorgo
+    name: "Sorgo grano ciclo 125 d (genérico)"
+    phenology_basis: days
+    citation_candidate: "FAO-56 Tabla 11 (20/35/40/30) y Tabla 12 [Verificar]"
+    stages:
+      - { code: INI,  seq: 1, length_days: 20, kc_start: 0.30, kc_end: 0.30, critical: false, citation: null }
+      - { code: DEV,  seq: 2, length_days: 35, kc_start: 0.30, kc_end: 1.05, critical: false, citation: null }
+      - { code: MID,  seq: 3, length_days: 40, kc_start: 1.05, kc_end: 1.05, critical: true,  citation: null }
+      - { code: LATE, seq: 4, length_days: 30, kc_start: 1.05, kc_end: 0.55, critical: false, citation: null }
+    root_depth: { z_min_m: 0.15, z_max_m: 1.0, citation: null }
+    depletion_fraction_p: { value: 0.55, citation: null }

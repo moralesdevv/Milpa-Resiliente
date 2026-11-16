@@ -64,6 +64,10 @@ class Settings(BaseSettings):
     job_max_attempts: int = Field(default=3, ge=1)
     # Timeout por tipo: [Pendiente]. 0 = sin timeout (no se asumen valores sin decisión).
     job_timeout_seconds: int = Field(default=0, ge=0)
+    # Entradas del motor (R2, milpa_core). Paquetes de configuración sandbox (ver docs/r2).
+    core_region_path: Path = Path("./regions/r2/pilot_corredor_seco.yaml")
+    core_strategies_path: Path = Path("./regions/r2/pilot_corredor_seco.strategies.yaml")
+    core_catalogs_dir: Path = Path("./catalogs/r2")
     log_level: str = "INFO"
     web_dist_dir: Path = Path(
         "./apps/web/dist"

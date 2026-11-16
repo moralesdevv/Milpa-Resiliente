@@ -26,7 +26,8 @@ FROM base AS deps
 COPY pyproject.toml uv.lock .python-version ./
 COPY apps/api/pyproject.toml apps/api/pyproject.toml
 COPY packages/milpa_etl/pyproject.toml packages/milpa_etl/pyproject.toml
-RUN uv sync --frozen --no-dev --package milpa-api --package milpa-etl --no-install-workspace
+COPY packages/milpa_core/pyproject.toml packages/milpa_core/pyproject.toml
+RUN uv sync --frozen --no-dev --package milpa-api --package milpa-etl --package milpa-core --no-install-workspace
 
 # --- runtime ------------------------------------------------------------------------------------
 FROM deps AS runtime
@@ -35,12 +36,13 @@ COPY apps/api/migrations apps/api/migrations
 COPY apps/api/templates apps/api/templates
 COPY apps/api/alembic.ini apps/api/alembic.ini
 COPY packages/milpa_etl/src packages/milpa_etl/src
+COPY packages/milpa_core/src packages/milpa_core/src
 COPY catalogs catalogs
 COPY regions regions
 # paquete de demostración congelado (sintético, rotulado): se copia a DATA_DIR/demo si falta
 COPY data/demo /opt/milpa/demo
 COPY README.md ./
-RUN uv sync --frozen --no-dev --package milpa-api --package milpa-etl
+RUN uv sync --frozen --no-dev --package milpa-api --package milpa-etl --package milpa-core
 COPY infra/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod 0755 /usr/local/bin/entrypoint.sh \
  && groupadd --system --gid 10001 milpa \
@@ -73,5 +75,5 @@ COPY docs/openapi docs/openapi
 COPY references references
 COPY infra infra
 COPY conftest.py README.md docker-compose.yml .env.example ./
-RUN uv sync --frozen --all-groups --package milpa-api --package milpa-etl
+RUN uv sync --frozen --all-groups --package milpa-api --package milpa-etl --package milpa-core
 CMD ["pytest", "-q", "-p", "no:cacheprovider"]

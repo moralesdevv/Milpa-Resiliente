@@ -10,6 +10,8 @@ if [ "${RUN_MIGRATIONS:-true}" = "true" ]; then
     exit 1
   fi
   (cd /srv/milpa/apps/api && alembic upgrade head)
+  # Catálogo y grilla de escenarios de R2 (idempotente; rol propietario)
+  (cd /srv/milpa && python -m api.cli register-engine)
 fi
 
 # Paquete de demostración congelado (README §9): disponible sin red ni NASA. No sobrescribe.

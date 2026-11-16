@@ -64,6 +64,8 @@ def run_ref_from_db(session: Session, run_id: UUID) -> RunRef:
         region_config_hash=run.region_config_hash,
         code_version=run.code_version,
         seed=run.seed,
+        period_start=run.period_start,
+        period_end=run.period_end,
     )
 
 
@@ -120,6 +122,8 @@ class RunService:
             run.region_config_hash,
             run.code_version,
             run.seed,
+            run.period_start,
+            run.period_end,
         )
 
     def _ready(self, run: AnalysisRun) -> None:

@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { useTranslation } from "react-i18next";
 
+import { useQueryClient } from "@tanstack/react-query";
 import { useLogin } from "../../api/queries";
 import { setSession, useSession } from "../../api/session";
 import { ErrorState } from "../common/states";
@@ -11,6 +12,7 @@ export function SessionControl() {
   const { t } = useTranslation();
   const session = useSession();
   const login = useLogin();
+  const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,6 +24,7 @@ export function SessionControl() {
         setSession({ token: data.access_token, role: data.role, expiresInSeconds: data.expires_in });
         setPassword("");
         setOpen(false);
+        void queryClient.invalidateQueries(); // reintenta lo que falló por no tener sesión
       },
     });
   };

@@ -8,6 +8,7 @@ propietario (``MIGRATION_DATABASE_URL``): el rol de aplicación no tiene permiso
 from __future__ import annotations
 
 import argparse
+import contextlib
 import getpass
 import json
 import os
@@ -223,6 +224,63 @@ def cmd_check_core(_: argparse.Namespace) -> int:
     return 0 if rep.ok else 2
 
 
+def cmd_register_engine(a: argparse.Namespace) -> int:
+    """Registra (idempotente, rol propietario) el catálogo de R2 y la grilla de escenarios.
+
+    Inserta ``ref.catalog_release`` con el hash real de ``catalogs/r2`` y ``engine.scenario_def``
+    con la definición que publica ``milpa_core`` (BASE + grilla estándar). No toca otros datos.
+    """
+    import subprocess
+
+    from api.adapters import core_io
+    from api.adapters.milpa_core import import_core
+
+    core = import_core()
+    if core is None:
+        print("milpa_core no está instalado", file=sys.stderr)
+        return 2
+    catalogs = core_io.load_catalogs(Path(a.catalogs))
+    sha = os.environ.get("GIT_SHA") or "unversioned"
+    if sha == "unversioned":
+        with contextlib.suppress(OSError, subprocess.SubprocessError):
+            sha = subprocess.run(
+                ["git", "rev-parse", "HEAD"],  # noqa: S607
+                capture_output=True,
+                text=True,
+                check=True,
+                timeout=10,
+            ).stdout.strip()
+    scenarios = {s.scenario_id: s for s in [core.BASE, *core.standard_grid()]}
+    with _owner_engine().begin() as c:
+        c.execute(
+            text(
+                "INSERT INTO ref.catalog_release (catalog_hash, git_sha) VALUES (:h, :g) "
+                "ON CONFLICT (catalog_hash) DO NOTHING"
+            ),
+            {"h": catalogs.catalog_hash, "g": sha},
+        )
+        for sc in scenarios.values():
+            c.execute(
+                text(
+                    "INSERT INTO engine.scenario_def (scenario_id, delta_t_c, precip_factor, "
+                    "onset_delay_days, humidity_assumption, grid_role, method_doc) "
+                    "VALUES (:i, :dt, :pf, :d, CAST(:h AS humidity_t), :r, :m) "
+                    "ON CONFLICT (scenario_id) DO NOTHING"
+                ),
+                {
+                    "i": sc.scenario_id,
+                    "dt": sc.delta_t_c,
+                    "pf": sc.precip_factor,
+                    "d": sc.onset_delay_days,
+                    "h": sc.humidity.value,
+                    "r": sc.grid_role,
+                    "m": sc.method_doc,
+                },
+            )
+    print(f"catalog_hash={catalogs.catalog_hash} escenarios={len(scenarios)}")
+    return 0
+
+
 def cmd_hash(a: argparse.Namespace) -> int:
     from api.reproducibility.hashing import sha256_file
 
@@ -253,6 +311,11 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--technician-email", required=True)
     s.add_argument("--farmer-email", required=True)
     s.set_defaults(fn=cmd_assign)
+    s = sub.add_parser(
+        "register-engine", help="Registrar catálogo de R2 y grilla de escenarios (propietario)"
+    )
+    s.add_argument("--catalogs", default="catalogs/r2")
+    s.set_defaults(fn=cmd_register_engine)
     s = sub.add_parser("openapi", help="Exportar OpenAPI")
     s.add_argument("--out", default="docs/openapi/openapi.json")
     s.set_defaults(fn=cmd_openapi)

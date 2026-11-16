@@ -123,7 +123,7 @@ def test_dependency_not_integrated_is_a_typed_job_failure(
     app_engine: Engine, worker_config: WorkerConfig
 ) -> None:
     for kind, payload in [
-        (JobKind.analysis_run, {"v": 1}),
+        (JobKind.analysis_run, {"v": 1, "zone_id": str(uuid4())}),
         (JobKind.zone_ingest, {"v": 1, "zone_id": str(uuid4())}),
     ]:
         jid = new_job(app_engine, kind, payload)

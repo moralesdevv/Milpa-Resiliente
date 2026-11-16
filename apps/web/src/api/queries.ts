@@ -1,6 +1,7 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { api, assertResponse } from "./client";
+import { toDekadChart, toHeatmap, toRankResponse, toSummaryPage } from "./r2-adapters";
 import { toQualityView, toSoilStatusView, toZoneView, uploadFromOk, uploadFromProblem } from "./adapters";
 import type { UploadView } from "./adapters";
 import type { components } from "./types.gen";
@@ -120,7 +121,7 @@ export function useRunSummary(runId: string | null, scenario: string | null, ada
         params: { path: { id: runId }, query: { scenario, adaptation } },
       });
       assertResponse(result.response, result.error);
-      return result.data;
+      return result.data ? toSummaryPage(result.data) : undefined;
     },
   });
 }
@@ -152,7 +153,7 @@ export function useHeatmap(runId: string | null, options: {
         },
       });
       assertResponse(result.response, result.error);
-      return result.data;
+      return result.data ? toHeatmap(result.data, options.view, options.strategy) : null;
     },
   });
 }
@@ -181,13 +182,16 @@ export function useDekadChart(runId: string | null, options: {
         } },
       });
       assertResponse(result.response, result.error);
-      return result.data;
+      if (!result.data) return null;
+      const raw = result.data as { provenance_info?: components["schemas"]["ProvenanceInfo"] };
+      return toDekadChart(result.data, raw.provenance_info);
     },
   });
 }
 
 /** Ranking recalculated by the backend from persisted results (synchronous endpoint). */
 export function useRank(runId: string | null, request: components["schemas"]["RankRequest"] | null) {
+  const queryClient = useQueryClient();
   return useQuery({
     queryKey: ["rank", runId, request],
     enabled: Boolean(runId && request),
@@ -198,7 +202,11 @@ export function useRank(runId: string | null, request: components["schemas"]["Ra
       const result = await api.POST("/v1/runs/{id}/rank", { params: { path: { id: runId } }, body: request });
       assertResponse(result.response, result.error);
       if (!result.data) throw new Error("The ranking response was empty.");
-      return result.data;
+      const names: Record<string, string> = {};
+      for (const [, page] of queryClient.getQueriesData<components["schemas"]["PageStrategyRiskDTO"]>({ queryKey: ["run-summary", runId] })) {
+        for (const item of page?.items ?? []) names[item.strategy_version_id] = item.name;
+      }
+      return toRankResponse(result.data, names);
     },
   });
 }

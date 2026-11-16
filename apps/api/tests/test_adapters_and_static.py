@@ -48,7 +48,8 @@ def a_run() -> RunRef:
     return RunRef(uuid4(), uuid4(), None, "a" * 64, "b" * 64, "c" * 64, "v", 1)
 
 
-def test_without_milpa_core_everything_is_not_integrated() -> None:
+def test_without_milpa_core_everything_is_not_integrated(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setitem(sys.modules, "milpa_core", None)  # simula el paquete ausente
     assert import_core() is None
     rep = check_core_contract()
     assert not rep.ok and not rep.package_present and "pendiente de R2" in rep.problems[0]
@@ -56,6 +57,12 @@ def test_without_milpa_core_everything_is_not_integrated() -> None:
     assert isinstance(ports.engine, NotIntegratedEngine) and not ports.engine.is_available()
     assert isinstance(ports.evidence, NotIntegratedEvidence)
     assert isinstance(ports.ingest, NotIntegratedIngest)
+
+
+def test_installed_milpa_core_matches_the_published_facade() -> None:
+    """El paquete real de R2 cumple las firmas publicadas (``DOCUMENTED_FACADE``)."""
+    rep = check_core_contract()
+    assert rep.package_present and rep.problems == ()
 
 
 def test_every_engine_operation_raises_typed_dependency_error() -> None:
@@ -97,12 +104,12 @@ def test_facade_signature_check_detects_mismatches() -> None:
 def test_milpa_core_adapter_refuses_incompatible_package_and_never_fakes_results() -> None:
     with pytest.raises(RuntimeError, match="fachada"):
         MilpaCoreEngine(types.ModuleType("milpa_core"))
-    eng = MilpaCoreEngine(fake_core())
-    assert eng.is_available()
-    with pytest.raises(DependencyNotIntegrated, match="PENDING_R2"):
-        eng.heatmap(a_run(), {})  # R2 no publicó el constructor del DTO: no se inventa
-    with pytest.raises(DependencyNotIntegrated, match="PENDING_R2"):
-        eng.run_base_analysis({})
+    eng = MilpaCoreEngine(fake_core())  # sin rutas de entrada: no disponible, nunca resultados
+    assert not eng.is_available()
+    with pytest.raises(DependencyNotIntegrated, match="Rutas"):
+        eng.climate_history(a_run(), {})  # R2 no publica contrato: no se inventa
+    with pytest.raises(DependencyNotIntegrated, match="Rutas"):
+        eng.run_base_analysis({"zone_id": str(uuid4())})
 
 
 def test_registry_selects_adapter_only_for_a_compatible_installed_package(

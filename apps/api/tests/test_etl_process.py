@@ -79,9 +79,10 @@ def test_with_token_adds_imerg_and_merge_in_order(tmp_path: Path) -> None:
     r = FakeRunner()
     fake = secrets.token_urlsafe(24)  # valor ficticio generado en la prueba
     out = make(tmp_path, r, token=fake).ingest_zone(uuid4())
-    assert verbs(r) == ["fetch power", "fetch imerg", "merge imerg", "curate", "validate"]
+    # orden de R1: `merge imerg` exige la serie curada (falla con "ejecute curate primero")
+    assert verbs(r) == ["fetch power", "curate", "validate", "fetch imerg", "merge imerg"]
     assert out["imerg"] is True
-    assert r.calls[1][1]["EARTHDATA_TOKEN"] == fake
+    assert r.calls[3][1]["EARTHDATA_TOKEN"] == fake
     assert fake not in str(out)  # nunca vuelve en el resultado del trabajo
 
 
@@ -162,3 +163,54 @@ def test_result_reports_the_data_hash_written_by_the_etl(tmp_path: Path) -> None
 def test_availability_reflects_whether_milpa_etl_is_installed(tmp_path: Path) -> None:
     expected = importlib.util.find_spec("milpa_etl") is not None
     assert make(tmp_path, FakeRunner()).is_available() is expected
+
+
+# --------------------------------------------- contra la CLI REAL de R1 (sin red, datos sintéticos)
+SEED_MANIFEST = """
+import json
+from milpa_etl import core
+data = core.synthetic_power_json(0)
+raw = json.dumps(data, sort_keys=True).encode()
+digest, path = core.save_raw("power", raw)
+core.log_ingestion(source="POWER_DAILY", product="SINTETICO", version="synthetic-v1",
+                   params={"zone": "zona_cli_real", "seed": 0}, raw_uri=path, raw_sha256=digest,
+                   n_records=len(data["properties"]["parameter"]["T2M_MAX"]), status="ok")
+"""
+
+
+@pytest.mark.slow
+def test_real_r1_cli_accepts_the_arguments_this_adapter_sends(tmp_path: Path) -> None:
+    """`curate` y `validate` REALES de R1 con los argumentos del adaptador. Solo `fetch` se simula
+    (necesita red): su efecto —una ingesta POWER en el manifiesto— se siembra con datos SINTÉTICOS
+    de R1 (`synthetic_power_json`)."""
+    import os
+    import sys
+
+    from api.adapters.etl_process import _run
+
+    pytest.importorskip("milpa_etl")
+    env = {**os.environ, "DATA_DIR": str(tmp_path), "PYTHONUTF8": "1"}
+    seeded = subprocess.run(  # noqa: S603
+        [sys.executable, "-c", SEED_MANIFEST], env=env, capture_output=True, text=True, check=False
+    )
+    assert seeded.returncode == 0, seeded.stderr[-400:]
+
+    def runner(
+        cmd: Sequence[str], env: Mapping[str, str], timeout: int
+    ) -> subprocess.CompletedProcess[str]:
+        if cmd[3] == "fetch":  # red: no se ejecuta en pruebas
+            return subprocess.CompletedProcess(cmd, 0, "", "")
+        return _run(cmd, env, timeout)
+
+    spec = ZoneSpec("zona_cli_real", 14.8, -89.5, 500.0, SPEC.geojson)
+    out = ProcessIngest(
+        data_dir=tmp_path, describe_zone=lambda _z: spec, runner=runner, step_timeout_seconds=600
+    ).ingest_zone(uuid4())
+    assert [(s["step"], s["ok"]) for s in out["steps"]] == [
+        ("fetch power", True),
+        ("curate", True),
+        ("validate", True),
+    ]
+    curated = tmp_path / "curated" / "zona_cli_real"
+    assert {p.name for p in curated.glob("*.parquet")} >= {"daily.parquet", "dekad.parquet"}
+    assert isinstance(out["data_hash"], str) and len(out["data_hash"]) == 64

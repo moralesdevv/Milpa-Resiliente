@@ -53,7 +53,13 @@ def test_api_never_imports_milpa_etl() -> None:
 
 
 def test_milpa_core_is_only_touched_by_its_adapter() -> None:
-    allowed = {SRC / "adapters" / "milpa_core.py", SRC / "contracts" / "provisional_enums.py"}
+    allowed = {
+        SRC / "adapters" / "milpa_core.py",
+        SRC
+        / "adapters"
+        / "core_io.py",  # E/S del adaptador: construye los objetos tipados del motor
+        SRC / "contracts" / "provisional_enums.py",
+    }
     for f in py_files():
         if f in allowed:
             continue

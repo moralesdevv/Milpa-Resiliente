@@ -1,0 +1,57 @@
+# Estrategias del piloto (DE-10). SANDBOX: definiciones de trabajo para probar el motor.
+# Reglas: suma de area_fraction por ciclo = 1; un solo ciclo con candidate_dates (y es el ancla);
+# una modificación de fecha nunca se etiqueta como rotación.
+- code: E1_REF_MAIZ
+  name: "Referencia: maíz de primera"
+  is_reference: true
+  changes_from_reference: []
+  cycles:
+    - { cycle_idx: 1, season: primera, window_mode: candidate_dates,
+        components: [ { variety: maiz_corto, role: principal, area_fraction: 1.0 } ] }
+
+- code: E2_MILPA
+  name: "Milpa: maíz + frijol asociado"
+  changes_from_reference: [association]
+  cycles:
+    - { cycle_idx: 1, season: primera, window_mode: candidate_dates,
+        components: [ { variety: maiz_corto, role: principal, area_fraction: 0.6 },
+                      { variety: frijol_negro, role: acompanante, area_fraction: 0.4, plant_offset_days: 15 } ] }
+
+- code: E3_MAIZ_FRIJOL_POSTRERA
+  name: "Maíz de primera y frijol de postrera"
+  changes_from_reference: [rotation]
+  cycles:
+    - { cycle_idx: 1, season: primera, window_mode: candidate_dates, fallow_after_days: 0,
+        components: [ { variety: maiz_corto, role: principal, area_fraction: 1.0 } ] }
+    - { cycle_idx: 2, season: postrera, window_mode: relative_to_previous_harvest, rel_lag_days: 0,
+        components: [ { variety: frijol_negro, role: principal, area_fraction: 1.0 } ] }
+
+- code: E4_MAIZ_INTERMEDIO
+  name: "Maíz de ciclo intermedio"
+  changes_from_reference: [variety]
+  cycles:
+    - { cycle_idx: 1, season: primera, window_mode: candidate_dates,
+        components: [ { variety: maiz_intermedio, role: principal, area_fraction: 1.0 } ] }
+
+- code: E5_MAIZ_TARDIO
+  name: "Maíz de primera sembrado tarde"
+  changes_from_reference: [planting_date]
+  cycles:
+    - { cycle_idx: 1, season: primera, window_mode: candidate_dates, plant_window: ["05-31", "07-15"],
+        components: [ { variety: maiz_corto, role: principal, area_fraction: 1.0 } ] }
+
+- code: E6_SORGO
+  name: "Sorgo de primera"
+  changes_from_reference: []
+  cycles:
+    - { cycle_idx: 1, season: primera, window_mode: candidate_dates,
+        components: [ { variety: sorgo_grano, role: principal, area_fraction: 1.0 } ] }
+
+- code: E7_ROTACION_2A
+  name: "Rotación de dos años: maíz → sorgo"
+  changes_from_reference: [rotation]
+  cycles:
+    - { cycle_idx: 1, season: primera, window_mode: candidate_dates, agri_year_offset: 0,
+        components: [ { variety: maiz_corto, role: principal, area_fraction: 1.0 } ] }
+    - { cycle_idx: 2, season: primera, window_mode: fixed_season_window, agri_year_offset: 1,
+        components: [ { variety: sorgo_grano, role: principal, area_fraction: 1.0 } ] }

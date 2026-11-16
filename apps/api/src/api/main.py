@@ -190,7 +190,20 @@ def create_app(
     if settings.web_dist_dir.is_dir():  # frontend estático de R4 (cuando lo entregue)
         from fastapi.staticfiles import StaticFiles
 
-        app.mount("/", StaticFiles(directory=settings.web_dist_dir, html=True), name="web")
+        class SpaFiles(StaticFiles):
+            """Sirve ``index.html`` para rutas del enrutador del cliente (``/calendar``…)."""
+
+            async def get_response(self, path: str, scope: Any) -> Response:
+                try:
+                    return await super().get_response(path, scope)
+                except StarletteHTTPException as exc:
+                    norm = path.replace("\\", "/").lstrip("/")  # Windows entrega "v1\x"
+                    leaf = norm.rsplit("/", 1)[-1]
+                    if exc.status_code == 404 and "." not in leaf and not norm.startswith("v1/"):
+                        return await super().get_response("index.html", scope)
+                    raise
+
+        app.mount("/", SpaFiles(directory=settings.web_dist_dir, html=True), name="web")
     return app
 
 

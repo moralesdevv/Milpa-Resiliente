@@ -33,6 +33,9 @@ NOT_INTEGRATED = (
     "`DEPENDENCY_NOT_INTEGRATED`; nunca devuelve datos simulados. Un escenario no calculado "
     "responde 409 `SCENARIO_NOT_COMPUTED`."
 )
+# R2 identifica estrategias y variedades por código (p. ej. E1_REF_MAIZ), no por UUID.
+CodeParam = Annotated[str | None, Query(pattern=r"^[A-Za-z0-9_.-]{1,64}$")]
+
 READ_ERRORS = {**AUTHED, **error_responses(404, 409, 503)}
 
 
@@ -135,17 +138,17 @@ def heatmap(
     run_id: RunId,
     ctx: CtxDep,
     view: str | None = None,
-    strategy: UUID | None = None,
+    strategy: CodeParam = None,
     cycle: Annotated[int | None, Query(ge=0, le=1000)] = None,
-    variety: UUID | None = None,
+    variety: CodeParam = None,
     scenario: str | None = None,
     adaptation: AdaptationMode = AdaptationMode.none,
 ) -> Any:
     params = {
         "view": view,
-        "strategy": str(strategy) if strategy else None,
+        "strategy": strategy,
         "cycle": cycle,
-        "variety": str(variety) if variety else None,
+        "variety": variety,
         "scenario": scenario,
         "adaptation": adaptation.value,
     }
@@ -162,14 +165,14 @@ def heatmap(
 def dekad_chart(
     run_id: RunId,
     ctx: CtxDep,
-    strategy: UUID | None = None,
+    strategy: CodeParam = None,
     cohort_year: Annotated[int | None, Query(ge=1900, le=2200)] = None,
     cycle: Annotated[int | None, Query(ge=0, le=1000)] = None,
     plant_date: date | None = None,
     scenario: str | None = None,
 ) -> Any:
     params = {
-        "strategy": str(strategy) if strategy else None,
+        "strategy": strategy,
         "cohort_year": cohort_year,
         "cycle": cycle,
         "plant_date": plant_date.isoformat() if plant_date else None,

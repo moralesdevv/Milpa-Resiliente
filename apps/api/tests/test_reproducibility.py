@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
 
 import pytest
@@ -110,7 +111,8 @@ def test_reproduce_reports_exactly_what_is_missing_and_never_succeeds(tmp_path: 
     st_ = check_reproduce_prerequisites(tmp_path)
     assert st_.exit_code == EXIT_MISSING_INPUTS != 0
     joined = " | ".join(st_.missing)
-    assert "milpa_core" in joined and "R2" in joined and "demo" in joined and "R1" in joined
+    assert "demo" in joined and "R1" in joined
+    assert "milpa_core" not in joined  # R2 está integrado: ya no figura como faltante
     (tmp_path / "demo").mkdir()
     assert any("EXPECTED.json" in m for m in check_reproduce_prerequisites(tmp_path).missing)
 
@@ -123,9 +125,17 @@ def test_cli_reproduce_exits_nonzero_and_does_not_claim_success(
     assert code != 0 and "FALTA" in err and "No se simula éxito" in err
 
 
-def test_cli_check_core_reports_not_integrated(capsys: pytest.CaptureFixture[str]) -> None:
+def test_cli_check_core_reports_not_integrated(
+    capsys: pytest.CaptureFixture[str], monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setitem(sys.modules, "milpa_core", None)  # simula el paquete ausente
     assert cli.main(["check-core"]) == 2
     assert "NO integrado" in capsys.readouterr().out
+
+
+def test_cli_check_core_accepts_the_installed_package(capsys: pytest.CaptureFixture[str]) -> None:
+    assert cli.main(["check-core"]) == 0
+    assert "OK" in capsys.readouterr().out
 
 
 def test_cli_verify_manifest_and_hash(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
@@ -205,8 +215,9 @@ def test_reproduce_regenerates_the_data_layer_and_still_refuses_to_claim_success
         pytest.skip("data/demo no existe")
     st_ = check_reproduce_prerequisites(REPO_DEMO.parent)
     assert any("regenerad" in v for v in st_.verified)
-    assert st_.exit_code == EXIT_WAITING_DEPENDENCY != 0
-    assert any("milpa_core" in m for m in st_.missing)
+    assert (
+        st_.exit_code == EXIT_WAITING_DEPENDENCY != 0
+    )  # recomputo vs EXPECTED.json aún no contratado
 
 
 # ------------------------------------------- tolerancia numérica entre plataformas (README §25)

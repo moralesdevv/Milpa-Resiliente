@@ -1,0 +1,12 @@
+{
+  "property_code": "ph",
+  "property_status": "desconocido",
+  "applicability": "evaluable",
+  "outcome": "insufficient_info",
+  "lab_recommended": false,
+  "rationale_es": "sin rango documentado para el pH",
+  "hypotheticals": null,
+  "range_citation": null,
+  "evidence": null,
+  "extra": {}
+}

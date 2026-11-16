@@ -11,6 +11,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from dataclasses import dataclass, field
+from datetime import date
 from typing import Any, Literal, Protocol
 from uuid import UUID
 
@@ -27,6 +28,9 @@ class RunRef:
     region_config_hash: str
     code_version: str
     seed: int
+    # Periodo de la corrida (el motor lo necesita para reconstruir el mismo contexto en otro proceso)
+    period_start: date | None = None
+    period_end: date | None = None
 
 
 class EnginePort(Protocol):
@@ -45,6 +49,10 @@ class EnginePort(Protocol):
     def heatmap(self, run: RunRef, params: Mapping[str, Any]) -> Mapping[str, Any]: ...
     def dekad_chart(self, run: RunRef, params: Mapping[str, Any]) -> Mapping[str, Any]: ...
     def climate_history(self, run: RunRef, params: Mapping[str, Any]) -> Mapping[str, Any]: ...
+    # Tabla ciclo-a-ciclo de un escenario calculado (para persistirla en Parquet; sin transformarla).
+    def cycle_table(
+        self, run: RunRef, scenario_id: str, adaptation: str
+    ) -> list[dict[str, Any]]: ...
 
 
 @dataclass(frozen=True)

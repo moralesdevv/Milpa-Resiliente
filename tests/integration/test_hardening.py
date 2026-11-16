@@ -200,3 +200,33 @@ def test_service_refuses_to_start_if_a_view_can_bypass_rls(
     )
     with TestClient(app_ok) as client:  # restaurada la invariante, arranca
         assert client.get("/healthz").status_code == 200
+
+
+# ------------------------------------------------- ingesta por proceso: consulta real de la zona
+def test_etl_ingest_reads_the_zone_from_postgis_and_is_opt_in(
+    settings: Any, world: World, admin_engine: Engine, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """`_describe_zone` (nombre, centroide, elevación, polígono) contra PostGIS real, y la selección
+    del adaptador: desactivada por defecto, `ProcessIngest` solo con ETL_INGEST_ENABLED=true."""
+    from api.adapters import registry
+    from api.adapters.etl_process import ProcessIngest
+
+    monkeypatch.setattr(registry, "get_settings", lambda: settings)
+    spec = registry._describe_zone(world.zone)
+    assert spec is not None and spec.elevation_m is None  # la zona de prueba no tiene DEM
+    assert spec.geojson["type"] == "Polygon" and len(spec.geojson["coordinates"][0]) >= 4
+    xs = [p[0] for p in spec.geojson["coordinates"][0]]
+    ys = [p[1] for p in spec.geojson["coordinates"][0]]
+    assert min(xs) <= spec.lon <= max(xs) and min(ys) <= spec.lat <= max(ys)
+    with admin_engine.connect() as c:
+        c.execute(
+            text("UPDATE geo.zone SET elevation_m = 790.15 WHERE zone_id = :z"), {"z": world.zone}
+        )
+    again = registry._describe_zone(world.zone)
+    assert again is not None and again.elevation_m == pytest.approx(790.15)
+    assert registry._describe_zone(uuid4()) is None
+
+    monkeypatch.delenv("ETL_INGEST_ENABLED", raising=False)
+    assert not isinstance(registry.load_ports().ingest, ProcessIngest)  # opt-in
+    monkeypatch.setenv("ETL_INGEST_ENABLED", "true")
+    assert isinstance(registry.load_ports().ingest, ProcessIngest)

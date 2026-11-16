@@ -1,0 +1,10 @@
+# Umbrales de exposición — SANDBOX. NINGUNO tiene cita: el motor marca cada resultado
+# «umbral provisional — no usar para decisión» (evidencia C). Valores elegidos solo para
+# que la demostración discrimine entre estrategias en la serie SINTÉTICA (cerca de su mediana de exposición
+# máxima por decena). No tienen significado agronómico. Con la serie real de R1, revisar o reemplazar por
+# umbrales con cita (DE-08) antes de mostrar cualquier resultado.
+# peff_method: null = marcador sandbox aplicable a cualquier método (en production debe declararse).
+thresholds:
+  - { crop: maiz,   stage: MID, metric: dekad_exposure_mm, peff_method: null, value: 60, sens_low: 50, sens_high: 68, unit: mm, evidence: C, citation: null }
+  - { crop: frijol, stage: MID, metric: dekad_exposure_mm, peff_method: null, value: 55, sens_low: 48, sens_high: 62, unit: mm, evidence: C, citation: null }
+  - { crop: sorgo,  stage: MID, metric: dekad_exposure_mm, peff_method: null, value: 58, sens_low: 50, sens_high: 64, unit: mm, evidence: C, citation: null }

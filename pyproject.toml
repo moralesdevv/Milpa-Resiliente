@@ -9,7 +9,7 @@ dependencies = []
 # Workspace uv. packages/milpa_etl (R1) se integró desde references/ (docs/auditoria, ADR-018).
 # packages/milpa_core (R2) se agrega cuando R2 lo entregue; R3 NO lo crea ni lo simula.
 [tool.uv.workspace]
-members = ["apps/api", "packages/milpa_etl"]
+members = ["apps/api", "packages/milpa_etl", "packages/milpa_core"]
 
 [dependency-groups]
 dev = []
@@ -55,7 +55,7 @@ packages = ["api"]
 explicit_package_bases = true
 
 [[tool.mypy.overrides]]
-module = ["geoalchemy2.*", "pandera.*", "weasyprint.*", "pypdf.*", "argon2.*", "pyarrow.*"]
+module = ["geoalchemy2.*", "pandera.*", "weasyprint.*", "pypdf.*", "argon2.*", "pyarrow.*", "milpa_core", "milpa_core.*", "yaml"]
 ignore_missing_imports = true
 
 # ---------------------------------------------------------------- pytest
