@@ -1,0 +1,285 @@
+{
+  "generated_at": "2026-11-15T07:25:56+00:00",
+  "conditions": {
+    "host": "Windows-11-10.0.26200-SP0",
+    "cpu_count": 8,
+    "python": "3.12.16",
+    "postgres": "16.4 (Debian 16.4-1.pgdg110+2)",
+    "runs_base": 30,
+    "parcels_per_user": 5000,
+    "parquet_synthetic_rows": 1000000,
+    "peak_rss_mb_process": 0,
+    "transport": "ASGI en proceso (TestClient): NO incluye red ni uvicorn",
+    "db": "contenedor PostGIS local, misma máquina",
+    "limitaciones": [
+      "Datos sintéticos de carga; no representan los volúmenes reales de MILPA.",
+      "Mediciones en un host de desarrollo con otras cargas; no son objetivos de latencia ni capacidad de producción.",
+      "El ranking, heatmap y matriz base dependen de R2 y no se miden.",
+      "peak_py_alloc_mb solo cuenta asignaciones de Python (tracemalloc), no memoria nativa de pyarrow."
+    ]
+  },
+  "results": [
+    {
+      "name": "GET /healthz (ASGI en proceso, sin red)",
+      "status": "medido",
+      "runs": 120,
+      "unit": "ms",
+      "min": 26.417,
+      "p50": 32.895,
+      "p95": 52.808,
+      "max": 61.664,
+      "mean": 35.487,
+      "peak_py_alloc_mb": 0.19,
+      "detail": {},
+      "note": ""
+    },
+    {
+      "name": "POST /v1/auth/login (Argon2id verify + JWT)",
+      "status": "medido",
+      "runs": 15,
+      "unit": "ms",
+      "min": 171.61,
+      "p50": 179.079,
+      "p95": 230.399,
+      "max": 230.399,
+      "mean": 187.045,
+      "peak_py_alloc_mb": 0.16,
+      "detail": {},
+      "note": ""
+    },
+    {
+      "name": "GET /v1/parcels/{id} (JWT + RLS + generalización)",
+      "status": "medido",
+      "runs": 60,
+      "unit": "ms",
+      "min": 55.618,
+      "p50": 66.683,
+      "p95": 83.47,
+      "max": 85.925,
+      "mean": 68.309,
+      "peak_py_alloc_mb": 0.19,
+      "detail": {},
+      "note": ""
+    },
+    {
+      "name": "GET /v1/zones (paginado)",
+      "status": "medido",
+      "runs": 60,
+      "unit": "ms",
+      "min": 45.221,
+      "p50": 72.0,
+      "p95": 96.336,
+      "max": 111.789,
+      "mean": 72.585,
+      "peak_py_alloc_mb": 0.18,
+      "detail": {},
+      "note": ""
+    },
+    {
+      "name": "SQL: count(*) farm.parcel con RLS (10000 filas totales)",
+      "status": "medido",
+      "runs": 30,
+      "unit": "ms",
+      "min": 16.436,
+      "p50": 23.35,
+      "p95": 34.333,
+      "max": 39.292,
+      "mean": 24.607,
+      "peak_py_alloc_mb": 0.01,
+      "detail": {
+        "detail": {
+          "filas_totales": 10000,
+          "filas_visibles": 5000
+        }
+      },
+      "note": ""
+    },
+    {
+      "name": "Trabajo: crear + reclamar + ejecutar handler nulo + cerrar (en línea)",
+      "status": "medido",
+      "runs": 30,
+      "unit": "ms",
+      "min": 95.263,
+      "p50": 111.592,
+      "p95": 132.254,
+      "max": 135.419,
+      "mean": 111.575,
+      "peak_py_alloc_mb": 0.1,
+      "detail": {
+        "detail": {
+          "nota": "mide la sobrecarga del sistema de trabajos, no ciencia"
+        }
+      },
+      "note": ""
+    },
+    {
+      "name": "Pool de procesos spawn: 12 trabajos parcel_delete (no-op), 1 worker(es)",
+      "status": "medido",
+      "runs": 1,
+      "unit": "ms",
+      "min": null,
+      "p50": null,
+      "p95": null,
+      "max": null,
+      "mean": null,
+      "peak_py_alloc_mb": null,
+      "detail": {
+        "total_ms": 5828.3,
+        "trabajos": 12,
+        "workers": 1,
+        "incluye_arranque_de_procesos_spawn": true
+      },
+      "note": ""
+    },
+    {
+      "name": "Pool de procesos spawn: 12 trabajos parcel_delete (no-op), 2 worker(es)",
+      "status": "medido",
+      "runs": 1,
+      "unit": "ms",
+      "min": null,
+      "p50": null,
+      "p95": null,
+      "max": null,
+      "mean": null,
+      "peak_py_alloc_mb": null,
+      "detail": {
+        "total_ms": 6611.2,
+        "trabajos": 12,
+        "workers": 2,
+        "incluye_arranque_de_procesos_spawn": true
+      },
+      "note": ""
+    },
+    {
+      "name": "Parquet: lectura completa (1,000,000 filas x 6 columnas)",
+      "status": "medido",
+      "runs": 7,
+      "unit": "ms",
+      "min": 122.668,
+      "p50": 169.695,
+      "p95": 235.86,
+      "max": 235.86,
+      "mean": 170.004,
+      "peak_py_alloc_mb": 30.14,
+      "detail": {
+        "archivo_mb": 30.1,
+        "escritura_ms": 759.3
+      },
+      "note": ""
+    },
+    {
+      "name": "Parquet: lectura de 2 columnas",
+      "status": "medido",
+      "runs": 7,
+      "unit": "ms",
+      "min": 67.578,
+      "p50": 74.032,
+      "p95": 114.008,
+      "max": 114.008,
+      "mean": 82.031,
+      "peak_py_alloc_mb": 12.58,
+      "detail": {},
+      "note": ""
+    },
+    {
+      "name": "SHA-256 del archivo Parquet",
+      "status": "medido",
+      "runs": 7,
+      "unit": "ms",
+      "min": 165.627,
+      "p50": 189.714,
+      "p95": 215.879,
+      "max": 215.879,
+      "mean": 186.421,
+      "peak_py_alloc_mb": 2.11,
+      "detail": {
+        "archivo_mb": 30.1
+      },
+      "note": ""
+    },
+    {
+      "name": "PDF: render Jinja2 + WeasyPrint",
+      "status": "omitido",
+      "runs": 0,
+      "unit": "ms",
+      "min": null,
+      "p50": null,
+      "p95": null,
+      "max": null,
+      "mean": null,
+      "peak_py_alloc_mb": null,
+      "detail": {},
+      "note": "ReportRenderError: WeasyPrint/Pango no disponible en este host (ejecutar en la imagen Docker)"
+    },
+    {
+      "name": "POST /v1/runs/{id}/rank (ranking + estabilidad)",
+      "status": "bloqueado",
+      "runs": 0,
+      "unit": "ms",
+      "min": null,
+      "p50": null,
+      "p95": null,
+      "max": null,
+      "mean": null,
+      "peak_py_alloc_mb": null,
+      "detail": {},
+      "note": "Requiere milpa_core (R2) y datos curados (R1): no integrados. No se estima ni se inventa."
+    },
+    {
+      "name": "GET /v1/runs/{id}/heatmap",
+      "status": "bloqueado",
+      "runs": 0,
+      "unit": "ms",
+      "min": null,
+      "p50": null,
+      "p95": null,
+      "max": null,
+      "mean": null,
+      "peak_py_alloc_mb": null,
+      "detail": {},
+      "note": "Requiere milpa_core (R2) y datos curados (R1): no integrados. No se estima ni se inventa."
+    },
+    {
+      "name": "GET /v1/runs/{id}/dekad-chart",
+      "status": "bloqueado",
+      "runs": 0,
+      "unit": "ms",
+      "min": null,
+      "p50": null,
+      "p95": null,
+      "max": null,
+      "mean": null,
+      "peak_py_alloc_mb": null,
+      "detail": {},
+      "note": "Requiere milpa_core (R2) y datos curados (R1): no integrados. No se estima ni se inventa."
+    },
+    {
+      "name": "Corrida base (matriz estrategia x cohorte x fecha)",
+      "status": "bloqueado",
+      "runs": 0,
+      "unit": "ms",
+      "min": null,
+      "p50": null,
+      "p95": null,
+      "max": null,
+      "mean": null,
+      "peak_py_alloc_mb": null,
+      "detail": {},
+      "note": "Requiere milpa_core (R2) y datos curados (R1): no integrados. No se estima ni se inventa."
+    },
+    {
+      "name": "Grilla de 45 corridas de escenarios",
+      "status": "bloqueado",
+      "runs": 0,
+      "unit": "ms",
+      "min": null,
+      "p50": null,
+      "p95": null,
+      "max": null,
+      "mean": null,
+      "peak_py_alloc_mb": null,
+      "detail": {},
+      "note": "Requiere milpa_core (R2) y datos curados (R1): no integrados. No se estima ni se inventa."
+    }
+  ]
+}

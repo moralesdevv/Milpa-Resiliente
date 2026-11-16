@@ -1,0 +1,65 @@
+{
+  "zone": "chiquimula_prueba",
+  "input_hash": "a48228e04132f78170f95c152e2837668f077fa8ca5ecb95d9d65f1cc8637c38",
+  "data_hash": "826f0671cebc50d9218bbc65d046a83f7bcdf29c7e62decee3d5cc68afbae56c",
+  "raw_sha256": [
+    "041b8682a524036517ebb224548328aacde8ebec4556580a45894439cc53bc15",
+    "06be02b2ebc515487d88399d1721f8d3463ad68155ec9f934a8443af04161c23",
+    "44f2b8a9c890b362e76524797e13a6fc096aa385676acbbf3c2af7aa95ae768e",
+    "5229b6677c2a63844eadf57317aa264d9245d7df8c24d86218f73edf067ec05d",
+    "5ead27d1350d61528a50fbaedf75fad99b3b1936bd25150827db6b72322df53a",
+    "7a0bc12a13d65358ecef2b7234101af3344a55dc9ae6cafebbc30465163a0702",
+    "8d2dcc4e067093762c2fad948c16ae39b43012d5aef70a8381141427bcbaf648",
+    "bd4ee3d2f99e20039c4327c955d96dfb8847de1269e48cdc1dd2df0857fb6db0",
+    "cc62cc01af677f137ade749ec08f11319707fecaa96bef0bd0afdc4a862bbfee",
+    "e9b618a8158de11238d8b14df6d018d55050fcdbd49f15d22dc923901eb6c225",
+    "f23a5d25ba9677ef557291a1d09932f55795d2161100bc359a7cdac80f4825b0"
+  ],
+  "et0_source": "milpa_r1.et0_fao56 (respaldo local; confirmar con R2)",
+  "n_days": 9131,
+  "parquet": true,
+  "notes": {
+    "unit_warnings": []
+  },
+  "limitations": [
+    "convención de día de POWER e IMERG frente a UTC-6 [Verificar]",
+    "evidencia de lluvia: B solo con validación en la zona (estación); sin ella, C",
+    "POWER tiene 9 días atípicos (>= 100 mm con IMERG < 10 mm); su lluvia como respaldo es poco confiable"
+  ],
+  "precip_primary": "IMERG_FINAL_V07",
+  "precip_fallback": "POWER_DAILY",
+  "fallback_days": 7397,
+  "fallback_share_pct": 0.0,
+  "fallback_cap_mm": null,
+  "fallback_days_capped": 0,
+  "power_spike_days": 9,
+  "days_without_precip": 0,
+  "imerg_missing_pct": 81.01,
+  "min_weight_cov": 0.5,
+  "imerg_n_cells": 12,
+  "imerg_formats": [
+    "json_zonal"
+  ],
+  "raw_sha256_power": [
+    "f23a5d25ba9677ef557291a1d09932f55795d2161100bc359a7cdac80f4825b0"
+  ],
+  "raw_sha256_imerg": [
+    "041b8682a524036517ebb224548328aacde8ebec4556580a45894439cc53bc15",
+    "06be02b2ebc515487d88399d1721f8d3463ad68155ec9f934a8443af04161c23",
+    "44f2b8a9c890b362e76524797e13a6fc096aa385676acbbf3c2af7aa95ae768e",
+    "5229b6677c2a63844eadf57317aa264d9245d7df8c24d86218f73edf067ec05d",
+    "5ead27d1350d61528a50fbaedf75fad99b3b1936bd25150827db6b72322df53a",
+    "7a0bc12a13d65358ecef2b7234101af3344a55dc9ae6cafebbc30465163a0702",
+    "8d2dcc4e067093762c2fad948c16ae39b43012d5aef70a8381141427bcbaf648",
+    "bd4ee3d2f99e20039c4327c955d96dfb8847de1269e48cdc1dd2df0857fb6db0",
+    "cc62cc01af677f137ade749ec08f11319707fecaa96bef0bd0afdc4a862bbfee",
+    "e9b618a8158de11238d8b14df6d018d55050fcdbd49f15d22dc923901eb6c225"
+  ],
+  "fallback_share_pct_full_series": 81.01,
+  "imerg_window": [
+    "2021-01-01",
+    "2025-09-30"
+  ],
+  "imerg_window_days": 1734,
+  "imerg_window_fallback_days": 0
+}

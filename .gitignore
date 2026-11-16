@@ -1,38 +1,6 @@
-# Entornos y secretos
-.env
-.env.*
-!.env.example
-*.pem
-*.key
-
-# Python
-.venv/
+﻿venv/
 __pycache__/
-*.py[cod]
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
-.hypothesis/
-.coverage
-htmlcov/
-dist/
-build/
-*.egg-info/
-
-# Datos (no versionar datos privados; data/demo/ y manifiestos se versionan por excepción de R1)
-data/*
-!data/demo/
-!data/manifest/
-!data/.gitkeep
-
-# Artefactos locales
-.schemathesis/
-bench-results/
+.env
+*.tif
+*.zip
 node_modules/
-.DS_Store
-
-# Entregas originales de R1 y R4: son repositorios git propios (no se anidan aquí; siguen en disco como referencia)
-references/
-
-# TypeScript incremental build info
-*.tsbuildinfo

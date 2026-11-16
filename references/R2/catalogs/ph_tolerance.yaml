@@ -1,0 +1,9 @@
+# Matriz de tolerancia de pH — [Pendiente] (DE-08). Sin matriz con cita, el VoI devuelve
+# insufficient_info y la recomendación de laboratorio es false (no se inventa).
+# Formato:
+# - { crop: maiz, ph_abs_min: x, ph_opt_min: x, ph_opt_max: x, ph_abs_max: x, ph_method: agua, evidence: B, citation: "..." }
+ph_tolerance: []
+reference_yields: []      # - { variety: maiz_corto, kg_ha: x, region: pilot_corredor_seco, management: tradicional, evidence: C, citation: "..." }
+food_composition: []      # - { crop: maiz, kcal_per_kg: x, protein_g_per_kg: x, citation: "Tabla INCAP [Verificar]" }
+prices: []                # - { crop: maiz, price_per_kg: x, currency: GTQ, date: 2025-xx, source: "..." }
+variable_costs: []

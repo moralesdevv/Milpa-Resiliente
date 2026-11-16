@@ -1,0 +1,51 @@
+{
+  "et0_T2MDEW_vs_RH2M": {
+    "mean_abs_diff_mm_day": 0.149,
+    "mean_diff_by_month": {
+      "1": 0.17,
+      "2": 0.213,
+      "3": 0.258,
+      "4": 0.265,
+      "5": 0.18,
+      "6": 0.097,
+      "7": 0.099,
+      "8": 0.084,
+      "9": 0.065,
+      "10": 0.089,
+      "11": 0.125,
+      "12": 0.143
+    },
+    "note": "si supera region.et0.ea_sensitivity_tol [Pendiente] -> limitación ea_sensible_a_la_ruta"
+  },
+  "precip_IMERG_vs_POWER": {
+    "n_days_common": 1369,
+    "daily": {
+      "corr": 0.144,
+      "bias_mm_day": -1.23,
+      "rmse_mm_day": 20.2
+    },
+    "monthly": {
+      "n_months": 45,
+      "corr": 0.347,
+      "ratio_imerg_over_power": 0.774
+    },
+    "annual_mm": {
+      "2021": {
+        "imerg": 1141.0,
+        "power": 2179.0,
+        "ratio": 0.524
+      },
+      "2022": {
+        "imerg": 1906.0,
+        "power": 2931.0,
+        "ratio": 0.65
+      },
+      "2023": {
+        "imerg": 1268.0,
+        "power": 1662.0,
+        "ratio": 0.763
+      }
+    },
+    "note": "el día IMERG es UTC; la hora local de Guatemala es UTC-6. La comparación diaria tiene desfase parcial; confiar más en la mensual y la anual [Verificar]"
+  }
+}

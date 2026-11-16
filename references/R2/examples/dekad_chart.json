@@ -1,0 +1,2119 @@
+{
+  "E1_REF_MAIZ": {
+    "strategy": "E1_REF_MAIZ",
+    "cohort_year": 2021,
+    "cycle_idx": 1,
+    "plant_date": "2021-05-01",
+    "harvest_date": "2021-09-02",
+    "variety": "maiz_corto",
+    "peff_method": "usda_scs_fao",
+    "state": "non_critical",
+    "severity_mm": 162.3270999194674,
+    "provisional": true,
+    "reasons": [
+      "provisional_sin_cita",
+      "umbral provisional — no usar para decisión"
+    ],
+    "dekads": [
+      {
+        "dekad_key": 202113,
+        "start": "2021-05-01",
+        "n_days": 10,
+        "etc_mm": 15.480634461195809,
+        "pef_mm": 6.6731379802802495,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 8.80749648091556,
+        "p_observed_mm": 8.960509315312347,
+        "idx": 1
+      },
+      {
+        "dekad_key": 202114,
+        "start": "2021-05-11",
+        "n_days": 10,
+        "etc_mm": 15.220242108202235,
+        "pef_mm": 33.54178458812926,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 0.0,
+        "p_observed_mm": 45.03900176233283,
+        "idx": 2
+      },
+      {
+        "dekad_key": 202115,
+        "start": "2021-05-21",
+        "n_days": 11,
+        "etc_mm": 21.44720717630591,
+        "pef_mm": 78.60284961595316,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 0.0,
+        "p_observed_mm": 105.54578195073746,
+        "idx": 3
+      },
+      {
+        "dekad_key": 202116,
+        "start": "2021-06-01",
+        "n_days": 10,
+        "etc_mm": 30.63811756865102,
+        "pef_mm": 15.859857586287738,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 14.77825998236328,
+        "p_observed_mm": 22.09722312805018,
+        "idx": 4
+      },
+      {
+        "dekad_key": 202117,
+        "start": "2021-06-11",
+        "n_days": 10,
+        "etc_mm": 43.72501994106404,
+        "pef_mm": 97.7418744575346,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 0.0,
+        "p_observed_mm": 136.18180346772922,
+        "idx": 5
+      },
+      {
+        "dekad_key": 202118,
+        "start": "2021-06-21",
+        "n_days": 10,
+        "etc_mm": 57.038246777587574,
+        "pef_mm": 13.019080244453217,
+        "critical_stage": "MID",
+        "over_threshold": false,
+        "limit_mm": 36.0,
+        "critical_segment_exposure_mm": 28.11483489919655,
+        "exposure_mm": 44.01916653313435,
+        "p_observed_mm": 18.13922473884019,
+        "idx": 6
+      },
+      {
+        "dekad_key": 202119,
+        "start": "2021-07-01",
+        "n_days": 10,
+        "etc_mm": 64.83633613208721,
+        "pef_mm": 44.42120279172146,
+        "critical_stage": "MID",
+        "over_threshold": false,
+        "limit_mm": 60.0,
+        "critical_segment_exposure_mm": 20.41513334036575,
+        "exposure_mm": 20.41513334036575,
+        "p_observed_mm": 51.266428586929194,
+        "idx": 7
+      },
+      {
+        "dekad_key": 202120,
+        "start": "2021-07-11",
+        "n_days": 10,
+        "etc_mm": 64.40365506512326,
+        "pef_mm": 14.336139021648679,
+        "critical_stage": "MID",
+        "over_threshold": false,
+        "limit_mm": 60.0,
+        "critical_segment_exposure_mm": 50.06751604347458,
+        "exposure_mm": 50.06751604347458,
+        "p_observed_mm": 16.545311724486034,
+        "idx": 8
+      },
+      {
+        "dekad_key": 202121,
+        "start": "2021-07-21",
+        "n_days": 11,
+        "etc_mm": 68.84029766931914,
+        "pef_mm": 13.55159592762773,
+        "critical_stage": "MID",
+        "over_threshold": false,
+        "limit_mm": 60.0,
+        "critical_segment_exposure_mm": 55.28870174169141,
+        "exposure_mm": 55.28870174169141,
+        "p_observed_mm": 15.639871980056396,
+        "idx": 9
+      },
+      {
+        "dekad_key": 202122,
+        "start": "2021-08-01",
+        "n_days": 10,
+        "etc_mm": 59.82648377049269,
+        "pef_mm": 23.553355619564996,
+        "critical_stage": "MID",
+        "over_threshold": false,
+        "limit_mm": 18.0,
+        "critical_segment_exposure_mm": 8.440913894739108,
+        "exposure_mm": 36.2731281509277,
+        "p_observed_mm": 25.7294752159559,
+        "idx": 10
+      },
+      {
+        "dekad_key": 202123,
+        "start": "2021-08-11",
+        "n_days": 10,
+        "etc_mm": 44.794717795431524,
+        "pef_mm": 8.744658534664312,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 36.05005926076721,
+        "p_observed_mm": 9.552586844684939,
+        "idx": 11
+      },
+      {
+        "dekad_key": 202124,
+        "start": "2021-08-21",
+        "n_days": 11,
+        "etc_mm": 29.886055689321093,
+        "pef_mm": 16.0917727799309,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 13.794282909390194,
+        "p_observed_mm": 17.57850879549844,
+        "idx": 12
+      },
+      {
+        "dekad_key": 202125,
+        "start": "2021-09-01",
+        "n_days": 2,
+        "etc_mm": 3.840961256174089,
+        "pef_mm": 1.9836938286924226,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 1.8572674274816665,
+        "p_observed_mm": 3.0157587864108515,
+        "idx": 13
+      }
+    ],
+    "stage_bands": [
+      {
+        "stage": "INI",
+        "start": "2021-05-01",
+        "end": "2021-05-20",
+        "critical": false
+      },
+      {
+        "stage": "DEV",
+        "start": "2021-05-21",
+        "end": "2021-06-24",
+        "critical": false
+      },
+      {
+        "stage": "MID",
+        "start": "2021-06-25",
+        "end": "2021-08-03",
+        "critical": true
+      },
+      {
+        "stage": "LATE",
+        "start": "2021-08-04",
+        "end": "2021-09-02",
+        "critical": false
+      }
+    ],
+    "etc_system_exploratory": null,
+    "etc_system_label": null,
+    "cumulative": [
+      {
+        "dekad_key": 202113,
+        "etc_cum_mm": 15.480634461195809,
+        "pef_cum_mm": 6.6731379802802495
+      },
+      {
+        "dekad_key": 202114,
+        "etc_cum_mm": 30.700876569398044,
+        "pef_cum_mm": 40.21492256840951
+      },
+      {
+        "dekad_key": 202115,
+        "etc_cum_mm": 52.14808374570396,
+        "pef_cum_mm": 118.81777218436267
+      },
+      {
+        "dekad_key": 202116,
+        "etc_cum_mm": 82.78620131435497,
+        "pef_cum_mm": 134.6776297706504
+      },
+      {
+        "dekad_key": 202117,
+        "etc_cum_mm": 126.511221255419,
+        "pef_cum_mm": 232.41950422818502
+      },
+      {
+        "dekad_key": 202118,
+        "etc_cum_mm": 183.54946803300658,
+        "pef_cum_mm": 245.43858447263824
+      },
+      {
+        "dekad_key": 202119,
+        "etc_cum_mm": 248.3858041650938,
+        "pef_cum_mm": 289.8597872643597
+      },
+      {
+        "dekad_key": 202120,
+        "etc_cum_mm": 312.78945923021706,
+        "pef_cum_mm": 304.1959262860084
+      },
+      {
+        "dekad_key": 202121,
+        "etc_cum_mm": 381.62975689953623,
+        "pef_cum_mm": 317.7475222136361
+      },
+      {
+        "dekad_key": 202122,
+        "etc_cum_mm": 441.45624067002893,
+        "pef_cum_mm": 341.30087783320107
+      },
+      {
+        "dekad_key": 202123,
+        "etc_cum_mm": 486.2509584654605,
+        "pef_cum_mm": 350.0455363678654
+      },
+      {
+        "dekad_key": 202124,
+        "etc_cum_mm": 516.1370141547816,
+        "pef_cum_mm": 366.1373091477963
+      },
+      {
+        "dekad_key": 202125,
+        "etc_cum_mm": 519.9779754109557,
+        "pef_cum_mm": 368.12100297648874
+      }
+    ]
+  },
+  "E2_MILPA": {
+    "strategy": "E2_MILPA",
+    "cohort_year": 2021,
+    "cycle_idx": 1,
+    "plant_date": "2021-05-01",
+    "harvest_date": "2021-09-02",
+    "variety": "maiz_corto",
+    "peff_method": "usda_scs_fao",
+    "state": "non_critical",
+    "severity_mm": 162.3270999194674,
+    "provisional": true,
+    "reasons": [
+      "provisional_sin_cita",
+      "umbral provisional — no usar para decisión"
+    ],
+    "dekads": [
+      {
+        "dekad_key": 202113,
+        "start": "2021-05-01",
+        "n_days": 10,
+        "etc_mm": 15.480634461195809,
+        "pef_mm": 6.6731379802802495,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 8.80749648091556,
+        "p_observed_mm": 8.960509315312347,
+        "idx": 1
+      },
+      {
+        "dekad_key": 202114,
+        "start": "2021-05-11",
+        "n_days": 10,
+        "etc_mm": 15.220242108202235,
+        "pef_mm": 33.54178458812926,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 0.0,
+        "p_observed_mm": 45.03900176233283,
+        "idx": 2
+      },
+      {
+        "dekad_key": 202115,
+        "start": "2021-05-21",
+        "n_days": 11,
+        "etc_mm": 21.44720717630591,
+        "pef_mm": 78.60284961595316,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 0.0,
+        "p_observed_mm": 105.54578195073746,
+        "idx": 3
+      },
+      {
+        "dekad_key": 202116,
+        "start": "2021-06-01",
+        "n_days": 10,
+        "etc_mm": 30.63811756865102,
+        "pef_mm": 15.859857586287738,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 14.77825998236328,
+        "p_observed_mm": 22.09722312805018,
+        "idx": 4
+      },
+      {
+        "dekad_key": 202117,
+        "start": "2021-06-11",
+        "n_days": 10,
+        "etc_mm": 43.72501994106404,
+        "pef_mm": 97.7418744575346,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 0.0,
+        "p_observed_mm": 136.18180346772922,
+        "idx": 5
+      },
+      {
+        "dekad_key": 202118,
+        "start": "2021-06-21",
+        "n_days": 10,
+        "etc_mm": 57.038246777587574,
+        "pef_mm": 13.019080244453217,
+        "critical_stage": "MID",
+        "over_threshold": false,
+        "limit_mm": 36.0,
+        "critical_segment_exposure_mm": 28.11483489919655,
+        "exposure_mm": 44.01916653313435,
+        "p_observed_mm": 18.13922473884019,
+        "idx": 6
+      },
+      {
+        "dekad_key": 202119,
+        "start": "2021-07-01",
+        "n_days": 10,
+        "etc_mm": 64.83633613208721,
+        "pef_mm": 44.42120279172146,
+        "critical_stage": "MID",
+        "over_threshold": false,
+        "limit_mm": 60.0,
+        "critical_segment_exposure_mm": 20.41513334036575,
+        "exposure_mm": 20.41513334036575,
+        "p_observed_mm": 51.266428586929194,
+        "idx": 7
+      },
+      {
+        "dekad_key": 202120,
+        "start": "2021-07-11",
+        "n_days": 10,
+        "etc_mm": 64.40365506512326,
+        "pef_mm": 14.336139021648679,
+        "critical_stage": "MID",
+        "over_threshold": false,
+        "limit_mm": 60.0,
+        "critical_segment_exposure_mm": 50.06751604347458,
+        "exposure_mm": 50.06751604347458,
+        "p_observed_mm": 16.545311724486034,
+        "idx": 8
+      },
+      {
+        "dekad_key": 202121,
+        "start": "2021-07-21",
+        "n_days": 11,
+        "etc_mm": 68.84029766931914,
+        "pef_mm": 13.55159592762773,
+        "critical_stage": "MID",
+        "over_threshold": false,
+        "limit_mm": 60.0,
+        "critical_segment_exposure_mm": 55.28870174169141,
+        "exposure_mm": 55.28870174169141,
+        "p_observed_mm": 15.639871980056396,
+        "idx": 9
+      },
+      {
+        "dekad_key": 202122,
+        "start": "2021-08-01",
+        "n_days": 10,
+        "etc_mm": 59.82648377049269,
+        "pef_mm": 23.553355619564996,
+        "critical_stage": "MID",
+        "over_threshold": false,
+        "limit_mm": 18.0,
+        "critical_segment_exposure_mm": 8.440913894739108,
+        "exposure_mm": 36.2731281509277,
+        "p_observed_mm": 25.7294752159559,
+        "idx": 10
+      },
+      {
+        "dekad_key": 202123,
+        "start": "2021-08-11",
+        "n_days": 10,
+        "etc_mm": 44.794717795431524,
+        "pef_mm": 8.744658534664312,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 36.05005926076721,
+        "p_observed_mm": 9.552586844684939,
+        "idx": 11
+      },
+      {
+        "dekad_key": 202124,
+        "start": "2021-08-21",
+        "n_days": 11,
+        "etc_mm": 29.886055689321093,
+        "pef_mm": 16.0917727799309,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 13.794282909390194,
+        "p_observed_mm": 17.57850879549844,
+        "idx": 12
+      },
+      {
+        "dekad_key": 202125,
+        "start": "2021-09-01",
+        "n_days": 2,
+        "etc_mm": 3.840961256174089,
+        "pef_mm": 1.9836938286924226,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 1.8572674274816665,
+        "p_observed_mm": 3.0157587864108515,
+        "idx": 13
+      }
+    ],
+    "stage_bands": [
+      {
+        "stage": "INI",
+        "start": "2021-05-01",
+        "end": "2021-05-20",
+        "critical": false
+      },
+      {
+        "stage": "DEV",
+        "start": "2021-05-21",
+        "end": "2021-06-24",
+        "critical": false
+      },
+      {
+        "stage": "MID",
+        "start": "2021-06-25",
+        "end": "2021-08-03",
+        "critical": true
+      },
+      {
+        "stage": "LATE",
+        "start": "2021-08-04",
+        "end": "2021-09-02",
+        "critical": false
+      }
+    ],
+    "etc_system_exploratory": [
+      9.288380676717486,
+      13.046072662401743,
+      20.893854630792887,
+      28.285697104480207,
+      42.07381129899498,
+      55.9829230199861,
+      63.75573052988577,
+      63.33026081403789,
+      67.61384922538315,
+      54.576241351365006,
+      35.68468457579212,
+      17.931633413592653,
+      2.3045767537044535
+    ],
+    "etc_system_label": "aproximación exploratoria",
+    "cumulative": [
+      {
+        "dekad_key": 202113,
+        "etc_cum_mm": 15.480634461195809,
+        "pef_cum_mm": 6.6731379802802495
+      },
+      {
+        "dekad_key": 202114,
+        "etc_cum_mm": 30.700876569398044,
+        "pef_cum_mm": 40.21492256840951
+      },
+      {
+        "dekad_key": 202115,
+        "etc_cum_mm": 52.14808374570396,
+        "pef_cum_mm": 118.81777218436267
+      },
+      {
+        "dekad_key": 202116,
+        "etc_cum_mm": 82.78620131435497,
+        "pef_cum_mm": 134.6776297706504
+      },
+      {
+        "dekad_key": 202117,
+        "etc_cum_mm": 126.511221255419,
+        "pef_cum_mm": 232.41950422818502
+      },
+      {
+        "dekad_key": 202118,
+        "etc_cum_mm": 183.54946803300658,
+        "pef_cum_mm": 245.43858447263824
+      },
+      {
+        "dekad_key": 202119,
+        "etc_cum_mm": 248.3858041650938,
+        "pef_cum_mm": 289.8597872643597
+      },
+      {
+        "dekad_key": 202120,
+        "etc_cum_mm": 312.78945923021706,
+        "pef_cum_mm": 304.1959262860084
+      },
+      {
+        "dekad_key": 202121,
+        "etc_cum_mm": 381.62975689953623,
+        "pef_cum_mm": 317.7475222136361
+      },
+      {
+        "dekad_key": 202122,
+        "etc_cum_mm": 441.45624067002893,
+        "pef_cum_mm": 341.30087783320107
+      },
+      {
+        "dekad_key": 202123,
+        "etc_cum_mm": 486.2509584654605,
+        "pef_cum_mm": 350.0455363678654
+      },
+      {
+        "dekad_key": 202124,
+        "etc_cum_mm": 516.1370141547816,
+        "pef_cum_mm": 366.1373091477963
+      },
+      {
+        "dekad_key": 202125,
+        "etc_cum_mm": 519.9779754109557,
+        "pef_cum_mm": 368.12100297648874
+      }
+    ]
+  },
+  "E3_MAIZ_FRIJOL_POSTRERA": {
+    "strategy": "E3_MAIZ_FRIJOL_POSTRERA",
+    "cohort_year": 2021,
+    "cycle_idx": 1,
+    "plant_date": "2021-05-01",
+    "harvest_date": "2021-09-02",
+    "variety": "maiz_corto",
+    "peff_method": "usda_scs_fao",
+    "state": "non_critical",
+    "severity_mm": 162.3270999194674,
+    "provisional": true,
+    "reasons": [
+      "provisional_sin_cita",
+      "umbral provisional — no usar para decisión"
+    ],
+    "dekads": [
+      {
+        "dekad_key": 202113,
+        "start": "2021-05-01",
+        "n_days": 10,
+        "etc_mm": 15.480634461195809,
+        "pef_mm": 6.6731379802802495,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 8.80749648091556,
+        "p_observed_mm": 8.960509315312347,
+        "idx": 1
+      },
+      {
+        "dekad_key": 202114,
+        "start": "2021-05-11",
+        "n_days": 10,
+        "etc_mm": 15.220242108202235,
+        "pef_mm": 33.54178458812926,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 0.0,
+        "p_observed_mm": 45.03900176233283,
+        "idx": 2
+      },
+      {
+        "dekad_key": 202115,
+        "start": "2021-05-21",
+        "n_days": 11,
+        "etc_mm": 21.44720717630591,
+        "pef_mm": 78.60284961595316,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 0.0,
+        "p_observed_mm": 105.54578195073746,
+        "idx": 3
+      },
+      {
+        "dekad_key": 202116,
+        "start": "2021-06-01",
+        "n_days": 10,
+        "etc_mm": 30.63811756865102,
+        "pef_mm": 15.859857586287738,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 14.77825998236328,
+        "p_observed_mm": 22.09722312805018,
+        "idx": 4
+      },
+      {
+        "dekad_key": 202117,
+        "start": "2021-06-11",
+        "n_days": 10,
+        "etc_mm": 43.72501994106404,
+        "pef_mm": 97.7418744575346,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 0.0,
+        "p_observed_mm": 136.18180346772922,
+        "idx": 5
+      },
+      {
+        "dekad_key": 202118,
+        "start": "2021-06-21",
+        "n_days": 10,
+        "etc_mm": 57.038246777587574,
+        "pef_mm": 13.019080244453217,
+        "critical_stage": "MID",
+        "over_threshold": false,
+        "limit_mm": 36.0,
+        "critical_segment_exposure_mm": 28.11483489919655,
+        "exposure_mm": 44.01916653313435,
+        "p_observed_mm": 18.13922473884019,
+        "idx": 6
+      },
+      {
+        "dekad_key": 202119,
+        "start": "2021-07-01",
+        "n_days": 10,
+        "etc_mm": 64.83633613208721,
+        "pef_mm": 44.42120279172146,
+        "critical_stage": "MID",
+        "over_threshold": false,
+        "limit_mm": 60.0,
+        "critical_segment_exposure_mm": 20.41513334036575,
+        "exposure_mm": 20.41513334036575,
+        "p_observed_mm": 51.266428586929194,
+        "idx": 7
+      },
+      {
+        "dekad_key": 202120,
+        "start": "2021-07-11",
+        "n_days": 10,
+        "etc_mm": 64.40365506512326,
+        "pef_mm": 14.336139021648679,
+        "critical_stage": "MID",
+        "over_threshold": false,
+        "limit_mm": 60.0,
+        "critical_segment_exposure_mm": 50.06751604347458,
+        "exposure_mm": 50.06751604347458,
+        "p_observed_mm": 16.545311724486034,
+        "idx": 8
+      },
+      {
+        "dekad_key": 202121,
+        "start": "2021-07-21",
+        "n_days": 11,
+        "etc_mm": 68.84029766931914,
+        "pef_mm": 13.55159592762773,
+        "critical_stage": "MID",
+        "over_threshold": false,
+        "limit_mm": 60.0,
+        "critical_segment_exposure_mm": 55.28870174169141,
+        "exposure_mm": 55.28870174169141,
+        "p_observed_mm": 15.639871980056396,
+        "idx": 9
+      },
+      {
+        "dekad_key": 202122,
+        "start": "2021-08-01",
+        "n_days": 10,
+        "etc_mm": 59.82648377049269,
+        "pef_mm": 23.553355619564996,
+        "critical_stage": "MID",
+        "over_threshold": false,
+        "limit_mm": 18.0,
+        "critical_segment_exposure_mm": 8.440913894739108,
+        "exposure_mm": 36.2731281509277,
+        "p_observed_mm": 25.7294752159559,
+        "idx": 10
+      },
+      {
+        "dekad_key": 202123,
+        "start": "2021-08-11",
+        "n_days": 10,
+        "etc_mm": 44.794717795431524,
+        "pef_mm": 8.744658534664312,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 36.05005926076721,
+        "p_observed_mm": 9.552586844684939,
+        "idx": 11
+      },
+      {
+        "dekad_key": 202124,
+        "start": "2021-08-21",
+        "n_days": 11,
+        "etc_mm": 29.886055689321093,
+        "pef_mm": 16.0917727799309,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 13.794282909390194,
+        "p_observed_mm": 17.57850879549844,
+        "idx": 12
+      },
+      {
+        "dekad_key": 202125,
+        "start": "2021-09-01",
+        "n_days": 2,
+        "etc_mm": 3.840961256174089,
+        "pef_mm": 1.9836938286924226,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 1.8572674274816665,
+        "p_observed_mm": 3.0157587864108515,
+        "idx": 13
+      }
+    ],
+    "stage_bands": [
+      {
+        "stage": "INI",
+        "start": "2021-05-01",
+        "end": "2021-05-20",
+        "critical": false
+      },
+      {
+        "stage": "DEV",
+        "start": "2021-05-21",
+        "end": "2021-06-24",
+        "critical": false
+      },
+      {
+        "stage": "MID",
+        "start": "2021-06-25",
+        "end": "2021-08-03",
+        "critical": true
+      },
+      {
+        "stage": "LATE",
+        "start": "2021-08-04",
+        "end": "2021-09-02",
+        "critical": false
+      }
+    ],
+    "etc_system_exploratory": null,
+    "etc_system_label": null,
+    "cumulative": [
+      {
+        "dekad_key": 202113,
+        "etc_cum_mm": 15.480634461195809,
+        "pef_cum_mm": 6.6731379802802495
+      },
+      {
+        "dekad_key": 202114,
+        "etc_cum_mm": 30.700876569398044,
+        "pef_cum_mm": 40.21492256840951
+      },
+      {
+        "dekad_key": 202115,
+        "etc_cum_mm": 52.14808374570396,
+        "pef_cum_mm": 118.81777218436267
+      },
+      {
+        "dekad_key": 202116,
+        "etc_cum_mm": 82.78620131435497,
+        "pef_cum_mm": 134.6776297706504
+      },
+      {
+        "dekad_key": 202117,
+        "etc_cum_mm": 126.511221255419,
+        "pef_cum_mm": 232.41950422818502
+      },
+      {
+        "dekad_key": 202118,
+        "etc_cum_mm": 183.54946803300658,
+        "pef_cum_mm": 245.43858447263824
+      },
+      {
+        "dekad_key": 202119,
+        "etc_cum_mm": 248.3858041650938,
+        "pef_cum_mm": 289.8597872643597
+      },
+      {
+        "dekad_key": 202120,
+        "etc_cum_mm": 312.78945923021706,
+        "pef_cum_mm": 304.1959262860084
+      },
+      {
+        "dekad_key": 202121,
+        "etc_cum_mm": 381.62975689953623,
+        "pef_cum_mm": 317.7475222136361
+      },
+      {
+        "dekad_key": 202122,
+        "etc_cum_mm": 441.45624067002893,
+        "pef_cum_mm": 341.30087783320107
+      },
+      {
+        "dekad_key": 202123,
+        "etc_cum_mm": 486.2509584654605,
+        "pef_cum_mm": 350.0455363678654
+      },
+      {
+        "dekad_key": 202124,
+        "etc_cum_mm": 516.1370141547816,
+        "pef_cum_mm": 366.1373091477963
+      },
+      {
+        "dekad_key": 202125,
+        "etc_cum_mm": 519.9779754109557,
+        "pef_cum_mm": 368.12100297648874
+      }
+    ]
+  },
+  "E4_MAIZ_INTERMEDIO": {
+    "strategy": "E4_MAIZ_INTERMEDIO",
+    "cohort_year": 2021,
+    "cycle_idx": 1,
+    "plant_date": "2021-05-01",
+    "harvest_date": "2021-09-17",
+    "variety": "maiz_intermedio",
+    "peff_method": "usda_scs_fao",
+    "state": "non_critical",
+    "severity_mm": 185.62161232676095,
+    "provisional": true,
+    "reasons": [
+      "provisional_sin_cita",
+      "umbral provisional — no usar para decisión"
+    ],
+    "dekads": [
+      {
+        "dekad_key": 202113,
+        "start": "2021-05-01",
+        "n_days": 10,
+        "etc_mm": 15.480634461195809,
+        "pef_mm": 6.6731379802802495,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 8.80749648091556,
+        "p_observed_mm": 8.960509315312347,
+        "idx": 1
+      },
+      {
+        "dekad_key": 202114,
+        "start": "2021-05-11",
+        "n_days": 10,
+        "etc_mm": 15.220242108202235,
+        "pef_mm": 33.54178458812926,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 0.0,
+        "p_observed_mm": 45.03900176233283,
+        "idx": 2
+      },
+      {
+        "dekad_key": 202115,
+        "start": "2021-05-21",
+        "n_days": 11,
+        "etc_mm": 16.57663836623842,
+        "pef_mm": 78.60284961595315,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 0.0,
+        "p_observed_mm": 105.54578195073746,
+        "idx": 3
+      },
+      {
+        "dekad_key": 202116,
+        "start": "2021-06-01",
+        "n_days": 10,
+        "etc_mm": 23.51213164600898,
+        "pef_mm": 15.859857586287738,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 7.652274059721243,
+        "p_observed_mm": 22.09722312805018,
+        "idx": 4
+      },
+      {
+        "dekad_key": 202117,
+        "start": "2021-06-11",
+        "n_days": 10,
+        "etc_mm": 34.83473496982604,
+        "pef_mm": 97.7418744575346,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 0.0,
+        "p_observed_mm": 136.18180346772922,
+        "idx": 5
+      },
+      {
+        "dekad_key": 202118,
+        "start": "2021-06-21",
+        "n_days": 10,
+        "etc_mm": 47.905654779291424,
+        "pef_mm": 13.019080244453217,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 34.8865745348382,
+        "p_observed_mm": 18.13922473884019,
+        "idx": 6
+      },
+      {
+        "dekad_key": 202119,
+        "start": "2021-07-01",
+        "n_days": 10,
+        "etc_mm": 63.66857365235537,
+        "pef_mm": 44.42120279172146,
+        "critical_stage": "MID",
+        "over_threshold": false,
+        "limit_mm": 36.0,
+        "critical_segment_exposure_mm": 0.0,
+        "exposure_mm": 19.247370860633907,
+        "p_observed_mm": 51.266428586929194,
+        "idx": 7
+      },
+      {
+        "dekad_key": 202120,
+        "start": "2021-07-11",
+        "n_days": 10,
+        "etc_mm": 64.40365506512326,
+        "pef_mm": 14.336139021648679,
+        "critical_stage": "MID",
+        "over_threshold": false,
+        "limit_mm": 60.0,
+        "critical_segment_exposure_mm": 50.06751604347458,
+        "exposure_mm": 50.06751604347458,
+        "p_observed_mm": 16.545311724486034,
+        "idx": 8
+      },
+      {
+        "dekad_key": 202121,
+        "start": "2021-07-21",
+        "n_days": 11,
+        "etc_mm": 68.84029766931914,
+        "pef_mm": 13.55159592762773,
+        "critical_stage": "MID",
+        "over_threshold": false,
+        "limit_mm": 60.0,
+        "critical_segment_exposure_mm": 55.28870174169141,
+        "exposure_mm": 55.28870174169141,
+        "p_observed_mm": 15.639871980056396,
+        "idx": 9
+      },
+      {
+        "dekad_key": 202122,
+        "start": "2021-08-01",
+        "n_days": 10,
+        "etc_mm": 62.95652780734731,
+        "pef_mm": 23.553355619564996,
+        "critical_stage": "MID",
+        "over_threshold": false,
+        "limit_mm": 60.0,
+        "critical_segment_exposure_mm": 39.40317218778231,
+        "exposure_mm": 39.40317218778231,
+        "p_observed_mm": 25.7294752159559,
+        "idx": 10
+      },
+      {
+        "dekad_key": 202123,
+        "start": "2021-08-11",
+        "n_days": 10,
+        "etc_mm": 61.148814840022624,
+        "pef_mm": 8.744658534664312,
+        "critical_stage": "MID",
+        "over_threshold": false,
+        "limit_mm": 48.0,
+        "critical_segment_exposure_mm": 40.862222353812655,
+        "exposure_mm": 52.40415630535831,
+        "p_observed_mm": 9.552586844684939,
+        "idx": 11
+      },
+      {
+        "dekad_key": 202124,
+        "start": "2021-08-21",
+        "n_days": 11,
+        "etc_mm": 51.8636393445343,
+        "pef_mm": 16.0917727799309,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 35.7718665646034,
+        "p_observed_mm": 17.57850879549844,
+        "idx": 12
+      },
+      {
+        "dekad_key": 202125,
+        "start": "2021-09-01",
+        "n_days": 10,
+        "etc_mm": 32.012745481748446,
+        "pef_mm": 18.426863038545523,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 13.585882443202923,
+        "p_observed_mm": 28.01388667479666,
+        "idx": 13
+      },
+      {
+        "dekad_key": 202126,
+        "start": "2021-09-11",
+        "n_days": 7,
+        "etc_mm": 13.938717489749626,
+        "pef_mm": 14.15493611980899,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 0.0,
+        "p_observed_mm": 21.519385883524446,
+        "idx": 14
+      }
+    ],
+    "stage_bands": [
+      {
+        "stage": "INI",
+        "start": "2021-05-01",
+        "end": "2021-05-25",
+        "critical": false
+      },
+      {
+        "stage": "DEV",
+        "start": "2021-05-26",
+        "end": "2021-07-04",
+        "critical": false
+      },
+      {
+        "stage": "MID",
+        "start": "2021-07-05",
+        "end": "2021-08-18",
+        "critical": true
+      },
+      {
+        "stage": "LATE",
+        "start": "2021-08-19",
+        "end": "2021-09-17",
+        "critical": false
+      }
+    ],
+    "etc_system_exploratory": null,
+    "etc_system_label": null,
+    "cumulative": [
+      {
+        "dekad_key": 202113,
+        "etc_cum_mm": 15.480634461195809,
+        "pef_cum_mm": 6.6731379802802495
+      },
+      {
+        "dekad_key": 202114,
+        "etc_cum_mm": 30.700876569398044,
+        "pef_cum_mm": 40.21492256840951
+      },
+      {
+        "dekad_key": 202115,
+        "etc_cum_mm": 47.27751493563646,
+        "pef_cum_mm": 118.81777218436267
+      },
+      {
+        "dekad_key": 202116,
+        "etc_cum_mm": 70.78964658164544,
+        "pef_cum_mm": 134.6776297706504
+      },
+      {
+        "dekad_key": 202117,
+        "etc_cum_mm": 105.62438155147149,
+        "pef_cum_mm": 232.41950422818502
+      },
+      {
+        "dekad_key": 202118,
+        "etc_cum_mm": 153.53003633076293,
+        "pef_cum_mm": 245.43858447263824
+      },
+      {
+        "dekad_key": 202119,
+        "etc_cum_mm": 217.1986099831183,
+        "pef_cum_mm": 289.8597872643597
+      },
+      {
+        "dekad_key": 202120,
+        "etc_cum_mm": 281.6022650482416,
+        "pef_cum_mm": 304.1959262860084
+      },
+      {
+        "dekad_key": 202121,
+        "etc_cum_mm": 350.4425627175607,
+        "pef_cum_mm": 317.7475222136361
+      },
+      {
+        "dekad_key": 202122,
+        "etc_cum_mm": 413.399090524908,
+        "pef_cum_mm": 341.30087783320107
+      },
+      {
+        "dekad_key": 202123,
+        "etc_cum_mm": 474.5479053649306,
+        "pef_cum_mm": 350.0455363678654
+      },
+      {
+        "dekad_key": 202124,
+        "etc_cum_mm": 526.4115447094649,
+        "pef_cum_mm": 366.1373091477963
+      },
+      {
+        "dekad_key": 202125,
+        "etc_cum_mm": 558.4242901912133,
+        "pef_cum_mm": 384.56417218634186
+      },
+      {
+        "dekad_key": 202126,
+        "etc_cum_mm": 572.3630076809629,
+        "pef_cum_mm": 398.7191083061509
+      }
+    ]
+  },
+  "E5_MAIZ_TARDIO": {
+    "strategy": "E5_MAIZ_TARDIO",
+    "cohort_year": 2021,
+    "cycle_idx": 1,
+    "plant_date": "2021-05-31",
+    "harvest_date": "2021-10-02",
+    "variety": "maiz_corto",
+    "peff_method": "usda_scs_fao",
+    "state": "critical",
+    "severity_mm": 188.838321635061,
+    "provisional": true,
+    "reasons": [
+      "provisional_sin_cita",
+      "umbral provisional — no usar para decisión"
+    ],
+    "dekads": [
+      {
+        "dekad_key": 202115,
+        "start": "2021-05-31",
+        "n_days": 1,
+        "etc_mm": 1.1621549739001167,
+        "pef_mm": 0.0,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 1.1621549739001167,
+        "p_observed_mm": 0.0,
+        "idx": 1
+      },
+      {
+        "dekad_key": 202116,
+        "start": "2021-06-01",
+        "n_days": 10,
+        "etc_mm": 13.184884906242644,
+        "pef_mm": 15.859857586287738,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 0.0,
+        "p_observed_mm": 22.09722312805018,
+        "idx": 2
+      },
+      {
+        "dekad_key": 202117,
+        "start": "2021-06-11",
+        "n_days": 10,
+        "etc_mm": 13.698629914419985,
+        "pef_mm": 97.7418744575346,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 0.0,
+        "p_observed_mm": 136.18180346772922,
+        "idx": 3
+      },
+      {
+        "dekad_key": 202118,
+        "start": "2021-06-21",
+        "n_days": 10,
+        "etc_mm": 21.438186883025814,
+        "pef_mm": 13.019080244453217,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 8.419106638572597,
+        "p_observed_mm": 18.13922473884019,
+        "idx": 4
+      },
+      {
+        "dekad_key": 202119,
+        "start": "2021-07-01",
+        "n_days": 10,
+        "etc_mm": 37.81075574853663,
+        "pef_mm": 44.42120279172146,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 0.0,
+        "p_observed_mm": 51.266428586929194,
+        "idx": 5
+      },
+      {
+        "dekad_key": 202120,
+        "start": "2021-07-11",
+        "n_days": 10,
+        "etc_mm": 51.20961338833607,
+        "pef_mm": 14.336139021648679,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 36.87347436668739,
+        "p_observed_mm": 16.545311724486034,
+        "idx": 6
+      },
+      {
+        "dekad_key": 202121,
+        "start": "2021-07-21",
+        "n_days": 11,
+        "etc_mm": 67.46284314492303,
+        "pef_mm": 13.55159592762773,
+        "critical_stage": "MID",
+        "over_threshold": true,
+        "limit_mm": 38.18181818181818,
+        "critical_segment_exposure_mm": 41.1911512419055,
+        "exposure_mm": 53.9112472172953,
+        "p_observed_mm": 15.639871980056396,
+        "idx": 7
+      },
+      {
+        "dekad_key": 202122,
+        "start": "2021-08-01",
+        "n_days": 10,
+        "etc_mm": 62.95652780734731,
+        "pef_mm": 23.553355619564996,
+        "critical_stage": "MID",
+        "over_threshold": false,
+        "limit_mm": 60.0,
+        "critical_segment_exposure_mm": 39.40317218778231,
+        "exposure_mm": 39.40317218778231,
+        "p_observed_mm": 25.7294752159559,
+        "idx": 8
+      },
+      {
+        "dekad_key": 202123,
+        "start": "2021-08-11",
+        "n_days": 10,
+        "etc_mm": 61.27819631597829,
+        "pef_mm": 8.744658534664312,
+        "critical_stage": "MID",
+        "over_threshold": false,
+        "limit_mm": 60.0,
+        "critical_segment_exposure_mm": 52.53353778131398,
+        "exposure_mm": 52.53353778131398,
+        "p_observed_mm": 9.552586844684939,
+        "idx": 9
+      },
+      {
+        "dekad_key": 202124,
+        "start": "2021-08-21",
+        "n_days": 11,
+        "etc_mm": 62.054353850013754,
+        "pef_mm": 16.0917727799309,
+        "critical_stage": "MID",
+        "over_threshold": false,
+        "limit_mm": 60.0,
+        "critical_segment_exposure_mm": 45.962581070082855,
+        "exposure_mm": 45.962581070082855,
+        "p_observed_mm": 17.57850879549844,
+        "idx": 10
+      },
+      {
+        "dekad_key": 202125,
+        "start": "2021-09-01",
+        "n_days": 10,
+        "etc_mm": 50.81454483439871,
+        "pef_mm": 18.426863038545527,
+        "critical_stage": "MID",
+        "over_threshold": false,
+        "limit_mm": 12.0,
+        "critical_segment_exposure_mm": 9.747879353976344,
+        "exposure_mm": 32.38768179585318,
+        "p_observed_mm": 28.01388667479666,
+        "idx": 11
+      },
+      {
+        "dekad_key": 202126,
+        "start": "2021-09-11",
+        "n_days": 10,
+        "etc_mm": 35.32000736331301,
+        "pef_mm": 37.7294833787645,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 0.0,
+        "p_observed_mm": 57.35916468583903,
+        "idx": 12
+      },
+      {
+        "dekad_key": 202127,
+        "start": "2021-09-21",
+        "n_days": 10,
+        "etc_mm": 22.412776720927074,
+        "pef_mm": 84.53535717393517,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 0.0,
+        "p_observed_mm": 128.5169326396102,
+        "idx": 13
+      },
+      {
+        "dekad_key": 202128,
+        "start": "2021-10-01",
+        "n_days": 2,
+        "etc_mm": 3.052672477344589,
+        "pef_mm": 0.0,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 3.052672477344589,
+        "p_observed_mm": 0.0,
+        "idx": 14
+      }
+    ],
+    "stage_bands": [
+      {
+        "stage": "INI",
+        "start": "2021-05-31",
+        "end": "2021-06-19",
+        "critical": false
+      },
+      {
+        "stage": "DEV",
+        "start": "2021-06-20",
+        "end": "2021-07-24",
+        "critical": false
+      },
+      {
+        "stage": "MID",
+        "start": "2021-07-25",
+        "end": "2021-09-02",
+        "critical": true
+      },
+      {
+        "stage": "LATE",
+        "start": "2021-09-03",
+        "end": "2021-10-02",
+        "critical": false
+      }
+    ],
+    "etc_system_exploratory": null,
+    "etc_system_label": null,
+    "cumulative": [
+      {
+        "dekad_key": 202115,
+        "etc_cum_mm": 1.1621549739001167,
+        "pef_cum_mm": 0.0
+      },
+      {
+        "dekad_key": 202116,
+        "etc_cum_mm": 14.347039880142761,
+        "pef_cum_mm": 15.859857586287738
+      },
+      {
+        "dekad_key": 202117,
+        "etc_cum_mm": 28.045669794562748,
+        "pef_cum_mm": 113.60173204382235
+      },
+      {
+        "dekad_key": 202118,
+        "etc_cum_mm": 49.48385667758856,
+        "pef_cum_mm": 126.62081228827557
+      },
+      {
+        "dekad_key": 202119,
+        "etc_cum_mm": 87.29461242612518,
+        "pef_cum_mm": 171.04201507999704
+      },
+      {
+        "dekad_key": 202120,
+        "etc_cum_mm": 138.50422581446125,
+        "pef_cum_mm": 185.37815410164572
+      },
+      {
+        "dekad_key": 202121,
+        "etc_cum_mm": 205.96706895938428,
+        "pef_cum_mm": 198.92975002927346
+      },
+      {
+        "dekad_key": 202122,
+        "etc_cum_mm": 268.9235967667316,
+        "pef_cum_mm": 222.48310564883846
+      },
+      {
+        "dekad_key": 202123,
+        "etc_cum_mm": 330.20179308270986,
+        "pef_cum_mm": 231.22776418350279
+      },
+      {
+        "dekad_key": 202124,
+        "etc_cum_mm": 392.2561469327236,
+        "pef_cum_mm": 247.31953696343368
+      },
+      {
+        "dekad_key": 202125,
+        "etc_cum_mm": 443.0706917671223,
+        "pef_cum_mm": 265.7464000019792
+      },
+      {
+        "dekad_key": 202126,
+        "etc_cum_mm": 478.39069913043534,
+        "pef_cum_mm": 303.4758833807437
+      },
+      {
+        "dekad_key": 202127,
+        "etc_cum_mm": 500.8034758513624,
+        "pef_cum_mm": 388.01124055467886
+      },
+      {
+        "dekad_key": 202128,
+        "etc_cum_mm": 503.856148328707,
+        "pef_cum_mm": 388.01124055467886
+      }
+    ]
+  },
+  "E6_SORGO": {
+    "strategy": "E6_SORGO",
+    "cohort_year": 2021,
+    "cycle_idx": 1,
+    "plant_date": "2021-05-01",
+    "harvest_date": "2021-09-02",
+    "variety": "sorgo_grano",
+    "peff_method": "usda_scs_fao",
+    "state": "non_critical",
+    "severity_mm": 130.8637122769473,
+    "provisional": true,
+    "reasons": [
+      "provisional_sin_cita",
+      "umbral provisional — no usar para decisión"
+    ],
+    "dekads": [
+      {
+        "dekad_key": 202113,
+        "start": "2021-05-01",
+        "n_days": 10,
+        "etc_mm": 15.480634461195809,
+        "pef_mm": 6.6731379802802495,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 8.80749648091556,
+        "p_observed_mm": 8.960509315312347,
+        "idx": 1
+      },
+      {
+        "dekad_key": 202114,
+        "start": "2021-05-11",
+        "n_days": 10,
+        "etc_mm": 15.220242108202235,
+        "pef_mm": 33.54178458812926,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 0.0,
+        "p_observed_mm": 45.03900176233283,
+        "idx": 2
+      },
+      {
+        "dekad_key": 202115,
+        "start": "2021-05-21",
+        "n_days": 11,
+        "etc_mm": 20.380650873487006,
+        "pef_mm": 78.60284961595316,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 0.0,
+        "p_observed_mm": 105.54578195073746,
+        "idx": 3
+      },
+      {
+        "dekad_key": 202116,
+        "start": "2021-06-01",
+        "n_days": 10,
+        "etc_mm": 27.72924545824963,
+        "pef_mm": 15.859857586287738,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 11.86938787196189,
+        "p_observed_mm": 22.09722312805018,
+        "idx": 4
+      },
+      {
+        "dekad_key": 202117,
+        "start": "2021-06-11",
+        "n_days": 10,
+        "etc_mm": 38.72062160329003,
+        "pef_mm": 97.7418744575346,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 0.0,
+        "p_observed_mm": 136.18180346772922,
+        "idx": 5
+      },
+      {
+        "dekad_key": 202118,
+        "start": "2021-06-21",
+        "n_days": 10,
+        "etc_mm": 49.9608090860433,
+        "pef_mm": 13.019080244453217,
+        "critical_stage": "MID",
+        "over_threshold": false,
+        "limit_mm": 34.8,
+        "critical_segment_exposure_mm": 23.757450739508464,
+        "exposure_mm": 36.94172884159008,
+        "p_observed_mm": 18.13922473884019,
+        "idx": 6
+      },
+      {
+        "dekad_key": 202119,
+        "start": "2021-07-01",
+        "n_days": 10,
+        "etc_mm": 56.73179411557633,
+        "pef_mm": 44.42120279172146,
+        "critical_stage": "MID",
+        "over_threshold": false,
+        "limit_mm": 58.0,
+        "critical_segment_exposure_mm": 12.310591323854865,
+        "exposure_mm": 12.310591323854865,
+        "p_observed_mm": 51.266428586929194,
+        "idx": 7
+      },
+      {
+        "dekad_key": 202120,
+        "start": "2021-07-11",
+        "n_days": 10,
+        "etc_mm": 56.35319818198287,
+        "pef_mm": 14.336139021648679,
+        "critical_stage": "MID",
+        "over_threshold": false,
+        "limit_mm": 58.0,
+        "critical_segment_exposure_mm": 42.01705916033419,
+        "exposure_mm": 42.01705916033419,
+        "p_observed_mm": 16.545311724486034,
+        "idx": 8
+      },
+      {
+        "dekad_key": 202121,
+        "start": "2021-07-21",
+        "n_days": 11,
+        "etc_mm": 60.235260460654246,
+        "pef_mm": 13.55159592762773,
+        "critical_stage": "MID",
+        "over_threshold": false,
+        "limit_mm": 58.0,
+        "critical_segment_exposure_mm": 46.683664533026516,
+        "exposure_mm": 46.683664533026516,
+        "p_observed_mm": 15.639871980056396,
+        "idx": 9
+      },
+      {
+        "dekad_key": 202122,
+        "start": "2021-08-01",
+        "n_days": 10,
+        "etc_mm": 53.24575945680853,
+        "pef_mm": 23.553355619564996,
+        "critical_stage": "MID",
+        "over_threshold": false,
+        "limit_mm": 17.4,
+        "critical_segment_exposure_mm": 6.094946520223274,
+        "exposure_mm": 29.692403837243532,
+        "p_observed_mm": 25.7294752159559,
+        "idx": 10
+      },
+      {
+        "dekad_key": 202123,
+        "start": "2021-08-11",
+        "n_days": 10,
+        "etc_mm": 43.92225794086527,
+        "pef_mm": 8.744658534664312,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 35.17759940620096,
+        "p_observed_mm": 9.552586844684939,
+        "idx": 11
+      },
+      {
+        "dekad_key": 202124,
+        "start": "2021-08-21",
+        "n_days": 11,
+        "etc_mm": 35.375031288942814,
+        "pef_mm": 16.0917727799309,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 19.283258509011915,
+        "p_observed_mm": 17.57850879549844,
+        "idx": 12
+      },
+      {
+        "dekad_key": 202125,
+        "start": "2021-09-01",
+        "n_days": 2,
+        "etc_mm": 5.623590107485361,
+        "pef_mm": 1.9836938286924226,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 3.6398962787929383,
+        "p_observed_mm": 3.0157587864108515,
+        "idx": 13
+      }
+    ],
+    "stage_bands": [
+      {
+        "stage": "INI",
+        "start": "2021-05-01",
+        "end": "2021-05-20",
+        "critical": false
+      },
+      {
+        "stage": "DEV",
+        "start": "2021-05-21",
+        "end": "2021-06-24",
+        "critical": false
+      },
+      {
+        "stage": "MID",
+        "start": "2021-06-25",
+        "end": "2021-08-03",
+        "critical": true
+      },
+      {
+        "stage": "LATE",
+        "start": "2021-08-04",
+        "end": "2021-09-02",
+        "critical": false
+      }
+    ],
+    "etc_system_exploratory": null,
+    "etc_system_label": null,
+    "cumulative": [
+      {
+        "dekad_key": 202113,
+        "etc_cum_mm": 15.480634461195809,
+        "pef_cum_mm": 6.6731379802802495
+      },
+      {
+        "dekad_key": 202114,
+        "etc_cum_mm": 30.700876569398044,
+        "pef_cum_mm": 40.21492256840951
+      },
+      {
+        "dekad_key": 202115,
+        "etc_cum_mm": 51.08152744288505,
+        "pef_cum_mm": 118.81777218436267
+      },
+      {
+        "dekad_key": 202116,
+        "etc_cum_mm": 78.81077290113467,
+        "pef_cum_mm": 134.6776297706504
+      },
+      {
+        "dekad_key": 202117,
+        "etc_cum_mm": 117.5313945044247,
+        "pef_cum_mm": 232.41950422818502
+      },
+      {
+        "dekad_key": 202118,
+        "etc_cum_mm": 167.492203590468,
+        "pef_cum_mm": 245.43858447263824
+      },
+      {
+        "dekad_key": 202119,
+        "etc_cum_mm": 224.22399770604432,
+        "pef_cum_mm": 289.8597872643597
+      },
+      {
+        "dekad_key": 202120,
+        "etc_cum_mm": 280.5771958880272,
+        "pef_cum_mm": 304.1959262860084
+      },
+      {
+        "dekad_key": 202121,
+        "etc_cum_mm": 340.8124563486814,
+        "pef_cum_mm": 317.7475222136361
+      },
+      {
+        "dekad_key": 202122,
+        "etc_cum_mm": 394.0582158054899,
+        "pef_cum_mm": 341.30087783320107
+      },
+      {
+        "dekad_key": 202123,
+        "etc_cum_mm": 437.9804737463552,
+        "pef_cum_mm": 350.0455363678654
+      },
+      {
+        "dekad_key": 202124,
+        "etc_cum_mm": 473.355505035298,
+        "pef_cum_mm": 366.1373091477963
+      },
+      {
+        "dekad_key": 202125,
+        "etc_cum_mm": 478.97909514278336,
+        "pef_cum_mm": 368.12100297648874
+      }
+    ]
+  },
+  "E7_ROTACION_2A": {
+    "strategy": "E7_ROTACION_2A",
+    "cohort_year": 2021,
+    "cycle_idx": 1,
+    "plant_date": "2021-05-01",
+    "harvest_date": "2021-09-02",
+    "variety": "maiz_corto",
+    "peff_method": "usda_scs_fao",
+    "state": "non_critical",
+    "severity_mm": 162.3270999194674,
+    "provisional": true,
+    "reasons": [
+      "provisional_sin_cita",
+      "umbral provisional — no usar para decisión"
+    ],
+    "dekads": [
+      {
+        "dekad_key": 202113,
+        "start": "2021-05-01",
+        "n_days": 10,
+        "etc_mm": 15.480634461195809,
+        "pef_mm": 6.6731379802802495,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 8.80749648091556,
+        "p_observed_mm": 8.960509315312347,
+        "idx": 1
+      },
+      {
+        "dekad_key": 202114,
+        "start": "2021-05-11",
+        "n_days": 10,
+        "etc_mm": 15.220242108202235,
+        "pef_mm": 33.54178458812926,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 0.0,
+        "p_observed_mm": 45.03900176233283,
+        "idx": 2
+      },
+      {
+        "dekad_key": 202115,
+        "start": "2021-05-21",
+        "n_days": 11,
+        "etc_mm": 21.44720717630591,
+        "pef_mm": 78.60284961595316,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 0.0,
+        "p_observed_mm": 105.54578195073746,
+        "idx": 3
+      },
+      {
+        "dekad_key": 202116,
+        "start": "2021-06-01",
+        "n_days": 10,
+        "etc_mm": 30.63811756865102,
+        "pef_mm": 15.859857586287738,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 14.77825998236328,
+        "p_observed_mm": 22.09722312805018,
+        "idx": 4
+      },
+      {
+        "dekad_key": 202117,
+        "start": "2021-06-11",
+        "n_days": 10,
+        "etc_mm": 43.72501994106404,
+        "pef_mm": 97.7418744575346,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 0.0,
+        "p_observed_mm": 136.18180346772922,
+        "idx": 5
+      },
+      {
+        "dekad_key": 202118,
+        "start": "2021-06-21",
+        "n_days": 10,
+        "etc_mm": 57.038246777587574,
+        "pef_mm": 13.019080244453217,
+        "critical_stage": "MID",
+        "over_threshold": false,
+        "limit_mm": 36.0,
+        "critical_segment_exposure_mm": 28.11483489919655,
+        "exposure_mm": 44.01916653313435,
+        "p_observed_mm": 18.13922473884019,
+        "idx": 6
+      },
+      {
+        "dekad_key": 202119,
+        "start": "2021-07-01",
+        "n_days": 10,
+        "etc_mm": 64.83633613208721,
+        "pef_mm": 44.42120279172146,
+        "critical_stage": "MID",
+        "over_threshold": false,
+        "limit_mm": 60.0,
+        "critical_segment_exposure_mm": 20.41513334036575,
+        "exposure_mm": 20.41513334036575,
+        "p_observed_mm": 51.266428586929194,
+        "idx": 7
+      },
+      {
+        "dekad_key": 202120,
+        "start": "2021-07-11",
+        "n_days": 10,
+        "etc_mm": 64.40365506512326,
+        "pef_mm": 14.336139021648679,
+        "critical_stage": "MID",
+        "over_threshold": false,
+        "limit_mm": 60.0,
+        "critical_segment_exposure_mm": 50.06751604347458,
+        "exposure_mm": 50.06751604347458,
+        "p_observed_mm": 16.545311724486034,
+        "idx": 8
+      },
+      {
+        "dekad_key": 202121,
+        "start": "2021-07-21",
+        "n_days": 11,
+        "etc_mm": 68.84029766931914,
+        "pef_mm": 13.55159592762773,
+        "critical_stage": "MID",
+        "over_threshold": false,
+        "limit_mm": 60.0,
+        "critical_segment_exposure_mm": 55.28870174169141,
+        "exposure_mm": 55.28870174169141,
+        "p_observed_mm": 15.639871980056396,
+        "idx": 9
+      },
+      {
+        "dekad_key": 202122,
+        "start": "2021-08-01",
+        "n_days": 10,
+        "etc_mm": 59.82648377049269,
+        "pef_mm": 23.553355619564996,
+        "critical_stage": "MID",
+        "over_threshold": false,
+        "limit_mm": 18.0,
+        "critical_segment_exposure_mm": 8.440913894739108,
+        "exposure_mm": 36.2731281509277,
+        "p_observed_mm": 25.7294752159559,
+        "idx": 10
+      },
+      {
+        "dekad_key": 202123,
+        "start": "2021-08-11",
+        "n_days": 10,
+        "etc_mm": 44.794717795431524,
+        "pef_mm": 8.744658534664312,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 36.05005926076721,
+        "p_observed_mm": 9.552586844684939,
+        "idx": 11
+      },
+      {
+        "dekad_key": 202124,
+        "start": "2021-08-21",
+        "n_days": 11,
+        "etc_mm": 29.886055689321093,
+        "pef_mm": 16.0917727799309,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 13.794282909390194,
+        "p_observed_mm": 17.57850879549844,
+        "idx": 12
+      },
+      {
+        "dekad_key": 202125,
+        "start": "2021-09-01",
+        "n_days": 2,
+        "etc_mm": 3.840961256174089,
+        "pef_mm": 1.9836938286924226,
+        "critical_stage": null,
+        "over_threshold": null,
+        "limit_mm": null,
+        "critical_segment_exposure_mm": null,
+        "exposure_mm": 1.8572674274816665,
+        "p_observed_mm": 3.0157587864108515,
+        "idx": 13
+      }
+    ],
+    "stage_bands": [
+      {
+        "stage": "INI",
+        "start": "2021-05-01",
+        "end": "2021-05-20",
+        "critical": false
+      },
+      {
+        "stage": "DEV",
+        "start": "2021-05-21",
+        "end": "2021-06-24",
+        "critical": false
+      },
+      {
+        "stage": "MID",
+        "start": "2021-06-25",
+        "end": "2021-08-03",
+        "critical": true
+      },
+      {
+        "stage": "LATE",
+        "start": "2021-08-04",
+        "end": "2021-09-02",
+        "critical": false
+      }
+    ],
+    "etc_system_exploratory": null,
+    "etc_system_label": null,
+    "cumulative": [
+      {
+        "dekad_key": 202113,
+        "etc_cum_mm": 15.480634461195809,
+        "pef_cum_mm": 6.6731379802802495
+      },
+      {
+        "dekad_key": 202114,
+        "etc_cum_mm": 30.700876569398044,
+        "pef_cum_mm": 40.21492256840951
+      },
+      {
+        "dekad_key": 202115,
+        "etc_cum_mm": 52.14808374570396,
+        "pef_cum_mm": 118.81777218436267
+      },
+      {
+        "dekad_key": 202116,
+        "etc_cum_mm": 82.78620131435497,
+        "pef_cum_mm": 134.6776297706504
+      },
+      {
+        "dekad_key": 202117,
+        "etc_cum_mm": 126.511221255419,
+        "pef_cum_mm": 232.41950422818502
+      },
+      {
+        "dekad_key": 202118,
+        "etc_cum_mm": 183.54946803300658,
+        "pef_cum_mm": 245.43858447263824
+      },
+      {
+        "dekad_key": 202119,
+        "etc_cum_mm": 248.3858041650938,
+        "pef_cum_mm": 289.8597872643597
+      },
+      {
+        "dekad_key": 202120,
+        "etc_cum_mm": 312.78945923021706,
+        "pef_cum_mm": 304.1959262860084
+      },
+      {
+        "dekad_key": 202121,
+        "etc_cum_mm": 381.62975689953623,
+        "pef_cum_mm": 317.7475222136361
+      },
+      {
+        "dekad_key": 202122,
+        "etc_cum_mm": 441.45624067002893,
+        "pef_cum_mm": 341.30087783320107
+      },
+      {
+        "dekad_key": 202123,
+        "etc_cum_mm": 486.2509584654605,
+        "pef_cum_mm": 350.0455363678654
+      },
+      {
+        "dekad_key": 202124,
+        "etc_cum_mm": 516.1370141547816,
+        "pef_cum_mm": 366.1373091477963
+      },
+      {
+        "dekad_key": 202125,
+        "etc_cum_mm": 519.9779754109557,
+        "pef_cum_mm": 368.12100297648874
+      }
+    ]
+  }
+}

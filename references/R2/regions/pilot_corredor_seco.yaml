@@ -1,0 +1,47 @@
+# Region pack — piloto Corredor Seco (Jocotán/Camotán). STATUS: SANDBOX.
+# Todo valor marcado [Pendiente] es un marcador de trabajo de R2 para que el motor corra:
+# NO es dato agronómico. En production, el cargador falla si queda algún pending/sin cita.
+region: pilot_corredor_seco
+status: sandbox
+pilot_candidates: [jocotan, camotan]
+zone:
+  name: chiquimula_prueba
+  lat_deg: 14.8            # punto POWER usado por R1 (centroide aproximado de zona, no parcela)
+  lon_deg: -89.5
+  elevation_m: 450         # [Pendiente] reemplazar por la elevación media del DEM de R1 (Copernicus 30 m)
+  cell_id: null            # null = primera celda de curated/daily.parquet
+window: { start: 2021-01-01, end: 2025-12-31, min_valid_years: 3 }   # R1 curó 5 años de IMERG (2021–2025)
+agri_year_start: "04-01"   # [Pendiente]
+seasons:
+  - { code: primera,  calendar_year_shift: 0, plant_window: ["05-01", "06-15"] }   # [Pendiente]
+  - { code: postrera, calendar_year_shift: 0, plant_window: ["08-20", "09-30"] }   # [Pendiente]
+planting_candidates: { step_days: 5 }   # [Pendiente]
+precip:
+  primary: IMERG_FINAL_V07
+  fallback: POWER_DAILY
+  primary_peff: usda_scs_fao
+  peff_justification: pending
+  peff_enabled: [usda_scs_fao, fao_dependable, upper_bound]   # fixed_fraction se habilita al tener phi con cita
+  phi: null
+et0: { method: FAO56_PM, ea_primary: dewpoint_T2MDEW, ea_fallback: rh_mean_RH2M, elevation_source: DEM, ea_sensitivity_tol_pct: 5 }
+qc: { max_missing_precip_pct: 0, max_missing_met_pct: 10, max_gap_fill_days: 3 }
+onset:                       # [Pendiente] definición agroclimática con cita; en sandbox habilita los escenarios D+10/D+20
+  search_start_md: "04-15"
+  x_mm: 20
+  n_days: 3
+  y_days: 10
+  z_days: 30
+  dry_day_mm: 1
+  citation: null
+adaptation: { lag_days: 0, citation: null }
+scenarios: { grid: standard_27, humidity_primary: constant_rh, humidity_sensitivity: constant_ea }
+crops_enabled: [maiz, frijol, sorgo]
+strategies_file: regions/pilot_corredor_seco.strategies.yaml
+priorities_default: { water: 0.25, soil: 0.25, food: 0.25, income: 0.25 }   # neutro; el piloto lo fija con el socio
+ranking: { min_weight_coverage: 0.5, missing_policy: common_support }
+soil_criterion: { min_subindicator_coverage: 0.3 }   # [Pendiente] (0.3 en sandbox para que el criterio de suelo exista)
+stability: { n_samples: 2000, mode: dirichlet, concentration: 50, stable_share: 0.80, unstable_share: 0.50 }
+voi: { n_hyp: 5, top_k: 3, zone_ph_range: null, zone_ph_range_citation: null }
+communication_tol_pct: 10    # [Pendiente]
+min_segment_days: 5          # [Propuesto R2] decenas parciales < 5 días en la etapa crítica no se comparan con el umbral (sí suman severidad)
+locales: [es, en]
