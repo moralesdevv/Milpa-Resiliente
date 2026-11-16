@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 from datetime import UTC, date, datetime
 from typing import Any
 from uuid import UUID
@@ -9,8 +10,10 @@ from uuid import UUID
 from api.errors import (
     DependencyNotIntegrated,
     NotFound,
+    ServiceUnavailable,
     ValidationFailed,
 )
+from api.geo.boundary import BoundaryError, load_boundary
 from api.models.enums import ConsentPurpose, JobKind, UserRole
 from api.models.farm import Parcel
 from api.repositories.accounts import FarmerRepository
@@ -38,6 +41,8 @@ from api.soil_csv import (
     accepted_by_property,
     parse_soil_csv,
 )
+
+log = logging.getLogger("api.parcels")
 
 
 class ParcelService:
@@ -72,6 +77,7 @@ class ParcelService:
             raise NotFound("Zona no encontrada")
         if not gen.covered:
             raise ValidationFailed("La ubicación indicada no está dentro de la zona")
+        self._require_inside_municipality(body.location.lat, body.location.lon)
         parcel = self.parcels.add(
             zone_id=body.zone_id,
             farmer_id=farmer_id,
@@ -83,6 +89,26 @@ class ParcelService:
         )
         self.ctx.uow.commit()
         return self._out(parcel)
+
+    def _require_inside_municipality(self, lat: float, lon: float) -> None:
+        """Regla del piloto (ADR-022): la ubicación debe caer dentro del municipio configurado.
+
+        La decide el servidor con PostGIS sobre el mismo GeoJSON que dibuja la interfaz; lo que la interfaz
+        compruebe es solo ayuda visual. Sin archivo configurado no se aplica la regla (solo la de la zona).
+        """
+        path = self.ctx.settings.municipal_boundary_file
+        if path is None:
+            return
+        try:
+            boundary = load_boundary(path)
+        except BoundaryError as exc:
+            log.error("municipal_boundary_unusable", extra={"reason": str(exc)[:200]})
+            raise ServiceUnavailable(
+                "La ubicación no se puede validar: el límite municipal configurado no es utilizable",
+                hint="Revise MUNICIPAL_BOUNDARY_FILE (docs/MAP_AND_LOCATION.md)",
+            ) from exc
+        if not self.parcels.covered_by_geojson(boundary.geometry_json, lat, lon):
+            raise ValidationFailed(f"La ubicación indicada está fuera de {boundary.label}")
 
     def _out(self, parcel: Parcel) -> ParcelOut:
         loc = self.parcels.display_location(parcel.parcel_id)

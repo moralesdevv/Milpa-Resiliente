@@ -13,7 +13,7 @@ type S = components["schemas"];
 export type NumberIndicator = S["IndicatorNumber"];
 
 const NO_PROVENANCE_REASON =
-  "La API entrega este valor sin procedencia estructurada (contrato de Indicator pendiente: SPEC-01).";
+  "The API provides this value without structured provenance (Indicator contract pending: SPEC-01).";
 
 /** Envuelve un número simple de la API como `Indicator` con procedencia desconocida (no inventada). */
 export function plain(
@@ -65,6 +65,8 @@ export type ZoneContextView = {
   message?: string;
   synthetic_fixture?: boolean;
   cells: { cell_id: string; source: string; weight: NumberIndicator; south: number; west: number; north: number; east: number }[];
+  /** Outline of the analysis zone (GeoJSON geometry from the API), drawn as a context layer. */
+  area: unknown;
   crops: { code: string; name_es: string; name_en: string; seasons: string[]; calendar_validated: boolean }[];
   pending: string[];
 };
@@ -73,7 +75,7 @@ export function toZoneView(zone: ZoneDetail): ZoneView {
   const cells = (zone.cells ?? []).map((cell) => ({
     cell_id: String(cell.cell_id),
     source: cell.source,
-    weight: plain("zone_cell_weight", "Peso de la celda en la zona", cell.weight, "1"),
+    weight: plain("zone_cell_weight", "Weight of the cell in the zone", cell.weight, "1"),
     south: cell.south,
     west: cell.west,
     north: cell.north,
@@ -83,16 +85,35 @@ export function toZoneView(zone: ZoneDetail): ZoneView {
     zone_id: zone.zone_id,
     region_id: zone.region_id,
     name: zone.name,
-    elevation: zone.elevation_m == null ? null : plain("elevation_m", "Elevación de la zona", zone.elevation_m, "m"),
-    slope: zone.slope_pct == null ? null : plain("slope_pct", "Pendiente de la zona", zone.slope_pct, "%"),
+    // Both figures are zonal means over the zone polygon computed by R1's DEM loader (Copernicus GLO-30).
+    elevation: zone.elevation_m == null ? null : {
+      ...plain("elevation_m", "Mean elevation inside the zone (Copernicus GLO-30 DEM)", zone.elevation_m, "m"),
+      label_es: "Elevación media dentro de la zona (DEM Copernicus GLO-30)",
+    },
+    slope: zone.slope_pct == null ? null : {
+      ...plain("slope_pct", "Mean slope inside the zone (Copernicus GLO-30 DEM)", zone.slope_pct, "%"),
+      label_es: "Pendiente media dentro de la zona (DEM Copernicus GLO-30)",
+    },
     sources: zone.sources ?? [],
     context: {
       state: cells.length ? "ok" : "insufficient_data",
-      message: cells.length ? undefined : "La zona no tiene celdas climáticas registradas.",
+      message: cells.length ? undefined : "The zone has no registered climate cells.",
       cells,
+      area: zone.geometry ?? null,
       // Cultivos, temporadas y calendarios dependen del catálogo y del region pack de R1 (pending).
-      crops: [],
-      pending: ["Cultivos, temporadas y calendario agrícola: pendientes de validación (DP-01…DP-05)."],
+      // Crops, seasons and pending decisions come from the region pack the engine actually uses (sandbox).
+      crops: (zone.agri_context?.crops ?? []).map((crop) => ({
+        code: String(crop.code),
+        name_es: String(crop.name_es),
+        name_en: String(crop.name_en),
+        seasons: ((crop.seasons as string[] | undefined) ?? []).map((code) => {
+          const season = (zone.agri_context?.seasons ?? []).find((item) => item.code === code);
+          const window = season?.plant_window as string[] | undefined;
+          return window ? `${code} (${window[0]} to ${window[1]})` : code;
+        }),
+        calendar_validated: Boolean(crop.calendar_validated),
+      })),
+      pending: zone.agri_context?.pending ?? ["Crops, seasons and agricultural calendar: pending validation (no region pack available)."],
     },
   };
 }
@@ -114,17 +135,17 @@ export function toQualityView(q: DataQuality): QualityView {
     coverage: q.coverage.map((row) => ({
       variable: row.variable,
       year: row.year,
-      missing_pct: plain(`missing_pct_${row.variable}`, `Faltantes de ${row.variable}`, row.pct_missing ?? null, "%"),
+      missing_pct: plain(`missing_pct_${row.variable}`, `Missing ${row.variable}`, row.pct_missing ?? null, "%"),
     })),
     comparisons: (q.comparisons ?? []).map((c) => ({
       pair: c.pair,
-      bias: plain("precip_bias", "Sesgo (IMERG − POWER)", c.bias_mm_day ?? null, "mm/día", "climate_input"),
-      correlation: plain("precip_corr_daily", "Correlación diaria", c.correlation_daily ?? null, "1", "climate_input"),
+      bias: plain("precip_bias", "Bias (IMERG − POWER)", c.bias_mm_day ?? null, "mm/day", "climate_input"),
+      correlation: plain("precip_corr_daily", "Daily correlation", c.correlation_daily ?? null, "1", "climate_input"),
     })),
     ea_sensitivity:
       q.ea_sensitivity_mm_day == null
         ? null
-        : plain("ea_sensitivity", "Diferencia de ET0 entre rutas de ea", q.ea_sensitivity_mm_day, "mm/día", "climate_input"),
+        : plain("ea_sensitivity", "ET0 difference between vapour-pressure routes", q.ea_sensitivity_mm_day, "mm/day", "climate_input"),
     sources: q.sources ?? [],
     limitations: q.limitations ?? [],
   };
@@ -148,9 +169,9 @@ export function toSoilStatusView(p: SoilStatus): SoilStatusView {
   return {
     ...p,
     value: p.value ? plain(`soil_${p.property_code}`, p.property_code, p.value.value, p.value.unit, "soil_property", prov) : null,
-    depth_cm: p.depth_cm ? [plain("depth_from_cm", "Profundidad desde", p.depth_cm[0], "cm", "soil_property"), plain("depth_to_cm", "Profundidad hasta", p.depth_cm[1], "cm", "soil_property")] : null,
-    age_years: p.age_years == null ? null : plain("sample_age", "Antigüedad de la muestra", p.age_years, "años", "soil_property"),
-    max_age_years: p.max_age_years == null ? null : plain("max_age", "Vigencia máxima", p.max_age_years, "años", "soil_property"),
+    depth_cm: p.depth_cm ? [plain("depth_from_cm", "Depth from", p.depth_cm[0], "cm", "soil_property"), plain("depth_to_cm", "Depth to", p.depth_cm[1], "cm", "soil_property")] : null,
+    age_years: p.age_years == null ? null : plain("sample_age", "Sample age", p.age_years, "years", "soil_property"),
+    max_age_years: p.max_age_years == null ? null : plain("max_age", "Maximum validity", p.max_age_years, "years", "soil_property"),
   };
 }
 

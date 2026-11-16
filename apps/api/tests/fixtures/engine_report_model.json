@@ -1,0 +1,2373 @@
+{
+ "locale": "es",
+ "sections": [
+  {
+   "id": "resumen",
+   "title_es": "Resumen",
+   "content": {
+    "modo": "exposure",
+    "etiqueta": "indicador_exposicion_climatica",
+    "escenario": "BASE",
+    "advertencia": "Indicador de exposición climática; no es predicción de rendimiento ni de cosecha."
+   }
+  },
+  {
+   "id": "riesgo",
+   "title_es": "Riesgo por estrategia",
+   "content": [
+    {
+     "strategy": "E1_REF_MAIZ",
+     "name": "Referencia: maíz de primera",
+     "anchor_md": "05-01",
+     "changes_from_reference": [],
+     "horizon_years": 1,
+     "overlapping_cohorts": false,
+     "n_independent_cohorts": 25,
+     "cohort_freq_critical": {
+      "code": "cohort_freq_critical_pct",
+      "label_es": "Frecuencia de cohortes críticas (depende del horizonte)",
+      "label_en": "Critical cohort frequency (horizon-dependent)",
+      "value": 0.0,
+      "unit": "%",
+      "kind": "exposure",
+      "provenance": {
+       "provenance": "modelado",
+       "evidence": "C",
+       "evidence_rule": "risk.min_lluvia_et0_kc_umbral",
+       "method": "indicador_exposicion_climatica; Pef=usda_scs_fao; ET0=FAO56-PM",
+       "sources": [
+        {
+         "code": "IMERG_FINAL_V07",
+         "product_name": "GPM IMERG Final Run",
+         "institution": "NASA GES DISC",
+         "is_nasa": true,
+         "version": "V07",
+         "citation": null,
+         "url": null
+        },
+        {
+         "code": "POWER_DAILY",
+         "product_name": "NASA POWER Daily",
+         "institution": "NASA LaRC",
+         "is_nasa": true,
+         "version": null,
+         "citation": null,
+         "url": null
+        }
+       ],
+       "dataset_version": null,
+       "period": null,
+       "spatial_res": null,
+       "temporal_res": null,
+       "retrieved_at": null,
+       "missing_pct": null,
+       "assumptions": [
+        "G = 0 en paso diario",
+        "ajuste climático de Kc desactivado (sin RHmin)"
+       ],
+       "limitations": [
+        "indicador de exposición climática: no es déficit real de agua del suelo",
+        "modo sandbox: catálogos y umbrales provisionales — no usar para decisión",
+        "ET0 es modelada, no medida"
+       ],
+       "run_id": null
+      },
+      "label": "indicador_exposicion_climatica",
+      "provisional": true,
+      "reason": "umbral provisional — no usar para decisión",
+      "scenario": null
+     },
+     "n_decided": 25,
+     "n_undecided": 0,
+     "water_inputs": {
+      "pooled_critical_share": {
+       "code": "pooled_critical_share_pct",
+       "label_es": "Proporción de ciclos críticos (agrupada)",
+       "label_en": "Pooled critical cycle share",
+       "value": 0.0,
+       "unit": "%",
+       "kind": "exposure",
+       "provenance": {
+        "provenance": "modelado",
+        "evidence": "C",
+        "evidence_rule": "risk.min_lluvia_et0_kc_umbral",
+        "method": "indicador_exposicion_climatica; Pef=usda_scs_fao; ET0=FAO56-PM",
+        "sources": [
+         {
+          "code": "IMERG_FINAL_V07",
+          "product_name": "GPM IMERG Final Run",
+          "institution": "NASA GES DISC",
+          "is_nasa": true,
+          "version": "V07",
+          "citation": null,
+          "url": null
+         },
+         {
+          "code": "POWER_DAILY",
+          "product_name": "NASA POWER Daily",
+          "institution": "NASA LaRC",
+          "is_nasa": true,
+          "version": null,
+          "citation": null,
+          "url": null
+         }
+        ],
+        "dataset_version": null,
+        "period": null,
+        "spatial_res": null,
+        "temporal_res": null,
+        "retrieved_at": null,
+        "missing_pct": null,
+        "assumptions": [
+         "G = 0 en paso diario",
+         "ajuste climático de Kc desactivado (sin RHmin)"
+        ],
+        "limitations": [
+         "indicador de exposición climática: no es déficit real de agua del suelo",
+         "modo sandbox: catálogos y umbrales provisionales — no usar para decisión",
+         "ET0 es modelada, no medida"
+        ],
+        "run_id": null
+       },
+       "label": "indicador_exposicion_climatica",
+       "provisional": true,
+       "reason": "umbral provisional — no usar para decisión",
+       "scenario": null
+      },
+      "p90_severity_by_agri_year": {
+       "code": "p90_severity_by_agri_year_mm",
+       "label_es": "P90 de severidad por año agrícola",
+       "label_en": "P90 severity per agricultural year",
+       "value": 109.37849633677216,
+       "unit": "mm",
+       "kind": "exposure",
+       "provenance": {
+        "provenance": "modelado",
+        "evidence": "C",
+        "evidence_rule": "risk.min_lluvia_et0_kc_umbral",
+        "method": "indicador_exposicion_climatica; Pef=usda_scs_fao; ET0=FAO56-PM",
+        "sources": [
+         {
+          "code": "IMERG_FINAL_V07",
+          "product_name": "GPM IMERG Final Run",
+          "institution": "NASA GES DISC",
+          "is_nasa": true,
+          "version": "V07",
+          "citation": null,
+          "url": null
+         },
+         {
+          "code": "POWER_DAILY",
+          "product_name": "NASA POWER Daily",
+          "institution": "NASA LaRC",
+          "is_nasa": true,
+          "version": null,
+          "citation": null,
+          "url": null
+         }
+        ],
+        "dataset_version": null,
+        "period": null,
+        "spatial_res": null,
+        "temporal_res": null,
+        "retrieved_at": null,
+        "missing_pct": null,
+        "assumptions": [
+         "G = 0 en paso diario",
+         "ajuste climático de Kc desactivado (sin RHmin)"
+        ],
+        "limitations": [
+         "indicador de exposición climática: no es déficit real de agua del suelo",
+         "modo sandbox: catálogos y umbrales provisionales — no usar para decisión",
+         "ET0 es modelada, no medida"
+        ],
+        "run_id": null
+       },
+       "label": "indicador_exposicion_climatica",
+       "provisional": true,
+       "reason": "umbral provisional — no usar para decisión",
+       "scenario": null
+      },
+      "tail_ratio": {
+       "code": "tail_ratio",
+       "label_es": "Cociente de cola",
+       "label_en": "Tail ratio",
+       "value": 1.9393628751424812,
+       "unit": "adimensional",
+       "kind": "exposure",
+       "provenance": {
+        "provenance": "modelado",
+        "evidence": "C",
+        "evidence_rule": "risk.min_lluvia_et0_kc_umbral",
+        "method": "indicador_exposicion_climatica; Pef=usda_scs_fao; ET0=FAO56-PM",
+        "sources": [
+         {
+          "code": "IMERG_FINAL_V07",
+          "product_name": "GPM IMERG Final Run",
+          "institution": "NASA GES DISC",
+          "is_nasa": true,
+          "version": "V07",
+          "citation": null,
+          "url": null
+         },
+         {
+          "code": "POWER_DAILY",
+          "product_name": "NASA POWER Daily",
+          "institution": "NASA LaRC",
+          "is_nasa": true,
+          "version": null,
+          "citation": null,
+          "url": null
+         }
+        ],
+        "dataset_version": null,
+        "period": null,
+        "spatial_res": null,
+        "temporal_res": null,
+        "retrieved_at": null,
+        "missing_pct": null,
+        "assumptions": [
+         "G = 0 en paso diario",
+         "ajuste climático de Kc desactivado (sin RHmin)"
+        ],
+        "limitations": [
+         "indicador de exposición climática: no es déficit real de agua del suelo",
+         "modo sandbox: catálogos y umbrales provisionales — no usar para decisión",
+         "ET0 es modelada, no medida"
+        ],
+        "run_id": null
+       },
+       "label": "indicador_exposicion_climatica",
+       "provisional": true,
+       "reason": "umbral provisional — no usar para decisión",
+       "scenario": null
+      }
+     },
+     "cohorts": [],
+     "by_cycle": [
+      {
+       "strategy": "E1_REF_MAIZ",
+       "cycle_idx": 1,
+       "variety": "maiz_corto",
+       "anchor_md": "05-01"
+      }
+     ],
+     "consistency": "consistente",
+     "flags": []
+    },
+    {
+     "strategy": "E2_MILPA",
+     "name": "Milpa: maíz + frijol asociado",
+     "anchor_md": "05-01",
+     "changes_from_reference": [
+      "association"
+     ],
+     "horizon_years": 1,
+     "overlapping_cohorts": false,
+     "n_independent_cohorts": 25,
+     "cohort_freq_critical": {
+      "code": "cohort_freq_critical_pct",
+      "label_es": "Frecuencia de cohortes críticas (depende del horizonte)",
+      "label_en": "Critical cohort frequency (horizon-dependent)",
+      "value": 4.0,
+      "unit": "%",
+      "kind": "exposure",
+      "provenance": {
+       "provenance": "modelado",
+       "evidence": "C",
+       "evidence_rule": "risk.min_lluvia_et0_kc_umbral",
+       "method": "indicador_exposicion_climatica; Pef=usda_scs_fao; ET0=FAO56-PM",
+       "sources": [
+        {
+         "code": "IMERG_FINAL_V07",
+         "product_name": "GPM IMERG Final Run",
+         "institution": "NASA GES DISC",
+         "is_nasa": true,
+         "version": "V07",
+         "citation": null,
+         "url": null
+        },
+        {
+         "code": "POWER_DAILY",
+         "product_name": "NASA POWER Daily",
+         "institution": "NASA LaRC",
+         "is_nasa": true,
+         "version": null,
+         "citation": null,
+         "url": null
+        }
+       ],
+       "dataset_version": null,
+       "period": null,
+       "spatial_res": null,
+       "temporal_res": null,
+       "retrieved_at": null,
+       "missing_pct": null,
+       "assumptions": [
+        "G = 0 en paso diario",
+        "ajuste climático de Kc desactivado (sin RHmin)"
+       ],
+       "limitations": [
+        "indicador de exposición climática: no es déficit real de agua del suelo",
+        "modo sandbox: catálogos y umbrales provisionales — no usar para decisión",
+        "ET0 es modelada, no medida"
+       ],
+       "run_id": null
+      },
+      "label": "indicador_exposicion_climatica",
+      "provisional": true,
+      "reason": "umbral provisional — no usar para decisión",
+      "scenario": null
+     },
+     "n_decided": 25,
+     "n_undecided": 0,
+     "water_inputs": {
+      "pooled_critical_share": {
+       "code": "pooled_critical_share_pct",
+       "label_es": "Proporción de ciclos críticos (agrupada)",
+       "label_en": "Pooled critical cycle share",
+       "value": 4.0,
+       "unit": "%",
+       "kind": "exposure",
+       "provenance": {
+        "provenance": "modelado",
+        "evidence": "C",
+        "evidence_rule": "risk.min_lluvia_et0_kc_umbral",
+        "method": "indicador_exposicion_climatica; Pef=usda_scs_fao; ET0=FAO56-PM",
+        "sources": [
+         {
+          "code": "IMERG_FINAL_V07",
+          "product_name": "GPM IMERG Final Run",
+          "institution": "NASA GES DISC",
+          "is_nasa": true,
+          "version": "V07",
+          "citation": null,
+          "url": null
+         },
+         {
+          "code": "POWER_DAILY",
+          "product_name": "NASA POWER Daily",
+          "institution": "NASA LaRC",
+          "is_nasa": true,
+          "version": null,
+          "citation": null,
+          "url": null
+         }
+        ],
+        "dataset_version": null,
+        "period": null,
+        "spatial_res": null,
+        "temporal_res": null,
+        "retrieved_at": null,
+        "missing_pct": null,
+        "assumptions": [
+         "G = 0 en paso diario",
+         "ajuste climático de Kc desactivado (sin RHmin)"
+        ],
+        "limitations": [
+         "indicador de exposición climática: no es déficit real de agua del suelo",
+         "modo sandbox: catálogos y umbrales provisionales — no usar para decisión",
+         "ET0 es modelada, no medida"
+        ],
+        "run_id": null
+       },
+       "label": "indicador_exposicion_climatica",
+       "provisional": true,
+       "reason": "umbral provisional — no usar para decisión",
+       "scenario": null
+      },
+      "p90_severity_by_agri_year": {
+       "code": "p90_severity_by_agri_year_mm",
+       "label_es": "P90 de severidad por año agrícola",
+       "label_en": "P90 severity per agricultural year",
+       "value": 109.37849633677216,
+       "unit": "mm",
+       "kind": "exposure",
+       "provenance": {
+        "provenance": "modelado",
+        "evidence": "C",
+        "evidence_rule": "risk.min_lluvia_et0_kc_umbral",
+        "method": "indicador_exposicion_climatica; Pef=usda_scs_fao; ET0=FAO56-PM",
+        "sources": [
+         {
+          "code": "IMERG_FINAL_V07",
+          "product_name": "GPM IMERG Final Run",
+          "institution": "NASA GES DISC",
+          "is_nasa": true,
+          "version": "V07",
+          "citation": null,
+          "url": null
+         },
+         {
+          "code": "POWER_DAILY",
+          "product_name": "NASA POWER Daily",
+          "institution": "NASA LaRC",
+          "is_nasa": true,
+          "version": null,
+          "citation": null,
+          "url": null
+         }
+        ],
+        "dataset_version": null,
+        "period": null,
+        "spatial_res": null,
+        "temporal_res": null,
+        "retrieved_at": null,
+        "missing_pct": null,
+        "assumptions": [
+         "G = 0 en paso diario",
+         "ajuste climático de Kc desactivado (sin RHmin)"
+        ],
+        "limitations": [
+         "indicador de exposición climática: no es déficit real de agua del suelo",
+         "modo sandbox: catálogos y umbrales provisionales — no usar para decisión",
+         "ET0 es modelada, no medida"
+        ],
+        "run_id": null
+       },
+       "label": "indicador_exposicion_climatica",
+       "provisional": true,
+       "reason": "umbral provisional — no usar para decisión",
+       "scenario": null
+      },
+      "tail_ratio": {
+       "code": "tail_ratio",
+       "label_es": "Cociente de cola",
+       "label_en": "Tail ratio",
+       "value": 1.9013968758499453,
+       "unit": "adimensional",
+       "kind": "exposure",
+       "provenance": {
+        "provenance": "modelado",
+        "evidence": "C",
+        "evidence_rule": "risk.min_lluvia_et0_kc_umbral",
+        "method": "indicador_exposicion_climatica; Pef=usda_scs_fao; ET0=FAO56-PM",
+        "sources": [
+         {
+          "code": "IMERG_FINAL_V07",
+          "product_name": "GPM IMERG Final Run",
+          "institution": "NASA GES DISC",
+          "is_nasa": true,
+          "version": "V07",
+          "citation": null,
+          "url": null
+         },
+         {
+          "code": "POWER_DAILY",
+          "product_name": "NASA POWER Daily",
+          "institution": "NASA LaRC",
+          "is_nasa": true,
+          "version": null,
+          "citation": null,
+          "url": null
+         }
+        ],
+        "dataset_version": null,
+        "period": null,
+        "spatial_res": null,
+        "temporal_res": null,
+        "retrieved_at": null,
+        "missing_pct": null,
+        "assumptions": [
+         "G = 0 en paso diario",
+         "ajuste climático de Kc desactivado (sin RHmin)"
+        ],
+        "limitations": [
+         "indicador de exposición climática: no es déficit real de agua del suelo",
+         "modo sandbox: catálogos y umbrales provisionales — no usar para decisión",
+         "ET0 es modelada, no medida"
+        ],
+        "run_id": null
+       },
+       "label": "indicador_exposicion_climatica",
+       "provisional": true,
+       "reason": "umbral provisional — no usar para decisión",
+       "scenario": null
+      }
+     },
+     "cohorts": [],
+     "by_cycle": [
+      {
+       "strategy": "E2_MILPA",
+       "cycle_idx": 1,
+       "variety": "maiz_corto",
+       "anchor_md": "05-01"
+      }
+     ],
+     "consistency": "variable",
+     "flags": []
+    },
+    {
+     "strategy": "E3_MAIZ_FRIJOL_POSTRERA",
+     "name": "Maíz de primera y frijol de postrera",
+     "anchor_md": "05-01",
+     "changes_from_reference": [
+      "rotation"
+     ],
+     "horizon_years": 1,
+     "overlapping_cohorts": false,
+     "n_independent_cohorts": 25,
+     "cohort_freq_critical": {
+      "code": "cohort_freq_critical_pct",
+      "label_es": "Frecuencia de cohortes críticas (depende del horizonte)",
+      "label_en": "Critical cohort frequency (horizon-dependent)",
+      "value": 0.0,
+      "unit": "%",
+      "kind": "exposure",
+      "provenance": {
+       "provenance": "modelado",
+       "evidence": "C",
+       "evidence_rule": "risk.min_lluvia_et0_kc_umbral",
+       "method": "indicador_exposicion_climatica; Pef=usda_scs_fao; ET0=FAO56-PM",
+       "sources": [
+        {
+         "code": "IMERG_FINAL_V07",
+         "product_name": "GPM IMERG Final Run",
+         "institution": "NASA GES DISC",
+         "is_nasa": true,
+         "version": "V07",
+         "citation": null,
+         "url": null
+        },
+        {
+         "code": "POWER_DAILY",
+         "product_name": "NASA POWER Daily",
+         "institution": "NASA LaRC",
+         "is_nasa": true,
+         "version": null,
+         "citation": null,
+         "url": null
+        }
+       ],
+       "dataset_version": null,
+       "period": null,
+       "spatial_res": null,
+       "temporal_res": null,
+       "retrieved_at": null,
+       "missing_pct": null,
+       "assumptions": [
+        "G = 0 en paso diario",
+        "ajuste climático de Kc desactivado (sin RHmin)"
+       ],
+       "limitations": [
+        "indicador de exposición climática: no es déficit real de agua del suelo",
+        "modo sandbox: catálogos y umbrales provisionales — no usar para decisión",
+        "ET0 es modelada, no medida"
+       ],
+       "run_id": null
+      },
+      "label": "indicador_exposicion_climatica",
+      "provisional": true,
+      "reason": "umbral provisional — no usar para decisión",
+      "scenario": null
+     },
+     "n_decided": 25,
+     "n_undecided": 0,
+     "water_inputs": {
+      "pooled_critical_share": {
+       "code": "pooled_critical_share_pct",
+       "label_es": "Proporción de ciclos críticos (agrupada)",
+       "label_en": "Pooled critical cycle share",
+       "value": 0.0,
+       "unit": "%",
+       "kind": "exposure",
+       "provenance": {
+        "provenance": "modelado",
+        "evidence": "C",
+        "evidence_rule": "risk.min_lluvia_et0_kc_umbral",
+        "method": "indicador_exposicion_climatica; Pef=usda_scs_fao; ET0=FAO56-PM",
+        "sources": [
+         {
+          "code": "IMERG_FINAL_V07",
+          "product_name": "GPM IMERG Final Run",
+          "institution": "NASA GES DISC",
+          "is_nasa": true,
+          "version": "V07",
+          "citation": null,
+          "url": null
+         },
+         {
+          "code": "POWER_DAILY",
+          "product_name": "NASA POWER Daily",
+          "institution": "NASA LaRC",
+          "is_nasa": true,
+          "version": null,
+          "citation": null,
+          "url": null
+         }
+        ],
+        "dataset_version": null,
+        "period": null,
+        "spatial_res": null,
+        "temporal_res": null,
+        "retrieved_at": null,
+        "missing_pct": null,
+        "assumptions": [
+         "G = 0 en paso diario",
+         "ajuste climático de Kc desactivado (sin RHmin)"
+        ],
+        "limitations": [
+         "indicador de exposición climática: no es déficit real de agua del suelo",
+         "modo sandbox: catálogos y umbrales provisionales — no usar para decisión",
+         "ET0 es modelada, no medida"
+        ],
+        "run_id": null
+       },
+       "label": "indicador_exposicion_climatica",
+       "provisional": true,
+       "reason": "umbral provisional — no usar para decisión",
+       "scenario": null
+      },
+      "p90_severity_by_agri_year": {
+       "code": "p90_severity_by_agri_year_mm",
+       "label_es": "P90 de severidad por año agrícola",
+       "label_en": "P90 severity per agricultural year",
+       "value": 161.20938104634757,
+       "unit": "mm",
+       "kind": "exposure",
+       "provenance": {
+        "provenance": "modelado",
+        "evidence": "C",
+        "evidence_rule": "risk.min_lluvia_et0_kc_umbral",
+        "method": "indicador_exposicion_climatica; Pef=usda_scs_fao; ET0=FAO56-PM",
+        "sources": [
+         {
+          "code": "IMERG_FINAL_V07",
+          "product_name": "GPM IMERG Final Run",
+          "institution": "NASA GES DISC",
+          "is_nasa": true,
+          "version": "V07",
+          "citation": null,
+          "url": null
+         },
+         {
+          "code": "POWER_DAILY",
+          "product_name": "NASA POWER Daily",
+          "institution": "NASA LaRC",
+          "is_nasa": true,
+          "version": null,
+          "citation": null,
+          "url": null
+         }
+        ],
+        "dataset_version": null,
+        "period": null,
+        "spatial_res": null,
+        "temporal_res": null,
+        "retrieved_at": null,
+        "missing_pct": null,
+        "assumptions": [
+         "G = 0 en paso diario",
+         "ajuste climático de Kc desactivado (sin RHmin)"
+        ],
+        "limitations": [
+         "indicador de exposición climática: no es déficit real de agua del suelo",
+         "modo sandbox: catálogos y umbrales provisionales — no usar para decisión",
+         "ET0 es modelada, no medida"
+        ],
+        "run_id": null
+       },
+       "label": "indicador_exposicion_climatica",
+       "provisional": true,
+       "reason": "umbral provisional — no usar para decisión",
+       "scenario": null
+      },
+      "tail_ratio": {
+       "code": "tail_ratio",
+       "label_es": "Cociente de cola",
+       "label_en": "Tail ratio",
+       "value": 1.2966933662377877,
+       "unit": "adimensional",
+       "kind": "exposure",
+       "provenance": {
+        "provenance": "modelado",
+        "evidence": "C",
+        "evidence_rule": "risk.min_lluvia_et0_kc_umbral",
+        "method": "indicador_exposicion_climatica; Pef=usda_scs_fao; ET0=FAO56-PM",
+        "sources": [
+         {
+          "code": "IMERG_FINAL_V07",
+          "product_name": "GPM IMERG Final Run",
+          "institution": "NASA GES DISC",
+          "is_nasa": true,
+          "version": "V07",
+          "citation": null,
+          "url": null
+         },
+         {
+          "code": "POWER_DAILY",
+          "product_name": "NASA POWER Daily",
+          "institution": "NASA LaRC",
+          "is_nasa": true,
+          "version": null,
+          "citation": null,
+          "url": null
+         }
+        ],
+        "dataset_version": null,
+        "period": null,
+        "spatial_res": null,
+        "temporal_res": null,
+        "retrieved_at": null,
+        "missing_pct": null,
+        "assumptions": [
+         "G = 0 en paso diario",
+         "ajuste climático de Kc desactivado (sin RHmin)"
+        ],
+        "limitations": [
+         "indicador de exposición climática: no es déficit real de agua del suelo",
+         "modo sandbox: catálogos y umbrales provisionales — no usar para decisión",
+         "ET0 es modelada, no medida"
+        ],
+        "run_id": null
+       },
+       "label": "indicador_exposicion_climatica",
+       "provisional": true,
+       "reason": "umbral provisional — no usar para decisión",
+       "scenario": null
+      }
+     },
+     "cohorts": [],
+     "by_cycle": [
+      {
+       "strategy": "E3_MAIZ_FRIJOL_POSTRERA",
+       "cycle_idx": 1,
+       "variety": "maiz_corto",
+       "anchor_md": "05-01"
+      },
+      {
+       "strategy": "E3_MAIZ_FRIJOL_POSTRERA",
+       "cycle_idx": 2,
+       "variety": "frijol_negro",
+       "anchor_md": "05-01"
+      }
+     ],
+     "consistency": "consistente",
+     "flags": []
+    },
+    {
+     "strategy": "E4_MAIZ_INTERMEDIO",
+     "name": "Maíz de ciclo intermedio",
+     "anchor_md": "05-01",
+     "changes_from_reference": [
+      "variety"
+     ],
+     "horizon_years": 1,
+     "overlapping_cohorts": false,
+     "n_independent_cohorts": 25,
+     "cohort_freq_critical": {
+      "code": "cohort_freq_critical_pct",
+      "label_es": "Frecuencia de cohortes críticas (depende del horizonte)",
+      "label_en": "Critical cohort frequency (horizon-dependent)",
+      "value": 0.0,
+      "unit": "%",
+      "kind": "exposure",
+      "provenance": {
+       "provenance": "modelado",
+       "evidence": "C",
+       "evidence_rule": "risk.min_lluvia_et0_kc_umbral",
+       "method": "indicador_exposicion_climatica; Pef=usda_scs_fao; ET0=FAO56-PM",
+       "sources": [
+        {
+         "code": "IMERG_FINAL_V07",
+         "product_name": "GPM IMERG Final Run",
+         "institution": "NASA GES DISC",
+         "is_nasa": true,
+         "version": "V07",
+         "citation": null,
+         "url": null
+        },
+        {
+         "code": "POWER_DAILY",
+         "product_name": "NASA POWER Daily",
+         "institution": "NASA LaRC",
+         "is_nasa": true,
+         "version": null,
+         "citation": null,
+         "url": null
+        }
+       ],
+       "dataset_version": null,
+       "period": null,
+       "spatial_res": null,
+       "temporal_res": null,
+       "retrieved_at": null,
+       "missing_pct": null,
+       "assumptions": [
+        "G = 0 en paso diario",
+        "ajuste climático de Kc desactivado (sin RHmin)"
+       ],
+       "limitations": [
+        "indicador de exposición climática: no es déficit real de agua del suelo",
+        "modo sandbox: catálogos y umbrales provisionales — no usar para decisión",
+        "ET0 es modelada, no medida"
+       ],
+       "run_id": null
+      },
+      "label": "indicador_exposicion_climatica",
+      "provisional": true,
+      "reason": "umbral provisional — no usar para decisión",
+      "scenario": null
+     },
+     "n_decided": 25,
+     "n_undecided": 0,
+     "water_inputs": {
+      "pooled_critical_share": {
+       "code": "pooled_critical_share_pct",
+       "label_es": "Proporción de ciclos críticos (agrupada)",
+       "label_en": "Pooled critical cycle share",
+       "value": 0.0,
+       "unit": "%",
+       "kind": "exposure",
+       "provenance": {
+        "provenance": "modelado",
+        "evidence": "C",
+        "evidence_rule": "risk.min_lluvia_et0_kc_umbral",
+        "method": "indicador_exposicion_climatica; Pef=usda_scs_fao; ET0=FAO56-PM",
+        "sources": [
+         {
+          "code": "IMERG_FINAL_V07",
+          "product_name": "GPM IMERG Final Run",
+          "institution": "NASA GES DISC",
+          "is_nasa": true,
+          "version": "V07",
+          "citation": null,
+          "url": null
+         },
+         {
+          "code": "POWER_DAILY",
+          "product_name": "NASA POWER Daily",
+          "institution": "NASA LaRC",
+          "is_nasa": true,
+          "version": null,
+          "citation": null,
+          "url": null
+         }
+        ],
+        "dataset_version": null,
+        "period": null,
+        "spatial_res": null,
+        "temporal_res": null,
+        "retrieved_at": null,
+        "missing_pct": null,
+        "assumptions": [
+         "G = 0 en paso diario",
+         "ajuste climático de Kc desactivado (sin RHmin)"
+        ],
+        "limitations": [
+         "indicador de exposición climática: no es déficit real de agua del suelo",
+         "modo sandbox: catálogos y umbrales provisionales — no usar para decisión",
+         "ET0 es modelada, no medida"
+        ],
+        "run_id": null
+       },
+       "label": "indicador_exposicion_climatica",
+       "provisional": true,
+       "reason": "umbral provisional — no usar para decisión",
+       "scenario": null
+      },
+      "p90_severity_by_agri_year": {
+       "code": "p90_severity_by_agri_year_mm",
+       "label_es": "P90 de severidad por año agrícola",
+       "label_en": "P90 severity per agricultural year",
+       "value": 109.93072129432741,
+       "unit": "mm",
+       "kind": "exposure",
+       "provenance": {
+        "provenance": "modelado",
+        "evidence": "C",
+        "evidence_rule": "risk.min_lluvia_et0_kc_umbral",
+        "method": "indicador_exposicion_climatica; Pef=usda_scs_fao; ET0=FAO56-PM",
+        "sources": [
+         {
+          "code": "IMERG_FINAL_V07",
+          "product_name": "GPM IMERG Final Run",
+          "institution": "NASA GES DISC",
+          "is_nasa": true,
+          "version": "V07",
+          "citation": null,
+          "url": null
+         },
+         {
+          "code": "POWER_DAILY",
+          "product_name": "NASA POWER Daily",
+          "institution": "NASA LaRC",
+          "is_nasa": true,
+          "version": null,
+          "citation": null,
+          "url": null
+         }
+        ],
+        "dataset_version": null,
+        "period": null,
+        "spatial_res": null,
+        "temporal_res": null,
+        "retrieved_at": null,
+        "missing_pct": null,
+        "assumptions": [
+         "G = 0 en paso diario",
+         "ajuste climático de Kc desactivado (sin RHmin)"
+        ],
+        "limitations": [
+         "indicador de exposición climática: no es déficit real de agua del suelo",
+         "modo sandbox: catálogos y umbrales provisionales — no usar para decisión",
+         "ET0 es modelada, no medida"
+        ],
+        "run_id": null
+       },
+       "label": "indicador_exposicion_climatica",
+       "provisional": true,
+       "reason": "umbral provisional — no usar para decisión",
+       "scenario": null
+      },
+      "tail_ratio": {
+       "code": "tail_ratio",
+       "label_es": "Cociente de cola",
+       "label_en": "Tail ratio",
+       "value": 1.52972654405788,
+       "unit": "adimensional",
+       "kind": "exposure",
+       "provenance": {
+        "provenance": "modelado",
+        "evidence": "C",
+        "evidence_rule": "risk.min_lluvia_et0_kc_umbral",
+        "method": "indicador_exposicion_climatica; Pef=usda_scs_fao; ET0=FAO56-PM",
+        "sources": [
+         {
+          "code": "IMERG_FINAL_V07",
+          "product_name": "GPM IMERG Final Run",
+          "institution": "NASA GES DISC",
+          "is_nasa": true,
+          "version": "V07",
+          "citation": null,
+          "url": null
+         },
+         {
+          "code": "POWER_DAILY",
+          "product_name": "NASA POWER Daily",
+          "institution": "NASA LaRC",
+          "is_nasa": true,
+          "version": null,
+          "citation": null,
+          "url": null
+         }
+        ],
+        "dataset_version": null,
+        "period": null,
+        "spatial_res": null,
+        "temporal_res": null,
+        "retrieved_at": null,
+        "missing_pct": null,
+        "assumptions": [
+         "G = 0 en paso diario",
+         "ajuste climático de Kc desactivado (sin RHmin)"
+        ],
+        "limitations": [
+         "indicador de exposición climática: no es déficit real de agua del suelo",
+         "modo sandbox: catálogos y umbrales provisionales — no usar para decisión",
+         "ET0 es modelada, no medida"
+        ],
+        "run_id": null
+       },
+       "label": "indicador_exposicion_climatica",
+       "provisional": true,
+       "reason": "umbral provisional — no usar para decisión",
+       "scenario": null
+      }
+     },
+     "cohorts": [],
+     "by_cycle": [
+      {
+       "strategy": "E4_MAIZ_INTERMEDIO",
+       "cycle_idx": 1,
+       "variety": "maiz_intermedio",
+       "anchor_md": "05-01"
+      }
+     ],
+     "consistency": "consistente",
+     "flags": []
+    },
+    {
+     "strategy": "E5_MAIZ_TARDIO",
+     "name": "Maíz de primera sembrado tarde",
+     "anchor_md": "05-31",
+     "changes_from_reference": [
+      "planting_date"
+     ],
+     "horizon_years": 1,
+     "overlapping_cohorts": false,
+     "n_independent_cohorts": 25,
+     "cohort_freq_critical": {
+      "code": "cohort_freq_critical_pct",
+      "label_es": "Frecuencia de cohortes críticas (depende del horizonte)",
+      "label_en": "Critical cohort frequency (horizon-dependent)",
+      "value": 0.0,
+      "unit": "%",
+      "kind": "exposure",
+      "provenance": {
+       "provenance": "modelado",
+       "evidence": "C",
+       "evidence_rule": "risk.min_lluvia_et0_kc_umbral",
+       "method": "indicador_exposicion_climatica; Pef=usda_scs_fao; ET0=FAO56-PM",
+       "sources": [
+        {
+         "code": "IMERG_FINAL_V07",
+         "product_name": "GPM IMERG Final Run",
+         "institution": "NASA GES DISC",
+         "is_nasa": true,
+         "version": "V07",
+         "citation": null,
+         "url": null
+        },
+        {
+         "code": "POWER_DAILY",
+         "product_name": "NASA POWER Daily",
+         "institution": "NASA LaRC",
+         "is_nasa": true,
+         "version": null,
+         "citation": null,
+         "url": null
+        }
+       ],
+       "dataset_version": null,
+       "period": null,
+       "spatial_res": null,
+       "temporal_res": null,
+       "retrieved_at": null,
+       "missing_pct": null,
+       "assumptions": [
+        "G = 0 en paso diario",
+        "ajuste climático de Kc desactivado (sin RHmin)"
+       ],
+       "limitations": [
+        "indicador de exposición climática: no es déficit real de agua del suelo",
+        "modo sandbox: catálogos y umbrales provisionales — no usar para decisión",
+        "ET0 es modelada, no medida"
+       ],
+       "run_id": null
+      },
+      "label": "indicador_exposicion_climatica",
+      "provisional": true,
+      "reason": "umbral provisional — no usar para decisión",
+      "scenario": null
+     },
+     "n_decided": 25,
+     "n_undecided": 0,
+     "water_inputs": {
+      "pooled_critical_share": {
+       "code": "pooled_critical_share_pct",
+       "label_es": "Proporción de ciclos críticos (agrupada)",
+       "label_en": "Pooled critical cycle share",
+       "value": 0.0,
+       "unit": "%",
+       "kind": "exposure",
+       "provenance": {
+        "provenance": "modelado",
+        "evidence": "C",
+        "evidence_rule": "risk.min_lluvia_et0_kc_umbral",
+        "method": "indicador_exposicion_climatica; Pef=usda_scs_fao; ET0=FAO56-PM",
+        "sources": [
+         {
+          "code": "IMERG_FINAL_V07",
+          "product_name": "GPM IMERG Final Run",
+          "institution": "NASA GES DISC",
+          "is_nasa": true,
+          "version": "V07",
+          "citation": null,
+          "url": null
+         },
+         {
+          "code": "POWER_DAILY",
+          "product_name": "NASA POWER Daily",
+          "institution": "NASA LaRC",
+          "is_nasa": true,
+          "version": null,
+          "citation": null,
+          "url": null
+         }
+        ],
+        "dataset_version": null,
+        "period": null,
+        "spatial_res": null,
+        "temporal_res": null,
+        "retrieved_at": null,
+        "missing_pct": null,
+        "assumptions": [
+         "G = 0 en paso diario",
+         "ajuste climático de Kc desactivado (sin RHmin)"
+        ],
+        "limitations": [
+         "indicador de exposición climática: no es déficit real de agua del suelo",
+         "modo sandbox: catálogos y umbrales provisionales — no usar para decisión",
+         "ET0 es modelada, no medida"
+        ],
+        "run_id": null
+       },
+       "label": "indicador_exposicion_climatica",
+       "provisional": true,
+       "reason": "umbral provisional — no usar para decisión",
+       "scenario": null
+      },
+      "p90_severity_by_agri_year": {
+       "code": "p90_severity_by_agri_year_mm",
+       "label_es": "P90 de severidad por año agrícola",
+       "label_en": "P90 severity per agricultural year",
+       "value": 82.73075369649274,
+       "unit": "mm",
+       "kind": "exposure",
+       "provenance": {
+        "provenance": "modelado",
+        "evidence": "C",
+        "evidence_rule": "risk.min_lluvia_et0_kc_umbral",
+        "method": "indicador_exposicion_climatica; Pef=usda_scs_fao; ET0=FAO56-PM",
+        "sources": [
+         {
+          "code": "IMERG_FINAL_V07",
+          "product_name": "GPM IMERG Final Run",
+          "institution": "NASA GES DISC",
+          "is_nasa": true,
+          "version": "V07",
+          "citation": null,
+          "url": null
+         },
+         {
+          "code": "POWER_DAILY",
+          "product_name": "NASA POWER Daily",
+          "institution": "NASA LaRC",
+          "is_nasa": true,
+          "version": null,
+          "citation": null,
+          "url": null
+         }
+        ],
+        "dataset_version": null,
+        "period": null,
+        "spatial_res": null,
+        "temporal_res": null,
+        "retrieved_at": null,
+        "missing_pct": null,
+        "assumptions": [
+         "G = 0 en paso diario",
+         "ajuste climático de Kc desactivado (sin RHmin)"
+        ],
+        "limitations": [
+         "indicador de exposición climática: no es déficit real de agua del suelo",
+         "modo sandbox: catálogos y umbrales provisionales — no usar para decisión",
+         "ET0 es modelada, no medida"
+        ],
+        "run_id": null
+       },
+       "label": "indicador_exposicion_climatica",
+       "provisional": true,
+       "reason": "umbral provisional — no usar para decisión",
+       "scenario": null
+      },
+      "tail_ratio": {
+       "code": "tail_ratio",
+       "label_es": "Cociente de cola",
+       "label_en": "Tail ratio",
+       "value": 1.5437810438099484,
+       "unit": "adimensional",
+       "kind": "exposure",
+       "provenance": {
+        "provenance": "modelado",
+        "evidence": "C",
+        "evidence_rule": "risk.min_lluvia_et0_kc_umbral",
+        "method": "indicador_exposicion_climatica; Pef=usda_scs_fao; ET0=FAO56-PM",
+        "sources": [
+         {
+          "code": "IMERG_FINAL_V07",
+          "product_name": "GPM IMERG Final Run",
+          "institution": "NASA GES DISC",
+          "is_nasa": true,
+          "version": "V07",
+          "citation": null,
+          "url": null
+         },
+         {
+          "code": "POWER_DAILY",
+          "product_name": "NASA POWER Daily",
+          "institution": "NASA LaRC",
+          "is_nasa": true,
+          "version": null,
+          "citation": null,
+          "url": null
+         }
+        ],
+        "dataset_version": null,
+        "period": null,
+        "spatial_res": null,
+        "temporal_res": null,
+        "retrieved_at": null,
+        "missing_pct": null,
+        "assumptions": [
+         "G = 0 en paso diario",
+         "ajuste climático de Kc desactivado (sin RHmin)"
+        ],
+        "limitations": [
+         "indicador de exposición climática: no es déficit real de agua del suelo",
+         "modo sandbox: catálogos y umbrales provisionales — no usar para decisión",
+         "ET0 es modelada, no medida"
+        ],
+        "run_id": null
+       },
+       "label": "indicador_exposicion_climatica",
+       "provisional": true,
+       "reason": "umbral provisional — no usar para decisión",
+       "scenario": null
+      }
+     },
+     "cohorts": [],
+     "by_cycle": [
+      {
+       "strategy": "E5_MAIZ_TARDIO",
+       "cycle_idx": 1,
+       "variety": "maiz_corto",
+       "anchor_md": "05-31"
+      }
+     ],
+     "consistency": "consistente",
+     "flags": []
+    },
+    {
+     "strategy": "E6_SORGO",
+     "name": "Sorgo de primera",
+     "anchor_md": "05-01",
+     "changes_from_reference": [],
+     "horizon_years": 1,
+     "overlapping_cohorts": false,
+     "n_independent_cohorts": 25,
+     "cohort_freq_critical": {
+      "code": "cohort_freq_critical_pct",
+      "label_es": "Frecuencia de cohortes críticas (depende del horizonte)",
+      "label_en": "Critical cohort frequency (horizon-dependent)",
+      "value": 0.0,
+      "unit": "%",
+      "kind": "exposure",
+      "provenance": {
+       "provenance": "modelado",
+       "evidence": "C",
+       "evidence_rule": "risk.min_lluvia_et0_kc_umbral",
+       "method": "indicador_exposicion_climatica; Pef=usda_scs_fao; ET0=FAO56-PM",
+       "sources": [
+        {
+         "code": "IMERG_FINAL_V07",
+         "product_name": "GPM IMERG Final Run",
+         "institution": "NASA GES DISC",
+         "is_nasa": true,
+         "version": "V07",
+         "citation": null,
+         "url": null
+        },
+        {
+         "code": "POWER_DAILY",
+         "product_name": "NASA POWER Daily",
+         "institution": "NASA LaRC",
+         "is_nasa": true,
+         "version": null,
+         "citation": null,
+         "url": null
+        }
+       ],
+       "dataset_version": null,
+       "period": null,
+       "spatial_res": null,
+       "temporal_res": null,
+       "retrieved_at": null,
+       "missing_pct": null,
+       "assumptions": [
+        "G = 0 en paso diario",
+        "ajuste climático de Kc desactivado (sin RHmin)"
+       ],
+       "limitations": [
+        "indicador de exposición climática: no es déficit real de agua del suelo",
+        "modo sandbox: catálogos y umbrales provisionales — no usar para decisión",
+        "ET0 es modelada, no medida"
+       ],
+       "run_id": null
+      },
+      "label": "indicador_exposicion_climatica",
+      "provisional": true,
+      "reason": "umbral provisional — no usar para decisión",
+      "scenario": null
+     },
+     "n_decided": 25,
+     "n_undecided": 0,
+     "water_inputs": {
+      "pooled_critical_share": {
+       "code": "pooled_critical_share_pct",
+       "label_es": "Proporción de ciclos críticos (agrupada)",
+       "label_en": "Pooled critical cycle share",
+       "value": 0.0,
+       "unit": "%",
+       "kind": "exposure",
+       "provenance": {
+        "provenance": "modelado",
+        "evidence": "C",
+        "evidence_rule": "risk.min_lluvia_et0_kc_umbral",
+        "method": "indicador_exposicion_climatica; Pef=usda_scs_fao; ET0=FAO56-PM",
+        "sources": [
+         {
+          "code": "IMERG_FINAL_V07",
+          "product_name": "GPM IMERG Final Run",
+          "institution": "NASA GES DISC",
+          "is_nasa": true,
+          "version": "V07",
+          "citation": null,
+          "url": null
+         },
+         {
+          "code": "POWER_DAILY",
+          "product_name": "NASA POWER Daily",
+          "institution": "NASA LaRC",
+          "is_nasa": true,
+          "version": null,
+          "citation": null,
+          "url": null
+         }
+        ],
+        "dataset_version": null,
+        "period": null,
+        "spatial_res": null,
+        "temporal_res": null,
+        "retrieved_at": null,
+        "missing_pct": null,
+        "assumptions": [
+         "G = 0 en paso diario",
+         "ajuste climático de Kc desactivado (sin RHmin)"
+        ],
+        "limitations": [
+         "indicador de exposición climática: no es déficit real de agua del suelo",
+         "modo sandbox: catálogos y umbrales provisionales — no usar para decisión",
+         "ET0 es modelada, no medida"
+        ],
+        "run_id": null
+       },
+       "label": "indicador_exposicion_climatica",
+       "provisional": true,
+       "reason": "umbral provisional — no usar para decisión",
+       "scenario": null
+      },
+      "p90_severity_by_agri_year": {
+       "code": "p90_severity_by_agri_year_mm",
+       "label_es": "P90 de severidad por año agrícola",
+       "label_en": "P90 severity per agricultural year",
+       "value": 87.99018850244838,
+       "unit": "mm",
+       "kind": "exposure",
+       "provenance": {
+        "provenance": "modelado",
+        "evidence": "C",
+        "evidence_rule": "risk.min_lluvia_et0_kc_umbral",
+        "method": "indicador_exposicion_climatica; Pef=usda_scs_fao; ET0=FAO56-PM",
+        "sources": [
+         {
+          "code": "IMERG_FINAL_V07",
+          "product_name": "GPM IMERG Final Run",
+          "institution": "NASA GES DISC",
+          "is_nasa": true,
+          "version": "V07",
+          "citation": null,
+          "url": null
+         },
+         {
+          "code": "POWER_DAILY",
+          "product_name": "NASA POWER Daily",
+          "institution": "NASA LaRC",
+          "is_nasa": true,
+          "version": null,
+          "citation": null,
+          "url": null
+         }
+        ],
+        "dataset_version": null,
+        "period": null,
+        "spatial_res": null,
+        "temporal_res": null,
+        "retrieved_at": null,
+        "missing_pct": null,
+        "assumptions": [
+         "G = 0 en paso diario",
+         "ajuste climático de Kc desactivado (sin RHmin)"
+        ],
+        "limitations": [
+         "indicador de exposición climática: no es déficit real de agua del suelo",
+         "modo sandbox: catálogos y umbrales provisionales — no usar para decisión",
+         "ET0 es modelada, no medida"
+        ],
+        "run_id": null
+       },
+       "label": "indicador_exposicion_climatica",
+       "provisional": true,
+       "reason": "umbral provisional — no usar para decisión",
+       "scenario": null
+      },
+      "tail_ratio": {
+       "code": "tail_ratio",
+       "label_es": "Cociente de cola",
+       "label_en": "Tail ratio",
+       "value": 2.0777109084998227,
+       "unit": "adimensional",
+       "kind": "exposure",
+       "provenance": {
+        "provenance": "modelado",
+        "evidence": "C",
+        "evidence_rule": "risk.min_lluvia_et0_kc_umbral",
+        "method": "indicador_exposicion_climatica; Pef=usda_scs_fao; ET0=FAO56-PM",
+        "sources": [
+         {
+          "code": "IMERG_FINAL_V07",
+          "product_name": "GPM IMERG Final Run",
+          "institution": "NASA GES DISC",
+          "is_nasa": true,
+          "version": "V07",
+          "citation": null,
+          "url": null
+         },
+         {
+          "code": "POWER_DAILY",
+          "product_name": "NASA POWER Daily",
+          "institution": "NASA LaRC",
+          "is_nasa": true,
+          "version": null,
+          "citation": null,
+          "url": null
+         }
+        ],
+        "dataset_version": null,
+        "period": null,
+        "spatial_res": null,
+        "temporal_res": null,
+        "retrieved_at": null,
+        "missing_pct": null,
+        "assumptions": [
+         "G = 0 en paso diario",
+         "ajuste climático de Kc desactivado (sin RHmin)"
+        ],
+        "limitations": [
+         "indicador de exposición climática: no es déficit real de agua del suelo",
+         "modo sandbox: catálogos y umbrales provisionales — no usar para decisión",
+         "ET0 es modelada, no medida"
+        ],
+        "run_id": null
+       },
+       "label": "indicador_exposicion_climatica",
+       "provisional": true,
+       "reason": "umbral provisional — no usar para decisión",
+       "scenario": null
+      }
+     },
+     "cohorts": [],
+     "by_cycle": [
+      {
+       "strategy": "E6_SORGO",
+       "cycle_idx": 1,
+       "variety": "sorgo_grano",
+       "anchor_md": "05-01"
+      }
+     ],
+     "consistency": "fallos_en_años_desfavorables",
+     "flags": []
+    },
+    {
+     "strategy": "E7_ROTACION_2A",
+     "name": "Rotación de dos años: maíz → sorgo",
+     "anchor_md": "05-01",
+     "changes_from_reference": [
+      "rotation"
+     ],
+     "horizon_years": 2,
+     "overlapping_cohorts": true,
+     "n_independent_cohorts": 12,
+     "cohort_freq_critical": {
+      "code": "cohort_freq_critical_pct",
+      "label_es": "Frecuencia de cohortes críticas (depende del horizonte)",
+      "label_en": "Critical cohort frequency (horizon-dependent)",
+      "value": 0.0,
+      "unit": "%",
+      "kind": "exposure",
+      "provenance": {
+       "provenance": "modelado",
+       "evidence": "C",
+       "evidence_rule": "risk.min_lluvia_et0_kc_umbral",
+       "method": "indicador_exposicion_climatica; Pef=usda_scs_fao; ET0=FAO56-PM",
+       "sources": [
+        {
+         "code": "IMERG_FINAL_V07",
+         "product_name": "GPM IMERG Final Run",
+         "institution": "NASA GES DISC",
+         "is_nasa": true,
+         "version": "V07",
+         "citation": null,
+         "url": null
+        },
+        {
+         "code": "POWER_DAILY",
+         "product_name": "NASA POWER Daily",
+         "institution": "NASA LaRC",
+         "is_nasa": true,
+         "version": null,
+         "citation": null,
+         "url": null
+        }
+       ],
+       "dataset_version": null,
+       "period": null,
+       "spatial_res": null,
+       "temporal_res": null,
+       "retrieved_at": null,
+       "missing_pct": null,
+       "assumptions": [
+        "G = 0 en paso diario",
+        "ajuste climático de Kc desactivado (sin RHmin)"
+       ],
+       "limitations": [
+        "indicador de exposición climática: no es déficit real de agua del suelo",
+        "modo sandbox: catálogos y umbrales provisionales — no usar para decisión",
+        "ET0 es modelada, no medida"
+       ],
+       "run_id": null
+      },
+      "label": "indicador_exposicion_climatica",
+      "provisional": true,
+      "reason": "umbral provisional — no usar para decisión",
+      "scenario": null
+     },
+     "n_decided": 24,
+     "n_undecided": 0,
+     "water_inputs": {
+      "pooled_critical_share": {
+       "code": "pooled_critical_share_pct",
+       "label_es": "Proporción de ciclos críticos (agrupada)",
+       "label_en": "Pooled critical cycle share",
+       "value": 0.0,
+       "unit": "%",
+       "kind": "exposure",
+       "provenance": {
+        "provenance": "modelado",
+        "evidence": "C",
+        "evidence_rule": "risk.min_lluvia_et0_kc_umbral",
+        "method": "indicador_exposicion_climatica; Pef=usda_scs_fao; ET0=FAO56-PM",
+        "sources": [
+         {
+          "code": "IMERG_FINAL_V07",
+          "product_name": "GPM IMERG Final Run",
+          "institution": "NASA GES DISC",
+          "is_nasa": true,
+          "version": "V07",
+          "citation": null,
+          "url": null
+         },
+         {
+          "code": "POWER_DAILY",
+          "product_name": "NASA POWER Daily",
+          "institution": "NASA LaRC",
+          "is_nasa": true,
+          "version": null,
+          "citation": null,
+          "url": null
+         }
+        ],
+        "dataset_version": null,
+        "period": null,
+        "spatial_res": null,
+        "temporal_res": null,
+        "retrieved_at": null,
+        "missing_pct": null,
+        "assumptions": [
+         "G = 0 en paso diario",
+         "ajuste climático de Kc desactivado (sin RHmin)"
+        ],
+        "limitations": [
+         "indicador de exposición climática: no es déficit real de agua del suelo",
+         "modo sandbox: catálogos y umbrales provisionales — no usar para decisión",
+         "ET0 es modelada, no medida"
+        ],
+        "run_id": null
+       },
+       "label": "indicador_exposicion_climatica",
+       "provisional": true,
+       "reason": "umbral provisional — no usar para decisión",
+       "scenario": null
+      },
+      "p90_severity_by_agri_year": {
+       "code": "p90_severity_by_agri_year_mm",
+       "label_es": "P90 de severidad por año agrícola",
+       "label_en": "P90 severity per agricultural year",
+       "value": 100.2146863933646,
+       "unit": "mm",
+       "kind": "exposure",
+       "provenance": {
+        "provenance": "modelado",
+        "evidence": "C",
+        "evidence_rule": "risk.min_lluvia_et0_kc_umbral",
+        "method": "indicador_exposicion_climatica; Pef=usda_scs_fao; ET0=FAO56-PM",
+        "sources": [
+         {
+          "code": "IMERG_FINAL_V07",
+          "product_name": "GPM IMERG Final Run",
+          "institution": "NASA GES DISC",
+          "is_nasa": true,
+          "version": "V07",
+          "citation": null,
+          "url": null
+         },
+         {
+          "code": "POWER_DAILY",
+          "product_name": "NASA POWER Daily",
+          "institution": "NASA LaRC",
+          "is_nasa": true,
+          "version": null,
+          "citation": null,
+          "url": null
+         }
+        ],
+        "dataset_version": null,
+        "period": null,
+        "spatial_res": null,
+        "temporal_res": null,
+        "retrieved_at": null,
+        "missing_pct": null,
+        "assumptions": [
+         "G = 0 en paso diario",
+         "ajuste climático de Kc desactivado (sin RHmin)"
+        ],
+        "limitations": [
+         "indicador de exposición climática: no es déficit real de agua del suelo",
+         "modo sandbox: catálogos y umbrales provisionales — no usar para decisión",
+         "ET0 es modelada, no medida"
+        ],
+        "run_id": null
+       },
+       "label": "indicador_exposicion_climatica",
+       "provisional": true,
+       "reason": "umbral provisional — no usar para decisión",
+       "scenario": null
+      },
+      "tail_ratio": {
+       "code": "tail_ratio",
+       "label_es": "Cociente de cola",
+       "label_en": "Tail ratio",
+       "value": 2.1572597733378216,
+       "unit": "adimensional",
+       "kind": "exposure",
+       "provenance": {
+        "provenance": "modelado",
+        "evidence": "C",
+        "evidence_rule": "risk.min_lluvia_et0_kc_umbral",
+        "method": "indicador_exposicion_climatica; Pef=usda_scs_fao; ET0=FAO56-PM",
+        "sources": [
+         {
+          "code": "IMERG_FINAL_V07",
+          "product_name": "GPM IMERG Final Run",
+          "institution": "NASA GES DISC",
+          "is_nasa": true,
+          "version": "V07",
+          "citation": null,
+          "url": null
+         },
+         {
+          "code": "POWER_DAILY",
+          "product_name": "NASA POWER Daily",
+          "institution": "NASA LaRC",
+          "is_nasa": true,
+          "version": null,
+          "citation": null,
+          "url": null
+         }
+        ],
+        "dataset_version": null,
+        "period": null,
+        "spatial_res": null,
+        "temporal_res": null,
+        "retrieved_at": null,
+        "missing_pct": null,
+        "assumptions": [
+         "G = 0 en paso diario",
+         "ajuste climático de Kc desactivado (sin RHmin)"
+        ],
+        "limitations": [
+         "indicador de exposición climática: no es déficit real de agua del suelo",
+         "modo sandbox: catálogos y umbrales provisionales — no usar para decisión",
+         "ET0 es modelada, no medida"
+        ],
+        "run_id": null
+       },
+       "label": "indicador_exposicion_climatica",
+       "provisional": true,
+       "reason": "umbral provisional — no usar para decisión",
+       "scenario": null
+      }
+     },
+     "cohorts": [],
+     "by_cycle": [
+      {
+       "strategy": "E7_ROTACION_2A",
+       "cycle_idx": 1,
+       "variety": "maiz_corto",
+       "anchor_md": "05-01"
+      },
+      {
+       "strategy": "E7_ROTACION_2A",
+       "cycle_idx": 2,
+       "variety": "sorgo_grano",
+       "anchor_md": "05-01"
+      }
+     ],
+     "consistency": "fallos_en_años_desfavorables",
+     "flags": [
+      "frecuencia_por_cohorte_dependiente_del_horizonte"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ranking",
+   "title_es": "Comparación de estrategias",
+   "content": {
+    "status": "ok",
+    "criteria_used": [
+     "water",
+     "soil"
+    ],
+    "weights": {
+     "water": 0.25,
+     "soil": 0.25,
+     "food": 0.25,
+     "income": 0.25
+    },
+    "weights_effective": {
+     "water": 0.5,
+     "soil": 0.5
+    },
+    "weight_coverage": 0.5,
+    "ranking": [
+     {
+      "rank": 1,
+      "strategy": "E3_MAIZ_FRIJOL_POSTRERA",
+      "total": 1.0,
+      "criteria": {
+       "water": {
+        "status": "provisional",
+        "value": 1.0,
+        "unit": "índice 0–1",
+        "evidence": "C",
+        "normalised": 1.0,
+        "subindicators": {
+         "pooled_critical_share_pct": 0.0,
+         "p90_severity_by_agri_year_mm": 161.20938104634757,
+         "tail_ratio": 1.2966933662377877
+        },
+        "reason": "umbral provisional"
+       },
+       "soil": {
+        "status": "evaluable",
+        "value": 0.6344721857205431,
+        "unit": "índice 0–1",
+        "evidence": "C",
+        "normalised": 1.0,
+        "subindicators": {
+         "n_fixation_potential": null,
+         "cover_months": 0.6022777047744196,
+         "family_diversity": 0.6666666666666666,
+         "residue_return": null,
+         "family_repeat_penalty": null,
+         "ph_compat": null
+        },
+        "reason": "subindicadores usados: cover_months,family_diversity"
+       },
+       "food": {
+        "status": "not_evaluable",
+        "value": null,
+        "unit": "índice 0–1",
+        "evidence": null,
+        "normalised": null,
+        "subindicators": {},
+        "reason": "sin rendimiento de referencia o composición con cita"
+       },
+       "income": {
+        "status": "not_evaluable",
+        "value": null,
+        "unit": "índice 0–1",
+        "evidence": null,
+        "normalised": null,
+        "subindicators": {},
+        "reason": "sin precios con fuente; comparación cualitativa"
+       }
+      }
+     },
+     {
+      "rank": 2,
+      "strategy": "E4_MAIZ_INTERMEDIO",
+      "total": 0.5346004797933198,
+      "criteria": {
+       "water": {
+        "status": "provisional",
+        "value": 1.0,
+        "unit": "índice 0–1",
+        "evidence": "C",
+        "normalised": 1.0,
+        "subindicators": {
+         "pooled_critical_share_pct": 0.0,
+         "p90_severity_by_agri_year_mm": 109.93072129432741,
+         "tail_ratio": 1.52972654405788
+        },
+        "reason": "umbral provisional"
+       },
+       "soil": {
+        "status": "evaluable",
+        "value": 0.3583004818221638,
+        "unit": "índice 0–1",
+        "evidence": "C",
+        "normalised": 0.06920095958663959,
+        "subindicators": {
+         "n_fixation_potential": 0.0,
+         "cover_months": 0.3832676303109943,
+         "family_diversity": 0.3333333333333333,
+         "residue_return": null,
+         "family_repeat_penalty": null,
+         "ph_compat": null
+        },
+        "reason": "subindicadores usados: cover_months,family_diversity"
+       },
+       "food": {
+        "status": "not_evaluable",
+        "value": null,
+        "unit": "índice 0–1",
+        "evidence": null,
+        "normalised": null,
+        "subindicators": {},
+        "reason": "sin rendimiento de referencia o composición con cita"
+       },
+       "income": {
+        "status": "not_evaluable",
+        "value": null,
+        "unit": "índice 0–1",
+        "evidence": null,
+        "normalised": null,
+        "subindicators": {},
+        "reason": "sin precios con fuente; comparación cualitativa"
+       }
+      }
+     },
+     {
+      "rank": 3,
+      "strategy": "E1_REF_MAIZ",
+      "total": 0.5,
+      "criteria": {
+       "water": {
+        "status": "provisional",
+        "value": 1.0,
+        "unit": "índice 0–1",
+        "evidence": "C",
+        "normalised": 1.0,
+        "subindicators": {
+         "pooled_critical_share_pct": 0.0,
+         "p90_severity_by_agri_year_mm": 109.37849633677216,
+         "tail_ratio": 1.9393628751424812
+        },
+        "reason": "umbral provisional"
+       },
+       "soil": {
+        "status": "evaluable",
+        "value": 0.33776828734121767,
+        "unit": "índice 0–1",
+        "evidence": "C",
+        "normalised": 0.0,
+        "subindicators": {
+         "n_fixation_potential": 0.0,
+         "cover_months": 0.34220324134910207,
+         "family_diversity": 0.3333333333333333,
+         "residue_return": null,
+         "family_repeat_penalty": null,
+         "ph_compat": null
+        },
+        "reason": "subindicadores usados: cover_months,family_diversity"
+       },
+       "food": {
+        "status": "not_evaluable",
+        "value": null,
+        "unit": "índice 0–1",
+        "evidence": null,
+        "normalised": null,
+        "subindicators": {},
+        "reason": "sin rendimiento de referencia o composición con cita"
+       },
+       "income": {
+        "status": "not_evaluable",
+        "value": null,
+        "unit": "índice 0–1",
+        "evidence": null,
+        "normalised": null,
+        "subindicators": {},
+        "reason": "sin precios con fuente; comparación cualitativa"
+       }
+      }
+     },
+     {
+      "rank": 4,
+      "strategy": "E5_MAIZ_TARDIO",
+      "total": 0.5,
+      "criteria": {
+       "water": {
+        "status": "provisional",
+        "value": 1.0,
+        "unit": "índice 0–1",
+        "evidence": "C",
+        "normalised": 1.0,
+        "subindicators": {
+         "pooled_critical_share_pct": 0.0,
+         "p90_severity_by_agri_year_mm": 82.73075369649274,
+         "tail_ratio": 1.5437810438099484
+        },
+        "reason": "umbral provisional"
+       },
+       "soil": {
+        "status": "evaluable",
+        "value": 0.33776828734121767,
+        "unit": "índice 0–1",
+        "evidence": "C",
+        "normalised": 0.0,
+        "subindicators": {
+         "n_fixation_potential": 0.0,
+         "cover_months": 0.34220324134910207,
+         "family_diversity": 0.3333333333333333,
+         "residue_return": null,
+         "family_repeat_penalty": null,
+         "ph_compat": null
+        },
+        "reason": "subindicadores usados: cover_months,family_diversity"
+       },
+       "food": {
+        "status": "not_evaluable",
+        "value": null,
+        "unit": "índice 0–1",
+        "evidence": null,
+        "normalised": null,
+        "subindicators": {},
+        "reason": "sin rendimiento de referencia o composición con cita"
+       },
+       "income": {
+        "status": "not_evaluable",
+        "value": null,
+        "unit": "índice 0–1",
+        "evidence": null,
+        "normalised": null,
+        "subindicators": {},
+        "reason": "sin precios con fuente; comparación cualitativa"
+       }
+      }
+     },
+     {
+      "rank": 5,
+      "strategy": "E6_SORGO",
+      "total": 0.5,
+      "criteria": {
+       "water": {
+        "status": "provisional",
+        "value": 1.0,
+        "unit": "índice 0–1",
+        "evidence": "C",
+        "normalised": 1.0,
+        "subindicators": {
+         "pooled_critical_share_pct": 0.0,
+         "p90_severity_by_agri_year_mm": 87.99018850244838,
+         "tail_ratio": 2.0777109084998227
+        },
+        "reason": "umbral provisional"
+       },
+       "soil": {
+        "status": "evaluable",
+        "value": 0.33776828734121767,
+        "unit": "índice 0–1",
+        "evidence": "C",
+        "normalised": 0.0,
+        "subindicators": {
+         "n_fixation_potential": 0.0,
+         "cover_months": 0.34220324134910207,
+         "family_diversity": 0.3333333333333333,
+         "residue_return": null,
+         "family_repeat_penalty": null,
+         "ph_compat": null
+        },
+        "reason": "subindicadores usados: cover_months,family_diversity"
+       },
+       "food": {
+        "status": "not_evaluable",
+        "value": null,
+        "unit": "índice 0–1",
+        "evidence": null,
+        "normalised": null,
+        "subindicators": {},
+        "reason": "sin rendimiento de referencia o composición con cita"
+       },
+       "income": {
+        "status": "not_evaluable",
+        "value": null,
+        "unit": "índice 0–1",
+        "evidence": null,
+        "normalised": null,
+        "subindicators": {},
+        "reason": "sin precios con fuente; comparación cualitativa"
+       }
+      }
+     },
+     {
+      "rank": 6,
+      "strategy": "E7_ROTACION_2A",
+      "total": 0.5,
+      "criteria": {
+       "water": {
+        "status": "provisional",
+        "value": 1.0,
+        "unit": "índice 0–1",
+        "evidence": "C",
+        "normalised": 1.0,
+        "subindicators": {
+         "pooled_critical_share_pct": 0.0,
+         "p90_severity_by_agri_year_mm": 100.2146863933646,
+         "tail_ratio": 2.1572597733378216
+        },
+        "reason": "umbral provisional"
+       },
+       "soil": {
+        "status": "evaluable",
+        "value": 0.33776828734121767,
+        "unit": "índice 0–1",
+        "evidence": "C",
+        "normalised": 0.0,
+        "subindicators": {
+         "n_fixation_potential": 0.0,
+         "cover_months": 0.34220324134910207,
+         "family_diversity": 0.3333333333333333,
+         "residue_return": null,
+         "family_repeat_penalty": null,
+         "ph_compat": null
+        },
+        "reason": "subindicadores usados: cover_months,family_diversity"
+       },
+       "food": {
+        "status": "not_evaluable",
+        "value": null,
+        "unit": "índice 0–1",
+        "evidence": null,
+        "normalised": null,
+        "subindicators": {},
+        "reason": "sin rendimiento de referencia o composición con cita"
+       },
+       "income": {
+        "status": "not_evaluable",
+        "value": null,
+        "unit": "índice 0–1",
+        "evidence": null,
+        "normalised": null,
+        "subindicators": {},
+        "reason": "sin precios con fuente; comparación cualitativa"
+       }
+      }
+     },
+     {
+      "rank": 7,
+      "strategy": "E2_MILPA",
+      "total": 0.28086362797564124,
+      "criteria": {
+       "water": {
+        "status": "provisional",
+        "value": 0.96,
+        "unit": "índice 0–1",
+        "evidence": "C",
+        "normalised": 0.0,
+        "subindicators": {
+         "pooled_critical_share_pct": 4.0,
+         "p90_severity_by_agri_year_mm": 109.37849633677216,
+         "tail_ratio": 1.9013968758499453
+        },
+        "reason": "umbral provisional"
+       },
+       "soil": {
+        "status": "evaluable",
+        "value": 0.5044349540078843,
+        "unit": "índice 0–1",
+        "evidence": "C",
+        "normalised": 0.5617272559512825,
+        "subindicators": {
+         "n_fixation_potential": null,
+         "cover_months": 0.34220324134910207,
+         "family_diversity": 0.6666666666666666,
+         "residue_return": null,
+         "family_repeat_penalty": null,
+         "ph_compat": null
+        },
+        "reason": "subindicadores usados: cover_months,family_diversity"
+       },
+       "food": {
+        "status": "not_evaluable",
+        "value": null,
+        "unit": "índice 0–1",
+        "evidence": null,
+        "normalised": null,
+        "subindicators": {},
+        "reason": "sin rendimiento de referencia o composición con cita"
+       },
+       "income": {
+        "status": "not_evaluable",
+        "value": null,
+        "unit": "índice 0–1",
+        "evidence": null,
+        "normalised": null,
+        "subindicators": {},
+        "reason": "sin precios con fuente; comparación cualitativa"
+       }
+      }
+     }
+    ],
+    "partial_table": null,
+    "top_margin": 0.4653995202066802,
+    "margin_within_uncertainty": false,
+    "evidence": "C",
+    "provisional": true,
+    "decision_log": [
+     {
+      "decision": "criterio_fuera_del_soporte_comun",
+      "criterion": "food",
+      "missing_in": [
+       "E1_REF_MAIZ",
+       "E2_MILPA",
+       "E3_MAIZ_FRIJOL_POSTRERA",
+       "E4_MAIZ_INTERMEDIO",
+       "E5_MAIZ_TARDIO",
+       "E6_SORGO",
+       "E7_ROTACION_2A"
+      ],
+      "note": "sale del total para todas: ninguna gana por tener menos datos"
+     },
+     {
+      "decision": "criterio_fuera_del_soporte_comun",
+      "criterion": "income",
+      "missing_in": [
+       "E1_REF_MAIZ",
+       "E2_MILPA",
+       "E3_MAIZ_FRIJOL_POSTRERA",
+       "E4_MAIZ_INTERMEDIO",
+       "E5_MAIZ_TARDIO",
+       "E6_SORGO",
+       "E7_ROTACION_2A"
+      ],
+      "note": "sale del total para todas: ninguna gana por tener menos datos"
+     },
+     {
+      "decision": "fecha_ancla_para_ranking",
+      "policy": "window_start",
+      "anchors": {
+       "E1_REF_MAIZ": "05-01",
+       "E2_MILPA": "05-01",
+       "E3_MAIZ_FRIJOL_POSTRERA": "05-01",
+       "E4_MAIZ_INTERMEDIO": "05-01",
+       "E5_MAIZ_TARDIO": "05-31",
+       "E6_SORGO": "05-01",
+       "E7_ROTACION_2A": "05-01"
+      }
+     }
+    ],
+    "explanations": [
+     {
+      "a": "E3_MAIZ_FRIJOL_POSTRERA",
+      "b": "E4_MAIZ_INTERMEDIO",
+      "contributions": {
+       "water": 0.0,
+       "soil": 0.4653995202066802
+      },
+      "text_es": "E3_MAIZ_FRIJOL_POSTRERA supera a E4_MAIZ_INTERMEDIO en salud del suelo (+0.47)"
+     },
+     {
+      "a": "E4_MAIZ_INTERMEDIO",
+      "b": "E1_REF_MAIZ",
+      "contributions": {
+       "water": 0.0,
+       "soil": 0.034600479793319795
+      },
+      "text_es": "E4_MAIZ_INTERMEDIO supera a E1_REF_MAIZ en salud del suelo (+0.03)"
+     },
+     {
+      "a": "E1_REF_MAIZ",
+      "b": "E5_MAIZ_TARDIO",
+      "contributions": {
+       "water": 0.0,
+       "soil": 0.0
+      },
+      "text_es": "sin diferencia"
+     },
+     {
+      "a": "E5_MAIZ_TARDIO",
+      "b": "E6_SORGO",
+      "contributions": {
+       "water": 0.0,
+       "soil": 0.0
+      },
+      "text_es": "sin diferencia"
+     },
+     {
+      "a": "E6_SORGO",
+      "b": "E7_ROTACION_2A",
+      "contributions": {
+       "water": 0.0,
+       "soil": 0.0
+      },
+      "text_es": "sin diferencia"
+     },
+     {
+      "a": "E7_ROTACION_2A",
+      "b": "E2_MILPA",
+      "contributions": {
+       "water": 0.5,
+       "soil": -0.28086362797564124
+      },
+      "text_es": "E7_ROTACION_2A supera a E2_MILPA en seguridad hídrica (+0.50); E2_MILPA supera a E7_ROTACION_2A en salud del suelo (+0.28)"
+     }
+    ],
+    "ties": [
+     [
+      "E1_REF_MAIZ",
+      "E5_MAIZ_TARDIO"
+     ],
+     [
+      "E5_MAIZ_TARDIO",
+      "E6_SORGO"
+     ],
+     [
+      "E6_SORGO",
+      "E7_ROTACION_2A"
+     ]
+    ],
+    "message": null,
+    "stability": {
+     "flag": "stable",
+     "top1_share": {
+      "E3_MAIZ_FRIJOL_POSTRERA": 1.0
+     },
+     "rank_corr_mean": 0.9917619047619048,
+     "conflicts": [],
+     "interpretation_es": "La estabilidad mide la sensibilidad del orden a variaciones de los pesos de prioridad, no la probabilidad de que una estrategia sea la mejor.",
+     "n_samples": 2000,
+     "seed": 42,
+     "mode": "dirichlet"
+    },
+    "anchors": {
+     "E1_REF_MAIZ": "05-01",
+     "E2_MILPA": "05-01",
+     "E3_MAIZ_FRIJOL_POSTRERA": "05-01",
+     "E4_MAIZ_INTERMEDIO": "05-01",
+     "E5_MAIZ_TARDIO": "05-31",
+     "E6_SORGO": "05-01",
+     "E7_ROTACION_2A": "05-01"
+    }
+   }
+  },
+  {
+   "id": "suelo",
+   "title_es": "Valor de la información del suelo (pH)",
+   "content": {
+    "property_code": "ph",
+    "property_status": "desconocido",
+    "applicability": "evaluable",
+    "outcome": "insufficient_info",
+    "lab_recommended": false,
+    "rationale_es": "sin rango documentado para el pH",
+    "hypotheticals": null,
+    "range_citation": null,
+    "evidence": null,
+    "extra": {}
+   }
+  }
+ ],
+ "annex": [
+  {
+   "id": "procedencia",
+   "title_es": "Procedencia y evidencia",
+   "content": {
+    "engine_version": "milpa_core 0.1.0",
+    "run_id": "16e09331-37c8-4fa8-8859-708e3bce8a06",
+    "data_hash": "de18c3b5acbd4ffab72b37c8bff68d5e33c9066adff670a38f9c23463d6966bf",
+    "region_config_hash": "bdae28b537119ad798485f32de819c9639b0c7a97f356920bb1286d6e2c91376",
+    "catalog_hash": "4b1e421532b3d9cff5106beb09050f33c8760c272936f405cd7317ffdd1554ca",
+    "seed": 42,
+    "mass_dropped_mm": 0.0,
+    "peff_primary": "usda_scs_fao",
+    "ea_route_diff_pct": 4.119552289821652,
+    "climate_flags": [],
+    "period": [
+     "2001-01-01",
+     "2025-12-31"
+    ]
+   }
+  },
+  {
+   "id": "supuestos",
+   "title_es": "Supuestos y limitaciones",
+   "content": [
+    "indicador de exposición climática: no es déficit real de agua del suelo",
+    "modo sandbox: catálogos y umbrales provisionales — no usar para decisión"
+   ]
+  },
+  {
+   "id": "decisiones",
+   "title_es": "Registro de decisiones del ranking",
+   "content": [
+    {
+     "decision": "criterio_fuera_del_soporte_comun",
+     "criterion": "food",
+     "missing_in": [
+      "E1_REF_MAIZ",
+      "E2_MILPA",
+      "E3_MAIZ_FRIJOL_POSTRERA",
+      "E4_MAIZ_INTERMEDIO",
+      "E5_MAIZ_TARDIO",
+      "E6_SORGO",
+      "E7_ROTACION_2A"
+     ],
+     "note": "sale del total para todas: ninguna gana por tener menos datos"
+    },
+    {
+     "decision": "criterio_fuera_del_soporte_comun",
+     "criterion": "income",
+     "missing_in": [
+      "E1_REF_MAIZ",
+      "E2_MILPA",
+      "E3_MAIZ_FRIJOL_POSTRERA",
+      "E4_MAIZ_INTERMEDIO",
+      "E5_MAIZ_TARDIO",
+      "E6_SORGO",
+      "E7_ROTACION_2A"
+     ],
+     "note": "sale del total para todas: ninguna gana por tener menos datos"
+    },
+    {
+     "decision": "fecha_ancla_para_ranking",
+     "policy": "window_start",
+     "anchors": {
+      "E1_REF_MAIZ": "05-01",
+      "E2_MILPA": "05-01",
+      "E3_MAIZ_FRIJOL_POSTRERA": "05-01",
+      "E4_MAIZ_INTERMEDIO": "05-01",
+      "E5_MAIZ_TARDIO": "05-31",
+      "E6_SORGO": "05-01",
+      "E7_ROTACION_2A": "05-01"
+     }
+    }
+   ]
+  },
+  {
+   "id": "modo",
+   "title_es": "Por qué este modo de cálculo",
+   "content": [
+    "awc",
+    "effective_depth",
+    "initial_condition",
+    "catalog:maiz_corto",
+    "catalog:frijol_negro",
+    "catalog:maiz_intermedio",
+    "catalog:sorgo_grano"
+   ]
+  }
+ ]
+}

@@ -24,6 +24,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/auth/demo-session": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Sesión pública de demostración
+         * @description Sin credenciales. Solo si el servidor habilita `DEMO_PUBLIC_ACCESS`. El token es de una cuenta sin parcelas ni contraseña utilizable y su alcance está limitado a lectura de resultados y a crear corridas de zona, escenarios, rankings e informes (todo lo demás responde 403).
+         */
+        post: operations["demo_session_v1_auth_demo_session_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/auth/login": {
         parameters: {
             query?: never;
@@ -207,6 +227,26 @@ export interface paths {
          * @description Solo el dueño (la vía admin está bloqueada hasta aprobar la política de acceso excepcional, ADR-015). Elimina parcela, suelo, historial, perfiles, corridas, resultados Parquet, informes y PDFs.
          */
         delete: operations["delete_parcel_v1_parcels__id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/parcels/{id}/planting-validation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Validar fecha y variedad de siembra para Jocotán
+         * @description Roles: dueño (agricultor) o técnico asignado con consentimiento vigente. Usa reglas sandbox configuradas y la serie histórica zonal curada; no constituye un pronóstico ni una validación específica de la parcela.
+         */
+        post: operations["validate_planting_v1_parcels__id__planting_validation_post"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -591,6 +631,66 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/zones/{id}/planting-options": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Cultivos, variedades y ciclos configurados para la validación de siembra
+         * @description Lee reglas_agronomicas_jocotan.json; los valores son provisionales hasta la validación oficial MAGA/ICTA.
+         */
+        get: operations["planting_options_v1_zones__id__planting_options_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/zones/{id}/planting-validation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Validar cultivo, variedad, ciclo y fecha de siembra en Jocotán
+         * @description Evaluación de solo lectura con reglas provisionales (reglas_agronomicas_jocotan.json) y, si no se indican datos propios, clima histórico zonal. Disponible en sesión demo; no es pronóstico ni medición parcelaria. Una fecha fuera de la ventana es una advertencia de compatibilidad, no una prohibición.
+         */
+        get: operations["validate_zone_planting_v1_zones__id__planting_validation_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/zones/{id}/rainy-season-onset": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Estimación SANDBOX del inicio de la época lluviosa (pentadas)
+         * @description Aplica un criterio de pentadas configurable (MAGA Informe 6/2025) a la precipitación diaria curada de la zona. No es un boletín ni el método oficial de INSIVUMEH; no usar como única base de decisiones. Con fecha_siembra compara en días la siembra con el inicio estimado.
+         */
+        get: operations["rainy_season_onset_v1_zones__id__rainy_season_onset_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/zones/{id}/runs": {
         parameters: {
             query?: never;
@@ -611,15 +711,70 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/zones/{id}/station-validation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Estado de la validación de la lluvia satelital contra la estación Camotán
+         * @description Por defecto «Nivel C - Pendiente»: no hay serie histórica de la estación. Solo un CSV real colocado por el operador en el servidor, con suficientes días coincidentes, puede pasar a «Nivel B - Validado localmente». El archivo de ejemplo ficticio nunca cambia el estado.
+         */
+        get: operations["station_validation_v1_zones__id__station_validation_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** AdaptationDelayOut */
+        AdaptationDelayOut: {
+            /** Advertencias */
+            advertencias: string[];
+            /** Conclusion */
+            conclusion: string;
+            /** Dias Diferencia */
+            dias_diferencia: number | null;
+            /** Mensaje */
+            mensaje: string;
+            /** Nota */
+            nota: string;
+        };
         /**
          * AdaptationMode
          * @enum {string}
          */
         AdaptationMode: "none" | "onset_rule";
+        /**
+         * AgriContextOut
+         * @description Cultivos, temporadas y decisiones pendientes del region pack (sin definir nada nuevo).
+         */
+        AgriContextOut: {
+            /** Crops */
+            crops?: {
+                [key: string]: unknown;
+            }[];
+            /** Pending */
+            pending?: string[];
+            /** Region */
+            region: string;
+            /** Seasons */
+            seasons?: {
+                [key: string]: unknown;
+            }[];
+            /** Source */
+            source: string;
+            /** Status */
+            status: string;
+        };
         /** @enum {string} */
         CellState: "critical" | "non_critical" | "insufficient_data" | "not_evaluable";
         ClimateHistoryDTO: {
@@ -1102,6 +1257,32 @@ export interface components {
                 [key: string]: components["schemas"]["IndicatorNumber"] | null;
             };
         };
+        /** PentadOut */
+        PentadOut: {
+            /** Completa */
+            completa: boolean;
+            /** Dias Totales */
+            dias_totales: number;
+            /** Dias Validos */
+            dias_validos: number;
+            /**
+             * Fin
+             * Format: date
+             */
+            fin: string;
+            /**
+             * Inicio
+             * Format: date
+             */
+            inicio: string;
+            /** Pentada */
+            pentada: number;
+            /**
+             * Precipitacion Mm
+             * @description null si algún día de la pentada no tiene dato (nunca se rellena con cero)
+             */
+            precipitacion_mm: number | null;
+        };
         Period: {
             /** Format: date */
             end?: string;
@@ -1117,6 +1298,175 @@ export interface components {
             end: string | null;
             /** Start */
             start: string | null;
+        };
+        /** PlantingOptionCrop */
+        PlantingOptionCrop: {
+            /** Clave */
+            clave: string;
+            /** Nombre */
+            nombre: string;
+            /** Variedades */
+            variedades: components["schemas"]["PlantingOptionVariety"][];
+        };
+        /** PlantingOptionCycle */
+        PlantingOptionCycle: {
+            /** Ciclo */
+            ciclo: string;
+            /** Estado */
+            estado: string;
+            /**
+             * Fin
+             * @description MM-DD
+             */
+            fin: string;
+            /**
+             * Inicio
+             * @description MM-DD
+             */
+            inicio: string;
+        };
+        /** PlantingOptionVariety */
+        PlantingOptionVariety: {
+            /** Ciclo Total Dias */
+            ciclo_total_dias: number | null;
+            /** Confianza */
+            confianza: string;
+            /** Nombre */
+            nombre: string;
+            /** Tipo Dato */
+            tipo_dato: string;
+            /** Tolerante Sequia */
+            tolerante_sequia: boolean | null;
+        };
+        /**
+         * PlantingOptionsResponse
+         * @description Opciones del formulario de siembra: salen del JSON de reglas, no del código del frontend.
+         */
+        PlantingOptionsResponse: {
+            /** Aviso */
+            aviso: string;
+            /** Ciclos */
+            ciclos: components["schemas"]["PlantingOptionCycle"][];
+            /** Cultivos */
+            cultivos: components["schemas"]["PlantingOptionCrop"][];
+            /** Estado Validacion */
+            estado_validacion: string;
+        };
+        /** PlantingValidationRequest */
+        PlantingValidationRequest: {
+            /**
+             * Ciclo
+             * @description primera | postrera; si falta se infiere de la fecha
+             */
+            ciclo?: string | null;
+            /**
+             * Cultivo
+             * @default maiz
+             */
+            cultivo: string;
+            /**
+             * Dias Secos Recientes
+             * @description Días secos consecutivos recientes (dato del usuario)
+             */
+            dias_secos_recientes?: number | null;
+            /**
+             * Fecha Siembra
+             * Format: date
+             */
+            fecha_siembra: string;
+            /**
+             * Idioma
+             * @default es
+             * @enum {string}
+             */
+            idioma: "es" | "en";
+            /**
+             * Lluvia 15 Dias Mm
+             * @description Lluvia acumulada en 15 días (dato del usuario)
+             */
+            lluvia_15_dias_mm?: number | null;
+            /** Variedad */
+            variedad: string;
+        };
+        /** PlantingValidationResponse */
+        PlantingValidationResponse: {
+            /** Advertencias */
+            advertencias?: string[];
+            /** Alcance */
+            alcance: string;
+            /** Alertas */
+            alertas: string[];
+            /** Ciclo */
+            ciclo?: string | null;
+            /** Cobertura Climatica */
+            cobertura_climatica: {
+                [key: string]: string;
+            };
+            /**
+             * Cultivo
+             * @default Maíz
+             */
+            cultivo: string;
+            /** Datos Suficientes */
+            datos_suficientes: boolean;
+            /** Dias Lluvia Disponibles */
+            dias_lluvia_disponibles: number;
+            /** Es Valido */
+            es_valido: boolean;
+            /** Estado Reglas */
+            estado_reglas: string;
+            /**
+             * Estado Validacion
+             * @default
+             */
+            estado_validacion: string;
+            /** Fecha En Ventana */
+            fecha_en_ventana?: boolean | null;
+            /**
+             * Fecha Siembra
+             * Format: date
+             */
+            fecha_siembra: string;
+            /** Fuentes */
+            fuentes?: {
+                [key: string]: unknown;
+            }[];
+            /** Fuentes Precipitacion */
+            fuentes_precipitacion: {
+                [key: string]: number;
+            };
+            /** Kc Etapa Media */
+            kc_etapa_media?: number | null;
+            /**
+             * Origen Senales Hidricas
+             * @default serie histórica zonal
+             */
+            origen_senales_hidricas: string;
+            /** Parametros Fenologicos */
+            parametros_fenologicos?: {
+                [key: string]: unknown;
+            } | null;
+            /** Precipitacion 15 Dias Mm */
+            precipitacion_15_dias_mm?: number | null;
+            /** Racha Seca Maxima Dias */
+            racha_seca_maxima_dias?: number | null;
+            /** Recomendacion */
+            recomendacion: string;
+            /**
+             * Senal Sequia
+             * @default false
+             */
+            senal_sequia: boolean;
+            /** Supuestos */
+            supuestos?: string[];
+            /** Temperatura Media Fecha C */
+            temperatura_media_fecha_c?: number | null;
+            /** Umbrales Aplicados */
+            umbrales_aplicados?: {
+                [key: string]: unknown;
+            }[];
+            /** Variedad */
+            variedad: string;
         };
         /** PriorityProfileIn */
         PriorityProfileIn: {
@@ -1266,6 +1616,44 @@ export interface components {
             temporal_res: string | null;
             /** Unit */
             unit: string;
+        };
+        /** RainySeasonOnsetResponse */
+        RainySeasonOnsetResponse: {
+            /** Anio */
+            anio: number | null;
+            /** Aviso */
+            aviso: string;
+            /** Criterio */
+            criterio: {
+                [key: string]: unknown;
+            };
+            /** Entradas */
+            entradas: {
+                [key: string]: unknown;
+            };
+            /**
+             * Es Metodo Oficial Insivumeh
+             * @default false
+             */
+            es_metodo_oficial_insivumeh: boolean;
+            /** Estado */
+            estado: string;
+            /** Fecha Estimada Inicio */
+            fecha_estimada_inicio: string | null;
+            /** Fuente Precipitacion */
+            fuente_precipitacion: string;
+            /** Limitaciones */
+            limitaciones: string[];
+            /** Metodo */
+            metodo: string;
+            /** Precipitacion Pentadas */
+            precipitacion_pentadas: components["schemas"]["PentadOut"][];
+            /**
+             * Resultado
+             * @description detectado | no_detectado | datos_insuficientes
+             */
+            resultado: string;
+            retraso_adaptacion?: components["schemas"]["AdaptationDelayOut"] | null;
         };
         /** RankRequest */
         RankRequest: {
@@ -1783,6 +2171,37 @@ export interface components {
         } & {
             [key: string]: unknown;
         };
+        /** StationValidationResponse */
+        StationValidationResponse: {
+            /** Aviso */
+            aviso: string;
+            /**
+             * Carga Habilitada
+             * @description false: la interfaz no procesa archivos; el CSV lo coloca el operador en el servidor
+             */
+            carga_habilitada: boolean;
+            /**
+             * Es Ejemplo Ficticio
+             * @default false
+             */
+            es_ejemplo_ficticio: boolean;
+            /** Estado Validacion */
+            estado_validacion: string;
+            /** Filas */
+            filas?: {
+                [key: string]: number;
+            } | null;
+            /** Fuente Sugerida */
+            fuente_sugerida: string;
+            /** Mensaje */
+            mensaje: string;
+            /** Metricas */
+            metricas: {
+                [key: string]: unknown;
+            } | null;
+            /** Producto Satelital */
+            producto_satelital: string;
+        };
         /** @enum {string} */
         StrategyAxis: "association" | "rotation" | "planting_date" | "variety" | "cover_crop";
         /** StrategyComponentOut */
@@ -1905,6 +2324,12 @@ export interface components {
             /** Access Token */
             access_token: string;
             /**
+             * Demo
+             * @description True: sesión pública de demostración (alcance limitado)
+             * @default false
+             */
+            demo: boolean;
+            /**
              * Expires At
              * Format: date-time
              */
@@ -2008,6 +2433,7 @@ export interface components {
          *     }
          */
         ZoneDetail: {
+            agri_context?: components["schemas"]["AgriContextOut"] | null;
             /** Cells */
             cells?: components["schemas"]["ZoneCellOut"][];
             /** Elevation M */
@@ -2101,6 +2527,53 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    demo_session_v1_auth_demo_session_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TokenResponse"];
+                };
+            };
+            /** @description Recurso inexistente o no visible */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Límite de tasa superado */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Dependencia o dato no disponible */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
             };
         };
     };
@@ -2784,6 +3257,87 @@ export interface operations {
             };
             /** @description Límite de tasa superado */
             429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    validate_planting_v1_parcels__id__planting_validation_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Identificador de la parcela */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlantingValidationRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlantingValidationResponse"];
+                };
+            };
+            /** @description No autenticado */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Acceso denegado */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Recurso inexistente o no visible */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Error de validación */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Límite de tasa superado */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Dependencia o dato no disponible */
+            503: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -4471,6 +5025,249 @@ export interface operations {
             };
         };
     };
+    planting_options_v1_zones__id__planting_options_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Identificador de la zona */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlantingOptionsResponse"];
+                };
+            };
+            /** @description No autenticado */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Acceso denegado */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Recurso inexistente o no visible */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Error de validación */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Límite de tasa superado */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Dependencia o dato no disponible */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    validate_zone_planting_v1_zones__id__planting_validation_get: {
+        parameters: {
+            query: {
+                fecha_siembra: string;
+                variedad: string;
+                cultivo?: string;
+                ciclo?: string | null;
+                dias_secos_recientes?: number | null;
+                lluvia_15_dias_mm?: number | null;
+                idioma?: "es" | "en";
+            };
+            header?: never;
+            path: {
+                /** @description Identificador de la zona */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlantingValidationResponse"];
+                };
+            };
+            /** @description No autenticado */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Acceso denegado */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Recurso inexistente o no visible */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Error de validación */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Límite de tasa superado */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Dependencia o dato no disponible */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    rainy_season_onset_v1_zones__id__rainy_season_onset_get: {
+        parameters: {
+            query?: {
+                anio?: number | null;
+                fecha_siembra?: string | null;
+                idioma?: "es" | "en";
+            };
+            header?: never;
+            path: {
+                /** @description Identificador de la zona */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RainySeasonOnsetResponse"];
+                };
+            };
+            /** @description No autenticado */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Acceso denegado */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Recurso inexistente o no visible */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Error de validación */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Límite de tasa superado */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Dependencia o dato no disponible */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
     create_run_v1_zones__id__runs_post: {
         parameters: {
             query?: never;
@@ -4546,6 +5343,85 @@ export interface operations {
             };
             /** @description Límite de tasa superado */
             429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+        };
+    };
+    station_validation_v1_zones__id__station_validation_get: {
+        parameters: {
+            query?: {
+                idioma?: "es" | "en";
+            };
+            header?: never;
+            path: {
+                /** @description Identificador de la zona */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StationValidationResponse"];
+                };
+            };
+            /** @description No autenticado */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Acceso denegado */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Recurso inexistente o no visible */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Error de validación */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Límite de tasa superado */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Dependencia o dato no disponible */
+            503: {
                 headers: {
                     [name: string]: unknown;
                 };

@@ -2,7 +2,7 @@ import { useSyncExternalStore } from "react";
 
 const STORAGE_KEY = "milpa.session";
 
-export type StoredSession = { token: string; role: string; expiresAt: number };
+export type StoredSession = { token: string; role: string; expiresAt: number; demo?: boolean };
 
 const listeners = new Set<() => void>();
 let cachedRaw: string | null | undefined;
@@ -30,10 +30,10 @@ export function getSession(): StoredSession | null {
   return cachedValue;
 }
 
-export function setSession(session: { token: string; role: string; expiresInSeconds: number } | null): void {
+export function setSession(session: { token: string; role: string; expiresInSeconds: number; demo?: boolean } | null): void {
   try {
     if (session) {
-      const stored: StoredSession = { token: session.token, role: session.role, expiresAt: Date.now() + session.expiresInSeconds * 1000 };
+      const stored: StoredSession = { token: session.token, role: session.role, expiresAt: Date.now() + session.expiresInSeconds * 1000, demo: session.demo === true };
       window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
     } else {
       window.sessionStorage.removeItem(STORAGE_KEY);

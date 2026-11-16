@@ -1,5 +1,7 @@
 # Base de datos (PostgreSQL 16 + PostGIS 3.4)
 
+> **Actualización 2026-11-16:** la última migración es la **0014** (semillas de R1). Las tablas `engine.analysis_run`, `engine.scenario_run` y `ref.catalog_release` se escriben ahora con el motor real (trabajos de la API); `engine.scenario_def` se siembra con `python -m api.cli register-engine` (rol propietario). `engine.risk_summary`/`planting_summary` aún no se llenan (las lecturas salen del motor).
+
 Cadena Alembic **única**: `apps/api/migrations` (ADR-003). DDL en `migrations/sql/NNNN_*.up.sql`; cada revisión Python lo ejecuta y define su `downgrade`.
 
 | Rev. | Contenido | Propietario del contenido |

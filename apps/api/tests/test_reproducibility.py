@@ -15,7 +15,6 @@ from api import cli
 from api.reproducibility.hashing import MissingInputError, sha256_bytes
 from api.reproducibility.runs import (
     EXIT_MISSING_INPUTS,
-    EXIT_WAITING_DEPENDENCY,
     MANIFEST_FORMAT,
     RunIdentifiers,
     build_manifest,
@@ -215,9 +214,29 @@ def test_reproduce_regenerates_the_data_layer_and_still_refuses_to_claim_success
         pytest.skip("data/demo no existe")
     st_ = check_reproduce_prerequisites(REPO_DEMO.parent)
     assert any("regenerad" in v for v in st_.verified)
-    assert (
-        st_.exit_code == EXIT_WAITING_DEPENDENCY != 0
-    )  # recomputo vs EXPECTED.json aún no contratado
+    # Con EXPECTED_ENGINE.json congelado, el motor se recalcula y coincide: reproducción completa.
+    assert st_.exit_code == 0
+    assert any("corrida base de milpa_core reproducida" in v for v in st_.verified)
+
+
+def test_engine_fingerprint_detects_a_missing_or_changed_expectation(tmp_path: Path) -> None:
+    import shutil
+
+    from api.reproducibility import engine_check
+
+    diffs, _ = engine_check.verify(tmp_path, "zona", Path.cwd())
+    assert diffs and "EXPECTED_ENGINE.json" in diffs[0]
+    if not REPO_DEMO.is_dir():
+        pytest.skip("data/demo no existe")
+    import json as _json
+
+    expected = _json.loads((REPO_DEMO / "EXPECTED_ENGINE.json").read_text(encoding="utf-8"))
+    assert expected["n_cycle_results"] != 1  # no depende del valor congelado en cada momento
+    expected["n_cycle_results"] = 1
+    (tmp_path / "EXPECTED_ENGINE.json").write_text(_json.dumps(expected), encoding="utf-8")
+    shutil.copytree(REPO_DEMO / "zona_sintetica", tmp_path / "zona_sintetica")
+    diffs, _ = engine_check.verify(tmp_path, "zona_sintetica", Path.cwd())
+    assert any("n_cycle_results" in d for d in diffs)
 
 
 # ------------------------------------------- tolerancia numérica entre plataformas (README §25)

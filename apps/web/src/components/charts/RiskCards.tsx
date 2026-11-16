@@ -30,7 +30,7 @@ function CycleTable({ strategy }: { strategy: StrategyRisk }) {
       {methods.map((method) => <th key={method}>Pef · <code>{method}</code></th>)}
     </tr></thead>
     <tbody>{strategy.by_cycle.map((cycle) => <tr key={`${cycle.cycle_idx}:${cycle.variety_id}`}>
-      <th scope="row">{cycle.cycle_idx + 1}</th>
+      <th scope="row">{cycle.cycle_idx}</th>
       <td><code>{cycle.variety_id}</code></td>
       <td><Indicator indicator={cycle.freq_critical} compact /></td>
       <td><Indicator indicator={cycle.severity_median} compact /></td>

@@ -22,5 +22,10 @@ Estados: `propuesto`, `aceptado`, `rechazado`, `reemplazado`. Una decisión que 
 | [016](ADR-016-limites-timeouts-recuperacion.md) | Límites, timeouts, recuperación | **propuesto** |
 | [017](ADR-017-alineacion-contratos-auditoria-integracion.md) | Alineación de contratos y defensas de integración (auditoría) | **propuesto** |
 | [018](ADR-018-integracion-de-r1-y-r4-en-la-raiz.md) | Integración de R1 y R4 (`references/`) en la raíz | **propuesto** |
+| [019](ADR-019-sesion-publica-de-demostracion.md) | Sesión pública de demostración | **propuesto** |
+| [020](ADR-020-integracion-de-milpa-core.md) | Integración de `milpa_core` (R2) | **propuesto** |
+| [021](ADR-021-reportlab-motor-pdf.md) | ReportLab como motor PDF (WeasyPrint opcional) | **propuesto** |
+| [022](ADR-022-limite-municipal-y-seleccion-de-ubicacion.md) | Límite municipal y selección de ubicación | **propuesto** |
+| [023](ADR-023-validacion-agronomica-jocotan.md) | Validación agronómica de Jocotán (JSON, inicio de lluvias sandbox, estación) | **propuesto** |
 
 Plantilla: ver cualquiera de los anteriores (fecha, estado, contexto/problema, restricciones, alternativas, decisión, justificación, consecuencias, riesgos, módulos afectados, aprobadores, relación con otros ADR).

@@ -19,16 +19,16 @@ from __future__ import annotations
 import importlib
 import inspect
 from collections import OrderedDict
-from collections.abc import Callable, Mapping
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass, replace
 from datetime import date
 from pathlib import Path
 from types import ModuleType
-from typing import Any
+from typing import Any, Literal
 from uuid import UUID
 
 from api.adapters import core_io
-from api.adapters.ports import RunRef
+from api.adapters.ports import EvidenceRecord, RunRef
 from api.errors import DependencyNotIntegrated, NotFound, ValidationFailed
 
 # Parámetros posicionales REALES de la fachada de ``milpa_core`` (R2). El README §10 documenta otros
@@ -122,10 +122,22 @@ class MilpaCoreEngine:
         return self._assets
 
     def _build_context(
-        self, zone_id: UUID, seed: int, start: str | None, end: str | None
+        self,
+        zone_id: UUID,
+        seed: int,
+        start: str | None,
+        end: str | None,
+        soil_rows: Sequence[Mapping[str, Any]] | None = None,
     ) -> tuple[Any, core_io.CuratedInfo]:
         assets = self._need_assets()
         region, extras = core_io.load_region(assets.region_path)
+        if start or end:
+            # El periodo de la corrida acota la ventana de análisis (cohortes incluidas): 25 años = 2001 a 2025.
+            region = replace(
+                region,
+                window_start=start or region.window_start,
+                window_end=end or region.window_end,
+            )
         catalogs = core_io.load_catalogs(assets.catalogs_dir, mode=region.status)
         strategies = core_io.load_strategies(assets.strategies_path)
         daily = assets.daily_for_zone(zone_id)
@@ -148,6 +160,7 @@ class MilpaCoreEngine:
             soil_cfg=extras.soil_cfg,
             seed=seed,
             run_id=str(zone_id),
+            soil=core_io.soil_context_from_rows(soil_rows) if soil_rows else None,
         )
         return ctx, info
 
@@ -156,7 +169,11 @@ class MilpaCoreEngine:
         ctx = self._ctx.get(run.run_id)
         if ctx is None:
             ctx, _ = self._build_context(
-                run.zone_id, run.seed, _iso(run.period_start), _iso(run.period_end)
+                run.zone_id,
+                run.seed,
+                _iso(run.period_start),
+                _iso(run.period_end),
+                (run.params or {}).get("soil"),
             )
             ctx = replace(ctx, run_id=str(run.run_id))
             if ctx.data_hash != run.data_hash or ctx.region_config_hash != run.region_config_hash:
@@ -199,18 +216,13 @@ class MilpaCoreEngine:
         from milpa_core.dto import run_summary_dto
         from milpa_core.enums import AdaptationMode
 
-        if request.get("parcel_id") is not None:
-            raise self._pending(
-                "corrida con parcela",
-                "SoilContext desde el suelo declarado/medido de la parcela no está cableado",
-            )
         if not request.get("zone_id"):
             raise ValidationFailed("La corrida base requiere zone_id")
         zone_id = UUID(str(request["zone_id"]))
         seed = int(request.get("seed", 0))
         start = _iso(request.get("period_start"))
         end = _iso(request.get("period_end"))
-        ctx, info = self._build_context(zone_id, seed, start, end)
+        ctx, info = self._build_context(zone_id, seed, start, end, request.get("soil"))
         base = self._core.run_analysis(ctx, self._core.BASE, AdaptationMode.NONE)
         from milpa_core.serialize import to_jsonable
 
@@ -503,7 +515,7 @@ class MilpaCoreEngine:
                 "unit": unit,
                 "kind": "climate_input",
                 "provisional": True,
-                "reason": "Serie sandbox: evidencia C hasta validar con estación local",
+                "reason": "Sandbox series: evidence level C until validated with a local weather station",
                 "provenance": to_jsonable(prov),
             }
 
@@ -522,20 +534,48 @@ class MilpaCoreEngine:
                     "year": year,
                     "precip_mm": indicator(
                         "annual_precip_mm",
-                        "Precipitación anual",
+                        "Annual precipitation",
                         rain_total,
                         "mm",
                         series.precip_prov,
                     ),
                     "et0_mm": indicator(
-                        "annual_et0_mm", "ET0 anual (FAO-56)", et0_total, "mm", series.met_prov
+                        "annual_et0_mm", "Annual ET0 (FAO-56)", et0_total, "mm", series.met_prov
                     ),
                     "n_valid_days": indicator(
                         "valid_days",
-                        "Días válidos de lluvia",
+                        "Valid rainfall days",
                         float(valid),
-                        "días",
+                        "days",
                         series.precip_prov,
+                    ),
+                }
+            )
+        trends: list[dict[str, Any]] = []
+        for variable, key, label, prov in (
+            ("precipitation", "precip_mm", "Annual rainfall", series.precip_prov),
+            ("et0", "et0_mm", "Annual reference evapotranspiration (ET0)", series.met_prov),
+        ):
+            pairs = [(r["year"], r[key]["value"]) for r in rows if r[key]["value"] is not None]
+            if len(pairs) < 10:
+                continue  # sin suficientes años completos no se informa tendencia
+            xs = np.array([p[0] for p in pairs], dtype=float)
+            ys = np.array([p[1] for p in pairs], dtype=float)
+            per_decade = float(np.polyfit(xs, ys, 1)[0] * 10.0)
+            trends.append(
+                {
+                    "variable": variable,
+                    "change_per_decade": indicator(
+                        f"{variable}_trend_mm_per_decade",
+                        f"{label}: linear change per decade",
+                        per_decade,
+                        "mm/decade",
+                        prov,
+                    ),
+                    "description_es": (
+                        f"{label}: least-squares line over {len(pairs)} complete years "
+                        f"({int(xs.min())}-{int(xs.max())}). Descriptive only: no significance test, and "
+                        "year-to-year variability is large compared with the slope."
                     ),
                 }
             )
@@ -543,9 +583,9 @@ class MilpaCoreEngine:
             to_jsonable(
                 {
                     "years": rows,
-                    "trends": [],
+                    "trends": trends,
                     "provenance": series.precip_prov,
-                    "message": None if rows else "Sin datos en el periodo de la corrida",
+                    "message": None if rows else "No data in the run period",
                 }
             )
         )
@@ -576,3 +616,53 @@ def _et0_parity(info: core_io.CuratedInfo, ctx: Any) -> dict[str, Any] | None:
     if not ok.any():
         return None
     return {"mean_abs_diff_mm": float(np.mean(np.abs(r1[ok] - engine[ok]))), "n": int(ok.sum())}
+
+
+class MilpaCoreEvidence:
+    """Nivel de evidencia A/B/C del suelo según las reglas de ``milpa_core`` (``soil.PropertyValue``).
+
+    No inventa reglas: construye el valor con el estado que corresponde y lee la evidencia que el motor
+    le asigna (medido → A; declarado, estimado, desactualizado o no representativo → C; sin método → no
+    se acepta como medido).
+    """
+
+    component = "R2 (packages/milpa_core)"
+
+    def is_available(self) -> bool:
+        return True
+
+    def provenance_for_soil(
+        self,
+        *,
+        kind: Literal["medido", "declarado"],
+        property_code: str,
+        unit: str,
+        method: str | None,
+        representativeness: str | None,
+    ) -> EvidenceRecord:
+        from milpa_core.enums import PropertyStatus
+        from milpa_core.soil import PropertyValue
+
+        status = PropertyStatus(kind)
+        if kind == "medido" and representativeness in {"otra_parcela", "desconocida"}:
+            status = PropertyStatus.NO_REPRESENTATIVO
+        value = PropertyValue(property_code, status, 0.0, method if kind == "medido" else None)
+        level = value.evidence
+        if level is None or value.status.value == "desconocido":
+            raise ValidationFailed(
+                f"Un valor medido de '{property_code}' requiere método de laboratorio documentado"
+            )
+        notes = {
+            "declarado": "Valor declarado por el usuario; no es una medición.",
+            "no_representativo": "La muestra no representa esta parcela.",
+        }
+        limitation = notes.get(status.value)
+        return EvidenceRecord(
+            evidence_level=level.value,
+            evidence_rule_id=f"milpa_core.soil.{status.value}",
+            processing_method=method or "declaración del usuario",
+            source_ids=[],
+            dataset_version=None,
+            assumptions=[],
+            limitations=[limitation] if limitation else [],
+        )

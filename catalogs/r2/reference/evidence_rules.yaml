@@ -1,0 +1,20 @@
+version: 0.1.0
+status: proposed_pending_team_validation
+rules:
+  - indicator: climate_observation
+    evidence: A
+    requires: [source_version, coverage, qc_record]
+  - indicator: nasa_reanalysis_or_satellite
+    evidence: B
+    requires: [source_id, product_version, spatial_resolution, processing_method]
+  - indicator: agronomic_catalog_value
+    evidence: C
+    requires: [citation, crop, variety, stage, local_validation_status]
+  - indicator: modeled_value
+    evidence: C
+    requires: [input_provenance, method, parameters, limitations]
+  - indicator: pending_parameter
+    evidence: pending
+    requires: [reason, owner, decision_needed]
+minimum_propagation: weakest_input_evidence
+no_citation_policy: no_production_threshold

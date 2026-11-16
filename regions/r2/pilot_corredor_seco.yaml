@@ -5,15 +5,15 @@ region: pilot_corredor_seco
 status: sandbox
 pilot_candidates: [jocotan, camotan]
 zone:
-  name: chiquimula_prueba
-  lat_deg: 14.8            # punto POWER usado por R1 (centroide aproximado de zona, no parcela)
-  lon_deg: -89.5
-  elevation_m: 450         # [Pendiente] reemplazar por la elevación media del DEM de R1 (Copernicus 30 m)
+  name: camotan_jocotan
+  lat_deg: 14.8194         # punto público de referencia de Jocotán; no es una parcela
+  lon_deg: -89.3903
+  elevation_m: 444.74      # Copernicus GLO-30, píxel en el punto de referencia; ver copernicus_dem_jocotan.json
   cell_id: null            # null = primera celda de curated/daily.parquet
 window: { start: 2021-01-01, end: 2025-12-31, min_valid_years: 3 }   # R1 curó 5 años de IMERG (2021–2025)
 agri_year_start: "04-01"   # [Pendiente]
 seasons:
-  - { code: primera,  calendar_year_shift: 0, plant_window: ["05-01", "06-15"] }   # [Pendiente]
+  - { code: primera,  calendar_year_shift: 0, plant_window: ["05-01", "06-30"] }   # regla local sandbox; validar con MAGA/ZARC
   - { code: postrera, calendar_year_shift: 0, plant_window: ["08-20", "09-30"] }   # [Pendiente]
 planting_candidates: { step_days: 5 }   # [Pendiente]
 precip:

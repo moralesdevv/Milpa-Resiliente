@@ -21,6 +21,29 @@ Short = Annotated[str, StringConstraints(max_length=300)]
 Long = Annotated[str, StringConstraints(max_length=8000)]
 
 
+class ReportTable(BaseModel):
+    """Tabla de texto ya formateada (la capa PDF/web no calcula: solo presenta)."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    caption_es: Short | None = None
+    caption_en: Short | None = None
+    headers: list[Short] = Field(min_length=1, max_length=12)
+    rows: list[list[Short]] = Field(default_factory=list, max_length=300)
+    # Anchos relativos de columna (opcional): evita cortar tablas anchas al imprimir en A4.
+    weights: list[float] | None = Field(default=None, max_length=12)
+
+    @model_validator(mode="after")
+    def _rectangular(self) -> ReportTable:
+        if any(len(row) != len(self.headers) for row in self.rows):
+            raise ValueError("Cada fila de la tabla debe tener tantas celdas como encabezados")
+        if self.weights is not None and (
+            len(self.weights) != len(self.headers) or any(w <= 0 for w in self.weights)
+        ):
+            raise ValueError("weights debe tener un valor positivo por columna")
+        return self
+
+
 class ReportSection(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -29,6 +52,14 @@ class ReportSection(BaseModel):
     body_es: Long
     body_en: Long | None = None
     items: list[Short] = Field(default_factory=list, max_length=100)
+    items_en: list[Short] = Field(default_factory=list, max_length=100)  # mismos ítems en inglés
+    table: ReportTable | None = None
+
+    @model_validator(mode="after")
+    def _items_parallel(self) -> ReportSection:
+        if self.items_en and len(self.items_en) != len(self.items):
+            raise ValueError("items_en debe tener los mismos elementos que items")
+        return self
 
 
 class ReferenceItem(BaseModel):

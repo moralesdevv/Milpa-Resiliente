@@ -1,4 +1,4 @@
-"""Servicio de informes con PostgreSQL real (BE-07). Requiere Pango: se omite en el host Windows."""
+"""Servicio de informes con PostgreSQL real (BE-07). El PDF (ReportLab) no requiere Pango ni Docker."""
 
 from __future__ import annotations
 
@@ -21,9 +21,7 @@ from api.reports.service import ReportService
 from api.services.context import CurrentUser, ServiceContext
 from api.storage.object_store import LocalObjectStore
 from testkit.app import World
-from testkit.reports import make, needs_pdf, text_of
-
-pytestmark = needs_pdf
+from testkit.reports import make, text_of
 
 
 def service_ctx(engine: Engine, settings: Settings, data_dir: Path, user: dict[str, Any]) -> Any:

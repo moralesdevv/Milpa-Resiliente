@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 from typing import Any
 from uuid import UUID
 
@@ -14,6 +15,7 @@ from api.repositories.farms import ZoneRepository
 from api.schemas.common import Page
 from api.schemas.runs import SourceOut
 from api.schemas.zones import (
+    AgriContextOut,
     CoverageRow,
     DataQualityOut,
     DatasetInfo,
@@ -35,27 +37,46 @@ from api.storage.parquet import (
 )
 
 MAX_JSON_BYTES = 1024 * 1024
+PILOT_DEM_META = Path(__file__).resolve().parents[4] / "regions/r2/copernicus_dem_jocotan.json"
+
+
+def _pilot_dem_elevation(name: str) -> float | None:
+    """Fallback documentado para el punto de referencia del piloto si la BD aún no tiene DEM."""
+    if name.casefold() != "camotan_jocotan" or not PILOT_DEM_META.is_file():
+        return None
+    try:
+        metadata = json.loads(PILOT_DEM_META.read_text(encoding="utf-8"))
+        return float(metadata["reference_samples"]["jocotan_reference"]["elevation_m"])
+    except (OSError, ValueError, KeyError, TypeError):
+        return None
 
 
 def zone_out(z: Zone) -> ZoneOut:
+    elevation = z.elevation_m
+    if elevation is None:
+        elevation = _pilot_dem_elevation(z.name)
     return ZoneOut(
         zone_id=z.zone_id,
         region_id=z.region_id,
         name=z.name,
-        elevation_m=z.elevation_m,
+        elevation_m=elevation,
         slope_pct=z.slope_pct,
         ready_at=z.ready_at,
     )
 
 
 def curated_slug(store: ObjectStore, zone: Zone) -> str:
+    return curated_slug_for(store, zone.name, zone.zone_id)
+
+
+def curated_slug_for(store: ObjectStore, name: str, zone_id: UUID) -> str:
     """Directorio de ``curated/`` de la zona: su nombre (convención de R1) o, si no, su UUID.
 
     R1 escribe ``data/curated/<zona>/`` con el código de zona como nombre en ``geo.zone``. Si existen
     ambos, gana el nombre; si no existe ninguno se informa la ruta por nombre (o UUID si el nombre no
     es un identificador de archivo válido).
     """
-    candidates = ([zone.name] if _ZONE_RE.match(zone.name) else []) + [str(zone.zone_id)]
+    candidates = ([name] if _ZONE_RE.match(name) else []) + [str(zone_id)]
     for c in candidates:
         if store.exists(curated_path(c, "coverage")):
             return c
@@ -131,6 +152,9 @@ class ZoneService:
         slug = curated_slug(self.ctx.store, zone)
         meta = read_json(self.ctx.store, f"curated/{slug}/curated_meta.json")
         codes = sorted({c["source"] for c in cells} | self._meta_source_codes(meta))
+        from api.adapters.agri_context import agri_context
+
+        context = agri_context(self.ctx.settings)
         return ZoneDetail(
             **base,
             cells=[ZoneCellOut(**c) for c in cells],
@@ -139,6 +163,7 @@ class ZoneService:
             soil_estimates=[
                 SoilEstimateAvailability(**e) for e in self.repo.soil_estimates(zone_id)
             ],
+            agri_context=AgriContextOut(**context) if context else None,
         )
 
     def create(self, body: ZoneCreate, idempotency_key: str | None) -> tuple[object, bool]:

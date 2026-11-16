@@ -1,5 +1,5 @@
-Fuentes autoalojadas (sin peticiones a terceros):
-- Atkinson Hyperlegible Next: SIL Open Font License 1.1 (Braille Institute).
-- Archivo: SIL Open Font License 1.1 (Omnibus-Type).
-- Bricolage Grotesque: SIL Open Font License 1.1 (Mathieu Triay), distribuida vía Fontsource.
-- JetBrains Mono: SIL Open Font License 1.1 (JetBrains), distribuida vía Fontsource.
+Fuentes autoalojadas (sin peticiones a terceros), todas bajo SIL Open Font License 1.1:
+- Funnel Display y Funnel Sans: The Funnel Project Authors (Google Fonts).
+- Source Serif 4: Adobe (Frank Grießhammer), Google Fonts.
+- Martian Mono: Evil Martians (Google Fonts).
+Se descargaron de fonts.gstatic.com (subconjuntos latin y latin-ext) el 2026-11-16.

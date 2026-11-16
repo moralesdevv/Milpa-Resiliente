@@ -31,6 +31,8 @@ class RunRef:
     # Periodo de la corrida (el motor lo necesita para reconstruir el mismo contexto en otro proceso)
     period_start: date | None = None
     period_end: date | None = None
+    # Parámetros guardados de la corrida (incluye ``soil``: instantánea del suelo de la parcela)
+    params: Mapping[str, Any] | None = None
 
 
 class EnginePort(Protocol):

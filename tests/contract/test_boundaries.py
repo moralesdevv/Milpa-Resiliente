@@ -58,6 +58,9 @@ def test_milpa_core_is_only_touched_by_its_adapter() -> None:
         SRC
         / "adapters"
         / "core_io.py",  # E/S del adaptador: construye los objetos tipados del motor
+        SRC
+        / "reproducibility"
+        / "engine_check.py",  # huella reproducible: invoca la fachada del motor
         SRC / "contracts" / "provisional_enums.py",
     }
     for f in py_files():

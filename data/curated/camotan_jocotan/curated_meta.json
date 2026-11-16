@@ -1,0 +1,47 @@
+{
+  "zone": "camotan_jocotan",
+  "input_hash": "19c713432c95b9b3deebe35404cbcf84982952a3b84436e973ec2e929110ad57",
+  "data_hash": "9a38f89c98a4654696778903e93f888c90b5693512ba097628783d5b318c8584",
+  "raw_sha256": [
+    "9c4eb403c3ffe6d7e64fddb1000cda3a029ca8920917fca1a43c11346483cb4f",
+    "b555bf8e24b39daaba05e2979d2211c307e27a2643f419ed70d3d053a1aad613"
+  ],
+  "et0_source": "milpa_r1.et0_fao56 (respaldo local; confirmar con R2)",
+  "n_days": 9131,
+  "parquet": true,
+  "notes": {
+    "unit_warnings": []
+  },
+  "limitations": [
+    "convención de día de POWER e IMERG frente a UTC-6 [Verificar]",
+    "evidencia de lluvia: B solo con validación en la zona (estación); sin ella, C",
+    "POWER tiene 9 días atípicos (>= 100 mm con IMERG < 10 mm); su lluvia como respaldo es poco confiable"
+  ],
+  "precip_primary": "IMERG_FINAL_V07",
+  "precip_fallback": "POWER_DAILY",
+  "fallback_days": 92,
+  "fallback_share_pct": 0.0,
+  "fallback_share_pct_full_series": 1.008,
+  "imerg_window": [
+    "2001-01-01",
+    "2025-09-30"
+  ],
+  "imerg_window_days": 9039,
+  "imerg_window_fallback_days": 0,
+  "fallback_cap_mm": null,
+  "fallback_days_capped": 0,
+  "power_spike_days": 9,
+  "days_without_precip": 0,
+  "imerg_missing_pct": 1.008,
+  "min_weight_cov": 0.5,
+  "imerg_n_cells": 1,
+  "imerg_formats": [
+    "json_zonal"
+  ],
+  "raw_sha256_power": [
+    "b555bf8e24b39daaba05e2979d2211c307e27a2643f419ed70d3d053a1aad613"
+  ],
+  "raw_sha256_imerg": [
+    "9c4eb403c3ffe6d7e64fddb1000cda3a029ca8920917fca1a43c11346483cb4f"
+  ]
+}

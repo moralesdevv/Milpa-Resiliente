@@ -64,7 +64,6 @@ def build_rows(zone: str, data_dir: Path, rules: dict) -> list[dict]:
 
     r = rules["rules"]
     period = (daily.index.min().date(), daily.index.max().date())
-    n = len(daily)
     pv_path = zdir / "precip_validation.json"
     pv = json.loads(pv_path.read_text(encoding="utf-8")) if pv_path.exists() else {}
     all_hashes = meta["raw_sha256"]

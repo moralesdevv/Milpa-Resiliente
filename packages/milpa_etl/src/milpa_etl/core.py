@@ -180,14 +180,12 @@ def fetch_power(zone: str, lat: float, lon: float, start: str, end: str,
                 "latitude": lat, "longitude": lon,
                 "start": start.replace("-", ""), "end": end.replace("-", ""),
                 "format": "JSON"}
-    last_err = None
     for attempt in range(retries):
         try:
             r = requests.get(POWER_URL, params=query, timeout=120)
             r.raise_for_status()
             break
         except Exception as e:  # noqa: BLE001
-            last_err = e
             if attempt == retries - 1:
                 log_ingestion(source="POWER_DAILY", product="POWER daily AG", version=None,
                                 params={**query, "zone": zone}, raw_uri="", raw_sha256="",
@@ -363,6 +361,12 @@ def fetch_imerg(zone: str, geojson: str, start: str, end: str,
         granules = earthaccess.search_data(short_name=IMERG_SHORT_NAME, version=IMERG_VERSION,
                                             temporal=(ys, ye))
         print(f"{year}: {len(granules)} archivos encontrados ({ys} a {ye})")
+        if not granules:
+            raise RuntimeError(
+                f"NASA GES DISC no devolvió datos IMERG Final V07 para {ys} a {ye}. "
+                "El producto puede no cubrir ese período o no estar disponible en el catálogo; "
+                "no se registró una ingesta vacía."
+            )
 
         def work(g):
             win, day, chunks = _imerg_read_granule(g, i0, i1, j0, j1)
@@ -815,7 +819,7 @@ def ingest_soil_csv(parcel: str, path: str) -> dict:
             elif pd.isna(r.get("texture_method")):
                 errors.append(f"fila {ln}: textura requiere texture_method")
             else:
-                for pc, val in zip(("sand", "silt", "clay"), tex):
+                for pc, val in zip(("sand", "silt", "clay"), tex, strict=False):
                     rows.append({"parcel_code": parcel, "sample_date": sd, "property_code": pc,
                                 "value": float(val), "unit": "%", "method": r["texture_method"],
                                 "depth_from_cm": r.get("depth_from_cm"), "depth_to_cm": r.get("depth_to_cm")})
@@ -904,7 +908,7 @@ def synthetic_power_json(seed: int = 0, lat: float = 14.8, start="2001-01-01", e
     for k, v in vals.items():
         v = np.round(v, 2)
         v[rng.choice(len(v), 40, replace=False)] = -999          # centinelas
-        param[k] = {d.strftime("%Y%m%d"): float(x) for d, x in zip(idx, v)}
+        param[k] = {d.strftime("%Y%m%d"): float(x) for d, x in zip(idx, v, strict=False)}
     return {"label": "DATOS SINTÉTICOS — no representan ninguna zona real",
             "parameters": {k: {"units": ("MJ/m^2/day" if k == "ALLSKY_SFC_SW_DWN" else "x")} for k in vals},
             "properties": {"parameter": param}}

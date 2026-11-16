@@ -8,22 +8,25 @@
    ========================================================================== */
 
 /* ---- 1 · Tokens ---------------------------------------------------------- */
-@font-face { font-family: "Atkinson Hyperlegible Next"; font-style: normal; font-weight: 400 700; font-display: swap; src: url("/fonts/atkinson-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
-@font-face { font-family: "Atkinson Hyperlegible Next"; font-style: normal; font-weight: 400 700; font-display: swap; src: url("/fonts/atkinson-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
-@font-face { font-family: "Archivo"; font-style: normal; font-weight: 600 800; font-display: swap; src: url("/fonts/archivo-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
-@font-face { font-family: "Archivo"; font-style: normal; font-weight: 600 800; font-display: swap; src: url("/fonts/archivo-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
-@font-face { font-family: "Bricolage Grotesque"; font-style: normal; font-weight: 200 800; font-display: swap; src: url("/fonts/bricolage-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
-@font-face { font-family: "Bricolage Grotesque"; font-style: normal; font-weight: 200 800; font-display: swap; src: url("/fonts/bricolage-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
-@font-face { font-family: "JetBrains Mono"; font-style: normal; font-weight: 100 800; font-display: swap; src: url("/fonts/jetbrains-mono-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
-@font-face { font-family: "JetBrains Mono"; font-style: normal; font-weight: 100 800; font-display: swap; src: url("/fonts/jetbrains-mono-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Funnel Display"; font-style: normal; font-weight: 300 800; font-display: swap; src: url("/fonts/funnel-display-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Funnel Display"; font-style: normal; font-weight: 300 800; font-display: swap; src: url("/fonts/funnel-display-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Funnel Sans"; font-style: normal; font-weight: 300 800; font-display: swap; src: url("/fonts/funnel-sans-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Funnel Sans"; font-style: normal; font-weight: 300 800; font-display: swap; src: url("/fonts/funnel-sans-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Source Serif 4"; font-style: normal; font-weight: 300 700; font-display: swap; src: url("/fonts/source-serif-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Source Serif 4"; font-style: normal; font-weight: 300 700; font-display: swap; src: url("/fonts/source-serif-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Source Serif 4"; font-style: italic; font-weight: 300 700; font-display: swap; src: url("/fonts/source-serif-italic-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Source Serif 4"; font-style: italic; font-weight: 300 700; font-display: swap; src: url("/fonts/source-serif-italic-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Martian Mono"; font-style: normal; font-weight: 100 800; font-stretch: 75% 112.5%; font-display: swap; src: url("/fonts/martian-mono-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Martian Mono"; font-style: normal; font-weight: 100 800; font-stretch: 75% 112.5%; font-display: swap; src: url("/fonts/martian-mono-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
 
 :root {
   color-scheme: light;
 
-  /* Tipografía: Atkinson Hyperlegible Next (lectura y cifras), Archivo (títulos y valores). */
-  --font-body: "Atkinson Hyperlegible Next", "Segoe UI", system-ui, -apple-system, sans-serif;
-  --font-display: "Bricolage Grotesque", "Archivo", "Segoe UI", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", "Consolas", monospace;
+  /* Tipografía: Funnel Display (titulares y valores), Funnel Sans (interfaz y lectura corta), Source Serif 4 (lectura editorial), Martian Mono (datos y telemetría). Autoalojadas, licencia OFL. */
+  --font-body: "Funnel Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-serif: "Source Serif 4", "Iowan Old Style", "Georgia", serif;
+  --font-display: "Funnel Display", "Funnel Sans", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "Martian Mono", ui-monospace, "Cascadia Mono", "Consolas", monospace;
 
   /* Marca · verde agrícola */
   --forest-950: #04261b;
@@ -230,7 +233,6 @@ code, .indicator__value, .data-table td, .heatmap-table td { font-variant-numeri
 .button--danger:hover:not(:disabled) { background: var(--risk-800); border-color: var(--risk-800); }
 .topbar .button--secondary { color: #fff; background: transparent; border-color: rgba(255, 255, 255, 0.5); }
 .topbar .button--secondary:hover:not(:disabled) { color: var(--forest-950); background: #fff; border-color: #fff; }
-.topbar .session-control__role { color: #d3e3d8; }
 
 summary { border-radius: 2px; }
 .provenance-panel summary, details summary { display: flex; align-items: center; gap: 6px; width: fit-content; min-height: 24px; color: var(--sky-700); font-weight: 700; list-style: none; transition: color var(--t-fast) var(--ease-out); }
@@ -257,11 +259,6 @@ details[open] > summary::before { transform: rotate(45deg); }
 .file-field input::file-selector-button { margin-right: 10px; min-height: 36px; padding: 6px 12px; border: 1px solid var(--green-700); border-radius: var(--r-sm); background: #fff; color: var(--green-700); font: 700 0.84rem var(--font-body); cursor: pointer; transition: background-color var(--t-fast) var(--ease-out); }
 .file-field input::file-selector-button:hover { background: var(--green-100); }
 
-.session-control { position: relative; display: flex; align-items: center; gap: var(--s-2); margin-left: auto; }
-.session-control__role { font-size: 0.84rem; color: var(--ink-2); }
-.session-control + .language-picker { margin-left: 0; }
-.login-panel { position: absolute; z-index: 30; top: calc(100% + 10px); right: 0; display: grid; gap: var(--s-3); width: min(340px, 92vw); padding: var(--s-4); border: 1px solid var(--line); border-radius: var(--r-md); background: var(--surface); color: var(--ink); box-shadow: var(--shadow-pop); transform-origin: top right; animation: pop-in var(--t-base) var(--ease-out) both; }
-.login-panel .field { margin-bottom: 0; }
 @keyframes pop-in { from { opacity: 0; transform: scale(0.96); } }
 
 /* ---- 5 · Estados -------------------------------------------------------- */
@@ -537,8 +534,6 @@ th.is-consistent-window { background: var(--sky-100); }
   .language-picker > span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   .brand { flex: 1 1 auto; min-width: 0; }
   .brand strong { font-size: 0.86rem; }
-  .session-control { margin-left: 0; }
-  .login-panel { right: auto; left: 0; }
   .indicator__value { font-size: 1.35rem; }
   .field input, .field select { font-size: 1rem; }
 }
@@ -744,7 +739,6 @@ h1, h2, h3 { font-family: var(--font-display); }
 .brand { grid-area: brand; }
 .primary-nav { grid-area: nav; justify-self: center; align-self: center; display: flex; align-items: center; flex: initial; width: auto; margin: 0; padding: 0; gap: 0; overflow: visible; }
 .topbar__tools { grid-area: tools; display: flex; align-items: center; gap: var(--s-3); }
-.session-control { margin-left: 0; }
 .brand__mark { width: 42px; height: 42px; background: var(--green-700); border-color: rgba(255, 255, 255, 0.3); }
 .brand strong { font-family: var(--font-display); font-weight: 800; letter-spacing: 0.04em; }
 
@@ -820,7 +814,17 @@ h1, h2, h3 { font-family: var(--font-display); }
 .map-legend li { display: inline-flex; align-items: center; gap: 8px; }
 .map-legend__swatch { display: inline-block; width: 28px; height: 0; border-top: 3px solid; }
 .map-legend__swatch--dashed { border-top-style: dashed; }
+.map-legend__swatch--dotted { border-top-style: dotted; }
 .map-legend__dot { display: inline-block; width: 14px; height: 14px; border: 2.5px solid var(--night-950); border-radius: 50%; background: var(--maize-400); }
+.map-legend__dot--selected { background: #ffca28; border-color: var(--night-950); }
+.zone-map .notice { margin: 0; padding: 8px 14px; border-radius: 0; }
+.zone-map__panel { display: grid; gap: 8px; }
+.zone-map__panel p { margin: 0; font-size: 0.88rem; }
+.zone-map__form { display: flex; flex-wrap: wrap; align-items: end; gap: 8px 10px; }
+.zone-map__form .field { min-width: 120px; flex: 1 1 130px; }
+.zone-map__form .field input { width: 100%; min-height: 40px; }
+.zone-map__form .button { min-height: 40px; }
+@media (max-width: 560px) { .zone-map .leaflet-container { height: 340px !important; } }
 
 /* Paneles de datos: filo superior del color del tema */
 .chart-panel, .risk-card, .stability-meter { position: relative; }
@@ -877,3 +881,46 @@ h1, h2, h3 { font-family: var(--font-display); }
   .brand > span:last-child { min-width: 0; }
   .brand strong { display: block; max-width: 10ch; overflow: visible; white-space: normal; line-height: 1.05; text-overflow: clip; }
 }
+
+/* Scenario launcher: four selectors + submit, wrapping on narrow screens */
+.scenario-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--s-2); align-items: end; }
+.scenario-form .button { align-self: end; }
+
+/* Figures that arrive without structured provenance: value only, explanation in the provenance panel */
+.indicator--bare .indicator__meta { display: inline-flex; gap: 4px; align-items: center; }
+.data-table td .indicator--compact.indicator--bare { display: inline-flex; align-items: center; gap: 6px; }
+
+/* Data-quality coverage matrix: one compact tinted number per year, provenance stated once below */
+.coverage-cell { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.coverage-cell--ok { background: rgba(47, 143, 83, .10); }
+.coverage-cell--some { background: rgba(201, 162, 39, .22); }
+.coverage-cell--partial { background: rgba(201, 162, 39, .38); font-weight: 700; }
+.limitation-block h4 { margin: var(--s-3, 1rem) 0 var(--s-1, .25rem); }
+
+/* Agronomic validation, sandbox onset and station-validation notices */
+.kind-chip { display: inline-block; padding: 0.1rem 0.5rem; border-radius: 999px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.02em; border: 1px solid currentColor; white-space: nowrap; }
+.kind-chip--observed { color: #0b5d3b; background: #e4f5ec; }
+.kind-chip--satellite { color: #0b4f7c; background: #e7f3fb; }
+.kind-chip--modelled { color: #5b3f8c; background: #f0eafa; }
+.kind-chip--assumption { color: #7a4a00; background: #fff3d6; }
+.kind-chip--simulation { color: #8a2d12; background: #fde9e1; }
+.kind-chip--fictitious { color: #4a4a4a; background: #eee; border-style: dashed; }
+.kind-legend { margin: 0.6rem 0; }
+.kind-legend dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.5rem 1rem; margin: 0.5rem 0 0; }
+.kind-legend dt { margin-bottom: 0.15rem; }
+.kind-legend dd { margin: 0; font-size: 0.85rem; }
+.provisional-notice { margin: 0.6rem 0; padding: 0.6rem 0.8rem; border: 1px solid #c9a227; background: #fff8e1; border-radius: 8px; font-weight: 600; }
+.banner { margin: 0.8rem 0; padding: 0.7rem 0.9rem; border-radius: 8px; border: 1px solid; }
+.banner--warning { background: #fff3cd; border-color: #d9a400; color: #4d3800; }
+.banner p { margin: 0.3rem 0 0; }
+.sandbox-banner { margin: 0.8rem 0; padding: 0.8rem 1rem; border: 2px solid #8a2d12; background: #fde9e1; border-radius: 8px; color: #4a1608; }
+.sandbox-banner strong { display: block; letter-spacing: 0.04em; }
+.sandbox-banner p { margin: 0.35rem 0 0; }
+.onset__date { font-weight: 800; font-size: 1.15rem; }
+.onset__delay { margin: 0.8rem 0; padding: 0.6rem 0.9rem; border: 1px solid var(--line, #d9d2bd); border-radius: 8px; }
+.onset__delay--warn { border-color: #d9a400; background: #fff8e1; }
+.station-notice { margin: 1rem 0; padding: 0.9rem 1rem; border: 2px solid; border-radius: 10px; }
+.station-notice--c { border-color: #b8860b; background: #fff8e1; color: #3d2f00; }
+.station-notice--b { border-color: #0b5d3b; background: #e4f5ec; color: #073b24; }
+.station-notice__level { margin: 0 0 0.4rem; font-weight: 800; letter-spacing: 0.03em; }
+.station-notice__upload { margin-top: 0.6rem; }

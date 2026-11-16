@@ -20,7 +20,7 @@ export const chartColors = {
   series: ["#067a52", "#0b659f", "#a56b00", "#b8501f", "#4d6056"],
 } as const;
 
-export const chartFont = "'Atkinson Hyperlegible Next', 'Segoe UI', system-ui, sans-serif";
+export const chartFont = "'Funnel Sans', 'Segoe UI', system-ui, sans-serif";
 
 export const baseTextStyle = { fontFamily: chartFont, color: chartColors.ink, fontSize: 12 } as const;
 

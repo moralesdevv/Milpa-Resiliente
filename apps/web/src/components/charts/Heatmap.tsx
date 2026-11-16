@@ -79,6 +79,6 @@ export function Heatmap({ data }: { data: HeatmapData | null }) {
           <td>{item.provisional ? t("common.provisionalShort") : t("calendar.cited")}</td>
         </tr>)}</tbody>
       </table></div>
-    </details> : <InsufficientData detail={t("calendar.noThresholds")} />}
+    </details> : <p className="chart-caption" data-testid="heatmap-no-thresholds">{t("calendar.noThresholds")}</p>}
   </section>;
 }

@@ -12,6 +12,14 @@ if [ "${RUN_MIGRATIONS:-true}" = "true" ]; then
   (cd /srv/milpa/apps/api && alembic upgrade head)
   # Catálogo y grilla de escenarios de R2 (idempotente; rol propietario)
   (cd /srv/milpa && python -m api.cli register-engine)
+  # Cuenta de la sesión pública de demostración (sin contraseña utilizable), solo si está habilitada
+  if [ "${DEMO_PUBLIC_ACCESS:-false}" = "true" ]; then
+    (cd /srv/milpa && python -m api.cli create-demo-user)
+  fi
+  # Zona piloto + datos curados reales para la demo pública (idempotente; ver infra/scripts/bootstrap-demo.sh)
+  if [ "${BOOTSTRAP_DEMO:-${DEMO_PUBLIC_ACCESS:-false}}" = "true" ]; then
+    sh /usr/local/bin/bootstrap-demo.sh || echo "entrypoint: bootstrap-demo terminó con error (se continúa)" >&2
+  fi
 fi
 
 # Paquete de demostración congelado (README §9): disponible sin red ni NASA. No sobrescribe.

@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from datetime import date, datetime
 from decimal import Decimal
-from typing import Any
+from typing import Any, Literal
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
@@ -69,6 +69,58 @@ class ParcelOut(BaseModel):
     display_location: DisplayLocation | None
     display_grid_m: int | None
     created_at: datetime
+
+
+class PlantingValidationRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    fecha_siembra: date
+    variedad: str = Field(min_length=1, max_length=80)
+    cultivo: str = Field(default="maiz", min_length=1, max_length=40)
+    ciclo: str | None = Field(
+        default=None,
+        max_length=20,
+        description="primera | postrera; si falta se infiere de la fecha",
+    )
+    dias_secos_recientes: int | None = Field(
+        default=None,
+        ge=0,
+        le=366,
+        description="Días secos consecutivos recientes (dato del usuario)",
+    )
+    lluvia_15_dias_mm: float | None = Field(
+        default=None, ge=0, le=2000, description="Lluvia acumulada en 15 días (dato del usuario)"
+    )
+    idioma: Literal["es", "en"] = "es"
+
+
+class PlantingValidationResponse(BaseModel):
+    es_valido: bool
+    datos_suficientes: bool
+    alertas: list[str]
+    advertencias: list[str] = Field(default_factory=list)
+    fecha_en_ventana: bool | None = None
+    senal_sequia: bool = False
+    recomendacion: str
+    fecha_siembra: date
+    cultivo: str = "Maíz"
+    variedad: str
+    ciclo: str | None = None
+    precipitacion_15_dias_mm: float | None = None
+    dias_lluvia_disponibles: int
+    temperatura_media_fecha_c: float | None = None
+    racha_seca_maxima_dias: int | None = None
+    origen_senales_hidricas: str = "serie histórica zonal"
+    fuentes_precipitacion: dict[str, int]
+    cobertura_climatica: dict[str, str]
+    kc_etapa_media: float | None = None
+    parametros_fenologicos: dict[str, Any] | None = None
+    umbrales_aplicados: list[dict[str, Any]] = Field(default_factory=list)
+    estado_validacion: str = ""
+    fuentes: list[dict[str, Any]] = Field(default_factory=list)
+    supuestos: list[str] = Field(default_factory=list)
+    alcance: str
+    estado_reglas: str
 
 
 class SoilValue(BaseModel):

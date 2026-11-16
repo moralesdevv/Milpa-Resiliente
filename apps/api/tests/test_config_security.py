@@ -256,6 +256,15 @@ def test_find_sensitive_categories() -> None:
     assert find_sensitive("x", include_uuid=True) == []
 
 
+def test_doi_citations_are_not_mistaken_for_coordinates() -> None:
+    """Un DOI como 10.25966/564j-4331 parece un decimal largo, pero es una cita legítima."""
+    assert find_sensitive("GPM IMERG (DOI 10.25966/564j-4331): lluvia") == []
+    assert find_sensitive("https://doi.org/10.25966/564j-4331") == []
+    # una coordenada real junto a un DOI sigue detectándose
+    assert find_sensitive("DOI 10.25966/564j-4331 y punto 14.512345") == ["coordinates"]
+    assert find_sensitive("punto 14.512345, -89.512345") == ["coordinates"]
+
+
 @given(cell=st.text(max_size=40))
 def test_csv_formula_injection_is_neutralised(cell: str) -> None:
     out = sanitize_csv_cell(cell)
@@ -289,3 +298,9 @@ def test_cors_origins_from_environment_accepts_empty_csv_and_json(
     monkeypatch.setenv("CORS_ORIGINS", "*")
     with pytest.raises(ValidationError, match="CORS"):
         Settings(_env_file=None)  # type: ignore[call-arg]
+
+
+def test_blank_municipal_boundary_variable_means_no_rule(monkeypatch: pytest.MonkeyPatch) -> None:
+    """``MUNICIPAL_BOUNDARY_FILE=`` (compose ``${X:-}``) no debe convertirse en ``Path('.')`` (503 al crear parcelas)."""
+    monkeypatch.setenv("MUNICIPAL_BOUNDARY_FILE", "")
+    assert mk().municipal_boundary_file is None

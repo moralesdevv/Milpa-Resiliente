@@ -11,9 +11,10 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from api.adapters.ports import Ports
 from api.config import Settings
 from api.db.uow import UnitOfWork
-from api.errors import Unauthenticated
+from api.errors import Forbidden, Unauthenticated
 from api.jobs.dispatch import JobDispatcher
 from api.repositories.accounts import UserRepository
+from api.security.demo import demo_allows
 from api.security.ratelimit import SlidingWindowLimiter
 from api.security.tokens import decode_access_token
 from api.services.context import CurrentUser, ServiceContext
@@ -51,6 +52,8 @@ def get_current_user(
     if creds is None or creds.scheme.lower() != "bearer":
         raise Unauthenticated("Se requiere autenticación")
     claims = decode_access_token(settings, creds.credentials)
+    if claims.demo and not demo_allows(request.method, request.url.path):
+        raise Forbidden("La sesión de demostración no permite esta operación")
     user = UserRepository(uow.session).by_id(claims.user_id)
     if user is None or user.disabled_at is not None:
         raise Unauthenticated("Token inválido o expirado")

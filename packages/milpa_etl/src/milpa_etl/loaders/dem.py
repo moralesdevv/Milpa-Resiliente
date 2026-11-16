@@ -415,7 +415,7 @@ def main():
                             "raw_uri": dest, "sha256": sha})
             paths.append(dest)
     else:
-        for lat, lon, name in tiles_for(bbox):
+        for _lat, _lon, name in tiles_for(bbox):
             tmp, url = download_tile(name, raw_dir)
             dest, sha = store_raw(tmp, raw_dir)
             os.unlink(tmp)

@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { useTranslation } from "react-i18next";
 
+import { en } from "../../api/engine-text";
 import type { QualityView, ZoneContextView } from "../../api/adapters";
 import type { components } from "../../api/types.gen";
 import { Empty, InsufficientData, Loading, ProvisionalBanner } from "../common/states";
@@ -23,12 +24,12 @@ export function ZoneContextBlock({ context, parcel }: { context: Context | undef
     {context.synthetic_fixture && <ProvisionalBanner>{t("run.syntheticFixture")}</ProvisionalBanner>}
     {context.state === "insufficient_data" && <InsufficientData detail={context.message} />}
     {cells.length > 0 && <>
-      <Suspense fallback={<Loading />}><ZoneMap cells={cells} parcel={parcel} /></Suspense>
+      <Suspense fallback={<Loading />}><ZoneMap cells={cells} parcel={parcel} area={context.area} /></Suspense>
       <div className="table-scroll"><table className="data-table">
         <caption>{t("zone.cells")}</caption>
         <thead><tr><th>{t("zone.cell")}</th><th>{t("zone.cellSource")}</th><th>{t("zone.cellWeight")}</th></tr></thead>
         <tbody>{cells.map((cell) => <tr key={cell.cell_id}>
-          <th scope="row">{cell.cell_id}</th><td>{cell.source}</td><td><Indicator indicator={cell.weight} compact /></td>
+          <th scope="row">#{cell.cell_id}</th><td>{cell.source}</td><td><Indicator indicator={cell.weight} compact /></td>
         </tr>)}</tbody>
       </table></div>
     </>}
@@ -46,6 +47,8 @@ export function ZoneContextBlock({ context, parcel }: { context: Context | undef
   </>;
 }
 
+const formatPct = (value: number) => `${new Intl.NumberFormat("en", { maximumFractionDigits: 1 }).format(value)} %`;
+
 export function DataQualityBlock({ quality, sources }: { quality: Quality; sources: components["schemas"]["SourceOut"][] | undefined }) {
   const { t } = useTranslation();
   const rows = quality.coverage ?? [];
@@ -60,7 +63,7 @@ export function DataQualityBlock({ quality, sources }: { quality: Quality; sourc
       <caption>{t("quality.sources")}</caption>
       <thead><tr><th>{t("quality.product")}</th><th>{t("quality.institution")}</th><th>{t("provenance.version")}</th><th>{t("quality.origin")}</th></tr></thead>
       <tbody>{sourceList.map((source) => <tr key={source.code}>
-        <th scope="row">{source.product_name}</th><td>{source.institution}</td>
+        <th scope="row">{en(source.product_name)}</th><td>{en(source.institution)}</td>
         <td>{source.version ?? t("common.notAvailable")}</td>
         <td>{source.is_nasa ? t("quality.nasa") : t("quality.notNasa")}</td>
       </tr>)}</tbody>
@@ -72,10 +75,17 @@ export function DataQualityBlock({ quality, sources }: { quality: Quality; sourc
         <th scope="row">{variable}</th>
         {years.map((year) => {
           const cell = rows.find((row) => row.variable === variable && row.year === year);
-          return <td key={year}>{cell ? <Indicator indicator={cell.missing_pct} compact /> : t("common.notAvailable")}</td>;
+          const pct = cell?.missing_pct.value;
+          if (pct == null) return <td key={year} className="coverage-cell coverage-cell--none">{t("common.notAvailable")}</td>;
+          const level = pct === 0 ? "ok" : pct < 10 ? "some" : "partial";
+          return <td key={year} className={`coverage-cell coverage-cell--${level}`} title={t("quality.coverageCell", { variable, year, pct: formatPct(pct) })}>
+            <span className="visually-hidden">{t("quality.coverageCell", { variable, year, pct: formatPct(pct) })}</span>
+            <span aria-hidden="true">{formatPct(pct)}{level === "partial" ? " ◐" : ""}</span>
+          </td>;
         })}
       </tr>)}</tbody>
-    </table></div>}
+    </table>
+    <p className="chart-caption">{t("quality.coverageNote")}</p></div>}
     {comparisons.length > 0 && <div className="table-scroll"><table className="data-table">
       <caption>{t("quality.comparisons")}</caption>
       <thead><tr><th>{t("quality.pair")}</th><th>{t("quality.bias")}</th><th>{t("quality.correlation")}</th></tr></thead>
@@ -84,6 +94,6 @@ export function DataQualityBlock({ quality, sources }: { quality: Quality; sourc
       </tr>)}</tbody>
     </table></div>}
     {quality.ea_sensitivity && <Indicator indicator={quality.ea_sensitivity} />}
-    {quality.limitations.length > 0 && <ul className="limitation-list" data-testid="data-limitations">{quality.limitations.map((item) => <li key={item}>{item}</li>)}</ul>}
+    {quality.limitations.length > 0 && <div className="limitation-block"><h4>{t("quality.limitations")}</h4><ul className="limitation-list" data-testid="data-limitations">{quality.limitations.map((item) => <li key={item}>{en(item)}</li>)}</ul></div>}
   </>;
 }

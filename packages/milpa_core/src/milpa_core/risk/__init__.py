@@ -6,6 +6,8 @@ no entra en percentiles ni frecuencias; reduce n_valid (T-P07).
 """
 from __future__ import annotations
 
+from typing import Any
+
 from collections import defaultdict
 from dataclasses import dataclass, field
 
@@ -23,7 +25,7 @@ def _p(a, q):
     return float(np.percentile(a, q)) if a.size else None
 
 
-def severity_stats(sev: list[float], years: list[int], eps: float = 1e-6) -> dict:
+def severity_stats(sev: list[float], years: list[int], eps: float = 1e-6) -> dict[str, Any]:
     if not sev:
         return {"severity_median_mm": None, "severity_p90_mm": None, "severity_cvar90_mm": None,
                 "worst_year": None, "worst_year_severity_mm": None, "tail_ratio": None}
@@ -53,9 +55,9 @@ class CycleRisk:
     n_decided: int
     n_valid: int
     n_expected: int
-    stats: dict
-    threshold_sensitivity: dict
-    peff_sensitivity: dict
+    stats: dict[str, Any]
+    threshold_sensitivity: dict[str, Any]
+    peff_sensitivity: dict[str, Any]
     flags: tuple[str, ...]
     provisional: bool
     evidence: Evidence | None
@@ -97,7 +99,7 @@ class StrategyRisk:
     evidence: Evidence | None
     flags: tuple[str, ...]
     consistency: Consistency = Consistency.NO_COMPARABLE
-    by_year_crit: dict = field(default_factory=dict)  # agri_year → (n_crit, n_decided) para bootstrap
+    by_year_crit: dict[str, Any] = field(default_factory=dict)  # agri_year → (n_crit, n_decided) para bootstrap
 
     @property
     def insufficient(self) -> bool:

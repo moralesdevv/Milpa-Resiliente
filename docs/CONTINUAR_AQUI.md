@@ -1,5 +1,9 @@
 # CONTINUAR AQUÍ — estado al 2026-11-15 (traspaso a otro Claude)
 
+> **ACTUALIZACIÓN 2026-11-16:** este documento quedó **superado** en lo relativo a R2: otro agente ya cableó `milpa_core` a la API (`adapters/core_io.py`, `milpa_core.py`, jobs, informes). El estado vigente está en `HANDOFF_PARA_OTRO_AGENTE.md` (sección 7), `NEXT_STEPS.md` y `docs/FINAL_PROJECT_AUDIT.md`. Se conserva como registro histórico.
+
+> **Actualización 2026-11-16:** las secciones A.1–A.6, B (NASA POWER real descargado y zona registrada en la BD de desarrollo), C y F están HECHAS; D (R1: F841/B905/B023/B007/F401 corregidos; `pip-audit` limpio; `npm audit`: 3 avisos moderados de `react-router` 6.x) y A.5 (`make reproduce` con huella del motor) también. **Lo que sigue pendiente está en `NEXT_STEPS.md` (raíz)**: A.7 (`mypy --strict` de `milpa_core`: 183 errores), E (imagen Docker, `make test-docker`, Playwright real, CI).
+
 Raíz del repo: `C:\Users\MM\Desktop\milpa-resiliente` (rama `main`, único commit `e37c3dd V1`).
 Lee primero: `CLAUDE.md`, `README.md` (fuente de verdad), `docs/HANDOFF.md`, `docs/integration/INTEGRATION_STATUS.md`
 y la memoria `C:\Users\MM\.claude\projects\C--Users-MM-Desktop-milpa-resiliente\memory\`.

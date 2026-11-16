@@ -13,9 +13,16 @@ from pathlib import Path
 from uuid import UUID
 
 from sqlalchemy import text
+from sqlalchemy.exc import SQLAlchemyError
 
 from api.adapters.etl_process import ProcessIngest, ZoneSpec
-from api.adapters.milpa_core import CoreAssets, MilpaCoreEngine, check_core_contract, import_core
+from api.adapters.milpa_core import (
+    CoreAssets,
+    MilpaCoreEngine,
+    MilpaCoreEvidence,
+    check_core_contract,
+    import_core,
+)
 from api.adapters.not_integrated import default_ports
 from api.adapters.ports import Ports
 from api.config import get_settings
@@ -67,6 +74,7 @@ def load_ports() -> Ports:
     core = import_core()
     if core is not None and check_core_contract(core).ok:
         ports.engine = MilpaCoreEngine(core, _core_assets())
+        ports.evidence = MilpaCoreEvidence()
     return ports
 
 
@@ -81,7 +89,12 @@ def _core_assets() -> CoreAssets | None:
         return None
 
     def daily_for_zone(zone_id: UUID) -> Path:
-        spec = _describe_zone(zone_id)
+        try:
+            spec = _describe_zone(zone_id)
+        except (
+            SQLAlchemyError
+        ):  # sin acceso a la BD no se puede ubicar la serie: se informa como dato ausente
+            spec = None
         curated = settings.data_dir / "curated"
         for slug in ([spec.name] if spec else []) + [str(zone_id)]:
             candidate = curated / slug / "daily.parquet"

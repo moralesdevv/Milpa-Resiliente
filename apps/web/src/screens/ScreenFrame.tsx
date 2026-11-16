@@ -14,7 +14,7 @@ export function ScreenFrame({ id, children }: { id: string; children: ReactNode 
       <div className="screen-heading__text">
         <h1>{t(`screens.${id}.title`)}</h1>
         <p className="screen-question">{t(`screens.${id}.question`)}</p>
-        <p className="screen-tag">MILPA RESILIENTE · MVP1</p>
+        <p className="screen-tag">MILPA RESILIENTE · DEMO</p>
       </div>
     </header>
     {children}

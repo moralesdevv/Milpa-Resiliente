@@ -136,12 +136,25 @@ def test_engine_rebuilds_a_run_after_cache_loss_and_refuses_changed_inputs(base)
         )
 
 
-def test_run_with_parcel_is_not_wired_and_missing_series_is_reported(tmp_path: Path) -> None:
+def test_missing_series_is_reported_and_parcel_soil_never_invents_values(tmp_path: Path) -> None:
     eng = _engine(tmp_path / "no-existe.parquet")
-    with pytest.raises(DependencyNotIntegrated, match="parcela"):
-        eng.run_base_analysis({"zone_id": str(uuid4()), "parcel_id": str(uuid4()), "seed": 0})
     with pytest.raises(DependencyNotIntegrated, match="serie curada"):
         eng.run_base_analysis({"zone_id": str(uuid4()), "seed": 0})
+    ctx = core_io.soil_context_from_rows(
+        [
+            {"property_code": "ph", "status": "desconocido"},
+            {
+                "property_code": "effective_depth",
+                "status": "declarado",
+                "d_value": 80,
+                "max_age_years": None,
+            },
+            {"property_code": "awc", "status": "medido", "m_value": 120.0, "method": None},
+        ]
+    )
+    assert ctx.property("ph").value is None and ctx.property("ph").status.value == "desconocido"
+    assert abs(ctx.property("effective_depth").value - 0.8) < 1e-9  # cm -> m
+    assert ctx.property("awc_mm_m").status.value == "desconocido"  # medido sin método no se acepta
 
 
 @pytest.mark.skipif(not REAL_DAILY.is_file(), reason="serie curada real de R1 no presente")
@@ -162,3 +175,53 @@ def test_core_io_reindexes_missing_days_as_nan(tmp_path: Path, synthetic_daily: 
     df.to_csv(path, index=False)
     series, info = core_io.load_curated_daily(path, None, "2021-01-01", "2025-12-31")
     assert info.n_days == 1826 and np.isnan(series.precip_mm[10:13]).all()
+
+
+def test_dekad_filter_and_climate_history_on_the_synthetic_series(base) -> None:
+    eng, _zone, _out, ref = base
+    one = eng.dekad_chart(
+        ref,
+        {"strategy": "E1_REF_MAIZ", "cohort_year": 2022, "cycle": 1, "plant_date": "2022-05-01"},
+    )
+    assert one["cohort_year"] == 2022 and one["plant_date"] == "2022-05-01" and one["dekads"]
+    with pytest.raises(NotFound):
+        eng.dekad_chart(ref, {"strategy": "E1_REF_MAIZ", "cohort_year": 1999, "cycle": 1})
+    history = eng.climate_history(ref, {})
+    assert [y["year"] for y in history["years"]] == [2021, 2022, 2023, 2024, 2025]
+    assert history["years"][0]["precip_mm"]["provenance"]["evidence"] in {"A", "B", "C"}
+    assert history["trends"] == []  # 5 años completos (< 10): no se inventa una tendencia
+
+
+CAMOTAN = ROOT / "data" / "curated" / "camotan_jocotan" / "daily.parquet"
+
+
+@pytest.mark.skipif(not CAMOTAN.is_file(), reason="serie curada de camotan_jocotan no presente")
+def test_25_year_history_reports_descriptive_trends_with_provenance() -> None:
+    eng = _engine(CAMOTAN)
+    zone = uuid4()
+    out = eng.run_base_analysis(
+        {"zone_id": str(zone), "seed": 0, "period_start": "2001-01-01", "period_end": "2025-12-31"}
+    )
+    run = out["run"]
+    ref = RunRef(
+        uuid4(),
+        zone,
+        None,
+        run["data_hash"],
+        "p" * 64,
+        run["region_config_hash"],
+        run["code_version"],
+        0,
+        __import__("datetime").date(2001, 1, 1),
+        __import__("datetime").date(2025, 12, 31),
+    )
+    history = eng.climate_history(ref, {})
+    assert len(history["years"]) == 25
+    trend = next(t for t in history["trends"] if t["variable"] == "precipitation")
+    assert trend["change_per_decade"]["unit"] == "mm/decade"
+    assert "no significance test" in trend["description_es"]
+    # lluvia anual plausible del Corredor Seco oriental (IMERG, tasa por 24 h verificado): cientos a pocos miles de mm
+    totals = [
+        y["precip_mm"]["value"] for y in history["years"] if y["precip_mm"]["value"] is not None
+    ]
+    assert min(totals) > 800 and max(totals) < 3000

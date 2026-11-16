@@ -47,3 +47,20 @@ Date: 2026-11-16 · Repo root: `milpa-resiliente` · Branch `main` · Local comm
 
 ## How to run what exists
 See `README.md` §8. Dev credentials created locally (users `tecnico@milpa.local`, `admin@milpa.local`) live only in the local dev DB, not in the repo. Scratch dev DB: `docker exec milpa-test-db psql -U postgres -d milpa_dev`. Useful files: `docs/CONTINUAR_AQUI.md` (previous handover), `docs/r2/METHODS.md`, `tools/r2/r2_run.py` (CLI recipe of the engine).
+
+## Update 2026-11-16 (later): index, demo, Plants, English UI
+- New index (`apps/web/src/screens/HomeScreen.tsx`, `home.css`) composed after `IMAGEN-REFERENCIA.jpeg`: full-bleed Earth-from-orbit backdrop (generated SVG, decorative), pill navigation, headline with cropland-textured text, **LAUNCH DEMO**.
+- **Launch demo** (`/demo`, `DemoScreen.tsx`) runs the real workflow: sign in (technician/admin) → pilot zone → base run job → 2 synthetic scenarios → opens `/calendar`. Reuses a stored run when valid. Verified in the browser against the dev DB with real NASA data.
+- **Plants** (`/plants`, `PlantsScreen.tsx`): crops per strategy cycle, critical-cycle frequency and P90 severity, growth stages with critical stages — all from the run's own results.
+- UI is English-only (language selector removed; i18n forced to `en`); known Spanish engine messages are translated for display in `api/engine-text.ts` (unknown strings are shown as received).
+- Report: `jobs/handlers/reports.py` + `reports/from_engine.py` now build the report from the engine's model; without Pango the report is stored **without a PDF** (verified: report job ok, sections served; PDF only inside Docker).
+- Fixed: calendar/rotation/plants screens consume the engine payloads through `api/r2-adapters.ts` (one strategy card per strategy; counts/sensitivities wrapped as indicators); My zone auto-selects the pilot zone; login re-fetches failed queries.
+- Not done / unverified: the Rotation lab and Decision report screens were only checked by page text (no visual review); engine narrative strings not in the translation table remain Spanish; `eslint`, Playwright and the Docker build were not run; sign-in tokens last 15 min (the UI shows UNAUTHENTICATED until you sign in again); the demo needs a technician/admin account (`python -m api.cli create-user`).
+
+## Update 2026-11-16 (pass 2): public demo, strategy comparison, source status
+- **Public demo:** `DEMO_PUBLIC_ACCESS=true` enables `POST /v1/auth/demo-session`. Provision the account once: `python -m api.cli create-demo-user` (the Docker entrypoint does it when the flag is true). The token is scope-limited by `apps/api/src/api/security/demo.py` (enforced in `dependencies/core.py`). LAUNCH DEMO uses it automatically.
+- **Rotation lab:** new `components/scenario/StrategyCompare.tsx` (choose 2–4 strategies, chart + table, rank under current weights).
+- **My zone:** `components/zone/SourceStatus.tsx` lists every contemplated source with its real status.
+- **Report:** the screen now renders section `items` (per-strategy figures) and a Summary section (`reports/from_engine.py`).
+- Files touched this pass: `api/security/{demo,tokens}.py`, `api/dependencies/core.py`, `api/routers/auth.py`, `api/services/auth.py`, `api/schemas/auth.py`, `api/config/settings.py`, `api/cli.py`, `api/reports/from_engine.py`, `infra/entrypoint.sh`, `docker-compose.yml`, `.env.example`, `docs/openapi/openapi.json`, `apps/web/src/{api/session.ts,app.tsx,home.css,screens/{DemoScreen,MyZoneScreen,RotationLabScreen,ReportScreen}.tsx,components/{auth/SessionControl,scenario/StrategyCompare,zone/SourceStatus}.tsx}`, tests `test_demo_session.py`, `test_engine_e2e.py`.
+- Remaining work and where I stopped: see `NEXT_STEPS.md` in the repo root.

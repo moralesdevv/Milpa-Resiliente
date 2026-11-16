@@ -131,6 +131,23 @@ class ParcelRepository:
     def __init__(self, session: Session) -> None:
         self.s = session
 
+    def covered_by_geojson(self, geometry_json: str, lat: float, lon: float) -> bool:
+        """¿El punto está dentro (o sobre el borde) de la geometría GeoJSON dada? Evalúa PostGIS, no la interfaz.
+
+        El punto solo viaja como parámetro de esta consulta: no se persiste ni se registra.
+        """
+        covered = self.s.execute(
+            text(
+                """
+                SELECT ST_IsValid(g) AND ST_Covers(g, ST_SetSRID(ST_MakePoint(
+                         CAST(:lon AS double precision), CAST(:lat AS double precision)), 4326))
+                FROM (SELECT ST_SetSRID(ST_GeomFromGeoJSON(:geom), 4326) AS g) t
+                """
+            ),
+            {"geom": geometry_json, "lat": lat, "lon": lon},
+        ).scalar_one()
+        return bool(covered)
+
     def generalize(self, zone_id: UUID, lat: float, lon: float, grid_m: int) -> Generalized | None:
         """Centro de la celda de rejilla (UTM, metros reales) con ST_SnapToGrid.
 

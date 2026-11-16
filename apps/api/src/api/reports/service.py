@@ -9,7 +9,7 @@ from uuid import UUID, uuid4
 from api.errors import ApiError, ErrorCode, NotFound
 from api.models.report import Report
 from api.reports.contract import TEMPLATE_VERSION, ReportInput
-from api.reports.renderer import FetchGuard, html_to_pdf, render_html
+from api.reports.pdf import render_pdf
 from api.repositories.analysis import ReportRepository
 from api.services.context import ServiceContext
 from api.storage.object_store import ObjectStore
@@ -43,13 +43,12 @@ class ReportService:
         return self.ctx.store
 
     def generate(self, data: ReportInput, *, ranking_id: UUID | None = None) -> Report:
-        """Genera y registra un PDF a partir de una entrada validada (plantilla provisional)."""
+        """Genera y registra el PDF (ReportLab, Python puro) a partir de una entrada validada."""
         report_id = uuid4()
-        html = render_html(
-            data
-        )  # lanza PublicReportPrivacyError si un informe público filtra datos
-        pdf = html_to_pdf(html, FetchGuard())
+        # Lanza PublicReportPrivacyError si un informe público filtra datos; ReportRenderError si falla el dibujo.
+        pdf = render_pdf(data)
         sha = self.store.write_bytes(pdf_path(report_id), pdf)
+        pdf_uri = pdf_path(report_id)
         if hashlib.sha256(pdf).hexdigest() != sha:  # verificación tras escribir
             self.store.delete(pdf_path(report_id))
             raise ReportIntegrityError("El PDF escrito no coincide con el generado")
@@ -61,7 +60,7 @@ class ReportService:
             template_version=TEMPLATE_VERSION,
             privacy_level=data.privacy_level,
             content_json=data.model_dump(mode="json"),
-            pdf_uri=pdf_path(report_id),
+            pdf_uri=pdf_uri,
             pdf_sha256=sha,
             generated_by=self.ctx.user.user_id,
         )

@@ -1,6 +1,8 @@
 """Matriz fecha × año (heatmap) y ventanas de siembra consistentes (apartado 11.9)."""
 from __future__ import annotations
 
+from typing import Any
+
 import numpy as np
 
 from ..enums import CellState
@@ -8,7 +10,7 @@ from ..exposure import CycleResult
 from ..risk import StrategyRisk, freq_pct
 
 
-def heatmap_cycle(results: list[CycleResult], strategy: str, cycle_idx: int) -> dict:
+def heatmap_cycle(results: list[CycleResult], strategy: str, cycle_idx: int) -> dict[str, Any]:
     """view=cycle: eje X fecha candidata del ciclo (solo candidate_dates), eje Y año calendario de siembra."""
     rs = [r for r in results if r.strategy == strategy and r.cycle_idx == cycle_idx and r.anchor_md is not None]
     if not rs:
@@ -31,7 +33,7 @@ def heatmap_cycle(results: list[CycleResult], strategy: str, cycle_idx: int) -> 
             "pct_critical_by_date": pct, "n_decided_by_date": nd, "aggregation_rule": None}
 
 
-def heatmap_strategy(risks: list[StrategyRisk], strategy: str) -> dict:
+def heatmap_strategy(risks: list[StrategyRisk], strategy: str) -> dict[str, Any]:
     """view=strategy: eje X fecha del ciclo ancla, eje Y año de inicio de la cohorte; any/sum."""
     rs = [r for r in risks if r.strategy == strategy and r.anchor_md is not None]
     if not rs:

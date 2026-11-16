@@ -5,6 +5,8 @@ resultado del VoI. Una propiedad sin valor nunca resulta ``medido`` (T-P10).
 """
 from __future__ import annotations
 
+from typing import cast
+
 from dataclasses import dataclass, field
 from typing import Mapping
 
@@ -83,5 +85,5 @@ def from_csv_row(row: Mapping[str, object], method_by_prop: Mapping[str, str] | 
         if v is None or (isinstance(v, float) and v != v) or v == "":
             props[code] = PropertyValue(code, PropertyStatus.DESCONOCIDO)
         else:
-            props[code] = PropertyValue(code, PropertyStatus.MEDIDO, float(v), (method_by_prop or {}).get(code, "lab"))
+            props[code] = PropertyValue(code, PropertyStatus.MEDIDO, float(cast("float", v)), (method_by_prop or {}).get(code, "lab"))
     return SoilContext(props)

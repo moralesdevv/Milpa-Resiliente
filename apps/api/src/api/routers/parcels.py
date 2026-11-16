@@ -15,6 +15,8 @@ from api.schemas.jobs import JobOut
 from api.schemas.parcels import (
     ParcelCreate,
     ParcelOut,
+    PlantingValidationRequest,
+    PlantingValidationResponse,
     PriorityProfileIn,
     PriorityProfileOut,
     SoilCsvResult,
@@ -23,6 +25,7 @@ from api.schemas.parcels import (
     SoilPropertyStatusOut,
 )
 from api.services.parcels import ParcelService, ProfileService, SoilService
+from api.services.planting import PlantingValidationService
 
 router = APIRouter(prefix="/parcels", tags=["parcels"])
 OWNER_NOTE = "Roles: dueño (agricultor) o técnico asignado con consentimiento vigente."
@@ -51,6 +54,23 @@ def create_parcel(body: ParcelCreate, ctx: CtxDep) -> ParcelOut:
 )
 def get_parcel(parcel_id: ParcelId, ctx: CtxDep) -> ParcelOut:
     return ParcelService(ctx).get(parcel_id)
+
+
+@router.post(
+    "/{id}/planting-validation",
+    response_model=PlantingValidationResponse,
+    summary="Validar fecha y variedad de siembra para Jocotán",
+    description=(
+        OWNER_NOTE
+        + " Usa reglas sandbox configuradas y la serie histórica zonal curada; no constituye "
+        "un pronóstico ni una validación específica de la parcela."
+    ),
+    responses={**AUTHED, **error_responses(404, 422, 503)},
+)
+def validate_planting(
+    parcel_id: ParcelId, body: PlantingValidationRequest, ctx: CtxDep
+) -> PlantingValidationResponse:
+    return PlantingValidationService(ctx).validate(parcel_id, body)
 
 
 @router.delete(

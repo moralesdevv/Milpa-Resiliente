@@ -115,7 +115,7 @@ def min_evidence(levels: Iterable[Evidence | None]) -> Evidence | None:
         return None
     if any(x is None for x in lv):
         return None
-    return min(lv, key=lambda e: e.rank)
+    return min((x for x in lv if x is not None), key=lambda e: e.rank)
 
 
 def cap_evidence(level: Evidence | None, cap: Evidence) -> Evidence | None:

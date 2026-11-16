@@ -1,0 +1,55 @@
+catalog_status: partial_web_evidence_pending_local_validation
+sources:
+  - SRC-FAO56-KC
+  - SRC-ICTA
+  - SRC-ICTA-FRIJOL
+  - SRC-ICTA-FRIJOL-DATOS
+  - SRC-ICTA-MAIZ
+  - SRC-ICTA-MAIZ-CHIQ
+  - SRC-ZARC-GT
+crops:
+  frijol:
+    varieties:
+      - id: ICTA_Ostua
+        days_to_flowering: [38, 40]
+        days_to_harvest: [70, 75]
+        adaptation_masl: [50, 1200]
+        source_id: SRC-ICTA-FRIJOL-DATOS
+        status: reference_not_production
+      - id: ICTA_Santa_Gertrudis
+        days_to_flowering: [38, 40]
+        days_to_harvest: [70, 75]
+        adaptation_masl: [50, 1200]
+        source_id: SRC-ICTA-FRIJOL-DATOS
+        status: reference_not_production
+    planting_windows:
+      primera: pending_local_validation
+      postrera: pending_local_validation
+      source_id: SRC-ICTA-FRIJOL
+  maiz:
+    varieties:
+      - id: ICTA_B7
+        crop_cycle_days_by_source:
+          icta_general_guide: 95
+          icta_validation_report_2002_days_to_harvest: 110
+        days_to_flowering:
+          icta_validation_report_2002: 53
+        recommended_zone: limited_moisture
+        first_season: may_june
+        second_season: september
+        source_ids: [SRC-ICTA-MAIZ, SRC-ICTA-MAIZ-CHIQ]
+        status: conflicting_reference_values_pending_technical_resolution
+      - id: ICTA_B5
+        crop_cycle_days_by_source:
+          icta_general_guide: 95
+        days_to_flowering:
+          icta_validation_report_2002: 48
+        recommended_zone: limited_moisture
+        source_ids: [SRC-ICTA-MAIZ, SRC-ICTA-MAIZ-CHIQ]
+        status: reference_not_production
+  sorgo:
+    varieties: pending_icta_selection_and_local_validation
+  kc_by_stage: pending_cited_catalog_values
+  degree_day_parameters: pending_cited_catalog_values
+  critical_stage_thresholds: pending_cited_values
+  pilot_confirmation: pending_local_validation

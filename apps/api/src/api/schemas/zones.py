@@ -71,11 +71,23 @@ class ZoneCellOut(BaseModel):
     east: float
 
 
+class AgriContextOut(BaseModel):
+    """Cultivos, temporadas y decisiones pendientes del region pack (sin definir nada nuevo)."""
+
+    status: str
+    region: str
+    seasons: list[dict[str, Any]] = Field(default_factory=list)
+    crops: list[dict[str, Any]] = Field(default_factory=list)
+    pending: list[str] = Field(default_factory=list)
+    source: str
+
+
 class ZoneDetail(ZoneOut):
     geometry: dict[str, Any] = Field(description="GeoJSON (zona de análisis, dato público)")
     cells: list[ZoneCellOut] = Field(default_factory=list)
     sources: list[SourceOut] = Field(default_factory=list)
     soil_estimates: list[SoilEstimateAvailability] = Field(default_factory=list)
+    agri_context: AgriContextOut | None = None
 
 
 def _count_vertices(coords: Any) -> int:

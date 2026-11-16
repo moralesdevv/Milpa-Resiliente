@@ -1,5 +1,7 @@
 # API (R3) — rutas, autenticación, errores y ejemplos
 
+> **Actualización 2026-11-16:** nuevo `POST /v1/auth/demo-session` (ADR-019). `heatmap` y `dekad-chart` aceptan `strategy`/`variety` por código y `dekad-chart` filtra por `cohort_year`, `cycle`, `plant_date`. `climate-history` devuelve totales anuales de lluvia observada y ET0 del motor. `POST /v1/reports` genera el informe desde el modelo del motor (sin PDF si no hay Pango).
+
 OpenAPI: `docs/openapi/openapi.json` (regenerar con `make openapi`) · interactivo en `/docs` y `/openapi.json` con la app en marcha. Prefijo `/v1`. Este documento solo afirma lo implementado; los contratos no definidos por la especificación se marcan **provisional**.
 
 ## 1. Convenciones
@@ -10,7 +12,7 @@ OpenAPI: `docs/openapi/openapi.json` (regenerar con `make openapi`) · interacti
 - Caché: `ETag` en `/runs/{id}` y `/runs/{id}/scenarios`.
 - Modo demo (`DEMO_READONLY=true`): toda escritura salvo login → `403 READ_ONLY_MODE`.
 
-## 2. Endpoints (34 operaciones; coinciden con la especificación §10.2)
+## 2. Endpoints (36 operaciones; incluye extensiones provisionales de validación agrícola)
 **Estado:** *impl* = implementado y probado con PostgreSQL real; *R2/R1* = el adaptador responde 503 hasta que el componente exista.
 
 | Método y ruta | Roles | Modo | Estado / notas |
@@ -20,6 +22,8 @@ OpenAPI: `docs/openapi/openapi.json` (regenerar con `make openapi`) · interacti
 | `GET /zones`, `GET /zones/{id}` | autenticado | sync | impl (geometría de zona = dato público) |
 | `POST /zones` | tecnico, admin | **202** | impl (zona + trabajo `zone_ingest`; la ingesta es R1 → el trabajo termina `failed: DEPENDENCY_NOT_INTEGRATED`). Cuerpo **provisional** |
 | `GET /zones/{id}/data-quality` | autenticado | sync | impl sobre `coverage.parquet` (503 `DATASET_UNAVAILABLE/INCOMPATIBLE`); sesgos IMERG/POWER = `pending_r1` |
+| `POST /parcels/{id}/planting-validation` | dueño o técnico asignado | sync | sandbox; reglas configurables + serie zonal histórica POWER/IMERG; no es pronóstico ni validación parcelaria |
+| `GET /zones/{id}/planting-validation` | autenticado, incluye demo | sync | sandbox; mismo cálculo agregado por zona; fecha y variedad en query |
 | `POST /parcels` | agricultor, tecnico | sync 201 | impl · generaliza la ubicación ≥1 km · exige consentimiento `analysis` · cuerpo **provisional** |
 | `GET /parcels/{id}` | dueño o técnico asignado | sync | impl (404 si no visible) |
 | `DELETE /parcels/{id}` | dueño | **202** | impl (trabajo `parcel_delete`; vía admin bloqueada, ADR-015) |

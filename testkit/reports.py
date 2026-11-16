@@ -1,4 +1,4 @@
-"""Ayudas de prueba para informes: entrada SINTÉTICA y detección de Pango (WeasyPrint)."""
+"""Ayudas de prueba para informes: entrada SINTÉTICA, extracción de texto y detección opcional de Pango."""
 
 from __future__ import annotations
 
@@ -15,16 +15,19 @@ NOW = datetime(2026, 11, 14, 12, 0, tzinfo=UTC)
 
 
 def weasy_ok() -> bool:
+    """WeasyPrint/Pango es una RUTA OPCIONAL (HTML->PDF): el PDF principal usa ReportLab y no la necesita."""
     try:
         from weasyprint import HTML  # noqa: F401
-    except OSError:
+    except (ImportError, OSError):
         return False
     return True
 
 
-needs_pdf = pytest.mark.skipif(
-    not weasy_ok(), reason="WeasyPrint/Pango no disponible en este host (usar Docker)"
+# Solo para las pruebas de la ruta HTML opcional. El PDF de ReportLab se prueba siempre, sin Docker.
+needs_weasyprint = pytest.mark.skipif(
+    not weasy_ok(), reason="WeasyPrint/Pango (ruta HTML opcional) no disponible en este host"
 )
+needs_pdf = needs_weasyprint  # alias histórico: prefiera needs_weasyprint
 
 
 def make(**over: Any) -> ReportInput:

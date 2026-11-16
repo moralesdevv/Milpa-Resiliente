@@ -1,7 +1,9 @@
 """Modelo temporal de estrategias, rotaciones y cohortes (apartado 11.6)."""
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from typing import Any
+
+from dataclasses import dataclass
 
 import numpy as np
 
@@ -154,7 +156,7 @@ class CohortInstance:
     in_window: bool
 
     @property
-    def key(self) -> tuple:
+    def key(self) -> tuple[Any, ...]:
         return (self.strategy.code, self.cohort_year, self.anchor_md)
 
 

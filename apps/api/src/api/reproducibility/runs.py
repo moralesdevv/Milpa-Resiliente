@@ -296,8 +296,17 @@ def check_reproduce_prerequisites(data_dir: Path) -> ReproduceStatus:
             "las cifras de EXPECTED.json (waiting_for_dependency)."
         )
         return ReproduceStatus(EXIT_WAITING_DEPENDENCY, missing, notes, verified)
+    # Capa del motor: recalcula la corrida BASE sobre el paquete congelado y compara la huella.
+    from api.reproducibility import engine_check
+
+    zone = str(expected["zone"]) if expected is not None else ""
+    diffs, summary = engine_check.verify(demo, zone, Path.cwd())
+    if diffs:
+        missing.extend(f"motor (R2): {d}" for d in diffs)
+        return ReproduceStatus(EXIT_MISSING_INPUTS, missing, notes, verified)
+    verified.append(f"corrida base de milpa_core reproducida desde data/demo: {summary}")
     notes.append(
-        "milpa_core presente, pero la recomputación y comparación de cifras con EXPECTED.json aún no "
-        "están contratadas con R2 (waiting_for_dependency)."
+        "Reproducido: datos (R1) y corrida base del motor (R2) sobre una serie SINTÉTICA rotulada. "
+        "No valida la ciencia ni usa observaciones reales."
     )
-    return ReproduceStatus(EXIT_WAITING_DEPENDENCY, missing, notes, verified)
+    return ReproduceStatus(EXIT_OK, missing, notes, verified)

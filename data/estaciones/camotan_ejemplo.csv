@@ -1,0 +1,7 @@
+# DATOS FICTICIOS DE EJEMPLO. No son observaciones de la estación Camotán (INSIVUMEH).
+# Existen solo para probar el formato del archivo: columnas fecha (AAAA-MM-DD) y precipitacion_mm (mm/día).
+# Este archivo NUNCA cambia el estado de validación (Nivel C) ni se usa para conclusiones científicas.
+fecha,precipitacion_mm
+2025-05-01,12.5
+2025-05-02,0.0
+2025-05-03,8.2

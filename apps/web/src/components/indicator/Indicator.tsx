@@ -21,9 +21,9 @@ export function EvidenceBadge({ evidence, provenance, short = false }: { evidenc
   const full = evidence ? t("provenance.evidenceLevel", { level: evidence }) : t("provenance.noEvidence");
   return <span className={`evidence-badge evidence-badge--${evidence ?? "unknown"}`}>
     {short && evidence
-      ? <span><span aria-hidden="true">{t("provenance.evidenceShort", { level: evidence })}</span><span className="visually-hidden">{full}</span></span>
+      ? <span title={`${full} · ${t(provenanceKeys[provenance])}`}><span aria-hidden="true">{t("provenance.evidenceShort", { level: evidence })}</span><span className="visually-hidden">{full}</span></span>
       : <span>{full}</span>}
-    <span>{t(provenanceKeys[provenance])}</span>
+    <span className={short ? "visually-hidden" : undefined}>{t(provenanceKeys[provenance])}</span>
   </span>;
 }
 
@@ -31,7 +31,7 @@ function useFormattedValue(indicator: IndicatorData) {
   const { i18n, t } = useTranslation();
   const value = indicator.value === null
     ? t("common.notAvailable")
-    : new Intl.NumberFormat(i18n.language, { maximumFractionDigits: 2 }).format(indicator.value);
+    : new Intl.NumberFormat(i18n.language, { maximumFractionDigits: 2, useGrouping: !/(^|_)year$/.test(indicator.code) }).format(indicator.value);
   const label = i18n.language.startsWith("en") ? indicator.label_en : indicator.label_es;
   return { value, label };
 }
@@ -43,30 +43,39 @@ function useFormattedValue(indicator: IndicatorData) {
  * provenance in a floating panel so tables stay readable; nothing is removed:
  * the label, the reason and the panel stay available to assistive technology.
  */
+/** The unit "1" marks a dimensionless quantity (e.g. a correlation): showing it ("0.26 1") only confuses. */
+const showUnit = (indicator: IndicatorData) => Boolean(indicator.unit) && indicator.unit !== "1" && !(/(^|_)year$/.test(indicator.code) && /^years?$/.test(indicator.unit ?? ""));
+
+/** Values the API sends as plain numbers get a placeholder provenance (see `plain` in adapters.ts). */
+const isBare = (indicator: IndicatorData) => indicator.provenance.evidence_rule === "sin_procedencia_en_la_api";
+
 export function Indicator({ indicator, includeMissingPct = true, compact = false }: { indicator: IndicatorData; includeMissingPct?: boolean; compact?: boolean }) {
   const { t } = useTranslation();
   const { value, label } = useFormattedValue(indicator);
+  // A bare number carries no evidence level to show: three "unknown" badges per cell are noise, so it
+  // renders as value + unit with the (honest) explanation one click away in the provenance panel.
+  const bare = isBare(indicator);
 
   if (compact) {
-    return <span className="indicator indicator--compact" data-indicator-code={indicator.code}>
-      <span className="indicator__value"><span className="visually-hidden">{label}: </span>{value}<span className="indicator__unit">{indicator.unit && ` ${indicator.unit}`}</span></span>
+    return <span className={`indicator indicator--compact${bare ? " indicator--bare" : ""}`} data-indicator-code={indicator.code}>
+      <span className="indicator__value"><span className="visually-hidden">{label}: </span>{value}<span className="indicator__unit">{showUnit(indicator) && ` ${indicator.unit}`}</span></span>
       <span className="indicator__meta">
-        <EvidenceBadge evidence={indicator.provenance.evidence} provenance={indicator.provenance.provenance} short />
-        {indicator.provisional && <span className="indicator__flag" aria-hidden="true" title={t("common.provisional")}>{t("common.provisionalAbbr")}</span>}
+        {!bare && <EvidenceBadge evidence={indicator.provenance.evidence} provenance={indicator.provenance.provenance} short />}
+        {!bare && indicator.provisional && <span className="indicator__flag visually-hidden">{t("common.provisional")}</span>}
         <ProvenancePanel provenance={indicator.provenance} includeMissingPct={includeMissingPct} floating />
       </span>
-      {indicator.provisional && <span className="visually-hidden indicator__reason">{indicator.reason ?? t("common.provisional")}</span>}
+      {indicator.provisional && <span className="visually-hidden indicator__reason">{bare ? t("provenance.noStructured") : indicator.reason ?? t("common.provisional")}</span>}
     </span>;
   }
 
-  return <div className="indicator" data-indicator-code={indicator.code}>
+  return <div className={`indicator${bare ? " indicator--bare" : ""}`} data-indicator-code={indicator.code}>
     <div className="indicator__main">
       <span className="indicator__label">{label}</span>
-      <span className="indicator__value">{value}<span className="indicator__unit">{indicator.unit && ` ${indicator.unit}`}</span></span>
+      <span className="indicator__value">{value}<span className="indicator__unit">{showUnit(indicator) && ` ${indicator.unit}`}</span></span>
     </div>
-    <EvidenceBadge evidence={indicator.provenance.evidence} provenance={indicator.provenance.provenance} />
+    {!bare && <EvidenceBadge evidence={indicator.provenance.evidence} provenance={indicator.provenance.provenance} />}
     <ProvenancePanel provenance={indicator.provenance} includeMissingPct={includeMissingPct} />
-    {indicator.provisional && <span className="indicator__reason">{indicator.reason ?? t("common.provisional")}</span>}
+    {indicator.provisional && <span className={bare ? "visually-hidden indicator__reason" : "indicator__reason"}>{bare ? t("provenance.noStructured") : indicator.reason ?? t("common.provisional")}</span>}
   </div>;
 }
 

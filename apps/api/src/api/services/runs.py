@@ -66,6 +66,7 @@ def run_ref_from_db(session: Session, run_id: UUID) -> RunRef:
         seed=run.seed,
         period_start=run.period_start,
         period_end=run.period_end,
+        params=run.params if isinstance(run.params, dict) else None,
     )
 
 
@@ -124,6 +125,7 @@ class RunService:
             run.seed,
             run.period_start,
             run.period_end,
+            run.params if isinstance(run.params, dict) else None,
         )
 
     def _ready(self, run: AnalysisRun) -> None:

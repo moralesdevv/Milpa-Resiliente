@@ -50,7 +50,7 @@ test-etl: ## Pruebas de milpa_etl (R1): CLI, catálogos, paquete de demostració
 	$(UV) run --all-packages pytest packages/milpa_etl/tests -q
 
 test-science: ## [R2] pruebas científicas T-P/T-G de milpa_core
-	@echo "BLOQUEADO: packages/milpa_core (R2) no existe en este repositorio." >&2; exit 1
+	cd packages/milpa_core && $(PY) -m pytest -q -p no:cacheprovider
 
 test-e2e: web-e2e ## Pruebas E2E T-UI/T-A de R4 (Playwright, fixture sintético rotulado)
 
@@ -100,12 +100,17 @@ register: ## [R1] registra zona, manifiesto y procedencia en la BD (rol propieta
 demo-data: ## [R1] regenera data/demo/ (zona SINTÉTICA rotulada + EXPECTED.json); sin red
 	DATA_DIR=data $(UV) run milpa-etl build-demo
 
-# ------------------------------------------------------------------ R2: motor científico (NO existe aún)
-run-base: ## [R2+R1] corrida base
-	@echo "BLOQUEADO: requiere milpa_core (R2); R3 no lo simula." >&2; exit 1
+# ------------------------------------------------------------------ R2: motor científico (packages/milpa_core)
+# Receta de línea de comandos del motor sobre la serie curada real de R1 (salida en results/base y results/scenarios).
+DAILY ?= data/curated/chiquimula_prueba/daily.parquet
+run-base: ## [R2+R1] corrida base con la serie curada real (JSON + Parquet en results/base)
+	$(PY) tools/r2/r2_run.py --daily $(DAILY) --out results/base
 
-scenarios: ## [R2] grilla de escenarios
-	@echo "BLOQUEADO: requiere milpa_core (R2); R3 no lo simula." >&2; exit 1
+scenarios: ## [R2] grilla de 45 escenarios con la serie curada real (results/scenarios)
+	$(PY) tools/r2/r2_run.py --daily $(DAILY) --grid --out results/scenarios
+
+freeze-engine: ## [R2] congela la huella de la corrida base sobre data/demo (EXPECTED_ENGINE.json)
+	$(PY) -m api.cli freeze-engine
 
 # ------------------------------------------------------------------ R4: frontend (apps/web)
 web-install: ## Dependencias de Node reproducibles (package-lock.json)
@@ -140,7 +145,7 @@ web-mock: ## SPA con el mock sintético rotulado de R4 (http://localhost:5174)
 reproduce: ## Verifica prerrequisitos y reproduce desde data/demo (falla si faltan R1/R2)
 	$(PY) -m api.cli reproduce
 
-report: ## PDF de prueba con la plantilla PROVISIONAL (requiere Pango: usar la imagen Docker)
+report: ## PDF de prueba con la plantilla PROVISIONAL (ReportLab: sin Docker ni Pango)
 	$(PY) -m api.cli report-sample --out data/results/sample_report.pdf
 
 openapi: ## Exporta docs/openapi/openapi.json

@@ -118,11 +118,11 @@ def rank(S: Mapping[str, Mapping[Criterion, CriterionValue]], w: Mapping[Criteri
             log.append({"decision": "criterio_no_discriminante", "criterion": c.value, "note": "todas reciben 0.5"})
     total = {s: sum(w_eff[c] * scores[c][s] for c in C) for s in E}
     order = _order(E, total, scores)
-    ties = tuple((a, b) for a, b in zip(order, order[1:]) if abs(total[a] - total[b]) < cfg.tie_eps)
+    ties = tuple((a, b) for a, b in zip(order, order[1:], strict=False) if abs(total[a] - total[b]) < cfg.tie_eps)
     ev = min_evidence([S[s][c].evidence for s in E for c in C])
     prov = any(S[s][c].status is CriterionStatus.PROVISIONAL for s in E for c in C)
     expl = []
-    for a, b in zip(order, order[1:]):
+    for a, b in zip(order, order[1:], strict=False):
         contrib = {c.value: w_eff[c] * (scores[c][a] - scores[c][b]) for c in C}
         parts = []
         for c, d in sorted(contrib.items(), key=lambda kv: -abs(kv[1])):
@@ -185,7 +185,7 @@ def project_simplex(v: np.ndarray) -> np.ndarray:
     cond = u - css / ind > 0
     rho = n - np.argmax(cond[:, ::-1], axis=1)
     theta = css[np.arange(v.shape[0]), rho - 1] / rho
-    return np.maximum(v - theta[:, None], 0)
+    return np.asarray(np.maximum(v - theta[:, None], 0))
 
 
 def kendall_tau(a: list[str], b: list[str]) -> float:

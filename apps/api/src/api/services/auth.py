@@ -7,7 +7,7 @@ from datetime import UTC, datetime, timedelta
 
 from api.config import Settings
 from api.db.uow import UnitOfWork
-from api.errors import Unauthenticated
+from api.errors import NotFound, ServiceUnavailable, Unauthenticated
 from api.models.auth import AppUser
 from api.models.enums import UserRole
 from api.repositories.accounts import UserRepository
@@ -54,6 +54,20 @@ class AuthService:
             self.users.clear_failed_logins(user.user_id)
             self.uow.commit()
         token, expires_at = create_access_token(self.settings, user.user_id, user.role, now=now)
+        return LoginResult(token, expires_at, user.role)
+
+    def demo_session(self, *, now: datetime | None = None) -> LoginResult:
+        """Token de alcance limitado para la cuenta de demostración (sin contraseña utilizable)."""
+        if not self.settings.demo_public_access:
+            raise NotFound("El acceso público de demostración no está habilitado")
+        user = self.users.by_email(self.settings.demo_user_email)
+        if user is None or user.disabled_at is not None:
+            raise ServiceUnavailable(
+                "La cuenta de demostración no está aprovisionada (python -m api.cli create-demo-user)"
+            )
+        token, expires_at = create_access_token(
+            self.settings, user.user_id, user.role, now=now, demo=True
+        )
         return LoginResult(token, expires_at, user.role)
 
     def _register_failure(self, user: AppUser, now: datetime) -> None:

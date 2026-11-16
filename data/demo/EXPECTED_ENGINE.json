@@ -1,0 +1,18 @@
+{
+  "engine_version": "milpa_core 0.1.0",
+  "label": "serie sintética rotulada (data/demo): no son observaciones reales",
+  "zone": "zona_sintetica",
+  "data_hash": "60d89427db49d342bb9a55e8f038e3fe8211b816288ebe4c02786efe02c3eb58",
+  "region_config_hash": "8982f9dc48c4ab7813b4ee395c42bd61462c2f9348430f3f9c683dfc4ddb6699",
+  "catalog_hash": "4b1e421532b3d9cff5106beb09050f33c8760c272936f405cd7317ffdd1554ca",
+  "n_cycle_results": 530,
+  "decimals": 6,
+  "results_hash": "f72e4a42e7247d7d69749f92dde2257bbd5d709a435125bc598032aabca740a2",
+  "missing_pct": {
+    "precip_mm": 0.4,
+    "tmax_c": 0.0,
+    "tmin_c": 0.0,
+    "srad_mj_m2": 0.0,
+    "wind2m_ms": 0.0
+  }
+}

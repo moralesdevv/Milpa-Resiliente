@@ -1,5 +1,7 @@
 # Traspaso de contexto del proyecto (R3 + integración de R1 y R4)
 
+> **Actualización 2026-11-16:** el motor `milpa_core` (R2) ya está integrado y cableado a la API (ADR-020): corridas, escenarios, ranking, VoI, informe, heatmap, gráfico por decena e historial climático salen del motor real; la sesión pública de demo está descrita en ADR-019. Estado vigente: `NEXT_STEPS.md` (raíz) y `docs/FINAL_PROJECT_AUDIT.md`.
+
 Fecha del registro: 2026-11-15. Autor: asistente (modelo Sonnet 5.5) a petición del solicitante, **antes de cambiar de modelo**.
 Regla de este documento: **nada se marca como completado si no fue verificado**. «Verificado» = se ejecutó en esta sesión y el resultado está citado. Lo demás figura como pendiente o sin verificar.
 

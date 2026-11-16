@@ -29,7 +29,7 @@ from api.reports.renderer import (
     render_template_pack,
 )
 from testkit import ROOT
-from testkit.reports import needs_pdf
+from testkit.reports import needs_weasyprint
 
 R4 = ROOT / "references" / "R4"
 pytestmark = pytest.mark.skipif(not R4.is_dir(), reason="references/R4 no está en este árbol")
@@ -62,7 +62,18 @@ def test_routes_match_except_the_known_health_path_difference() -> None:
     """
     o4, o3 = _ops(_r4()), _ops(_r3())
     assert o4 - o3 == {("GET", "/v1/healthz")}
-    assert o3 - o4 == {("GET", "/healthz")}
+    assert (
+        o3 - o4
+        == {  # ADR-019 (demo) y ADR-023 (validación agronómica de Jocotán): añadidos de R3 aún sin R4
+            ("GET", "/healthz"),
+            ("POST", "/v1/auth/demo-session"),
+            ("GET", "/v1/zones/{}/planting-validation"),
+            ("POST", "/v1/parcels/{}/planting-validation"),
+            ("GET", "/v1/zones/{}/planting-options"),
+            ("GET", "/v1/zones/{}/rainy-season-onset"),
+            ("GET", "/v1/zones/{}/station-validation"),
+        }
+    )
     assert len(o4 & o3) == 33
 
 
@@ -279,7 +290,7 @@ def test_inline_stylesheet_rejects_paths_and_dangerous_css(tmp_path: Path) -> No
         assert inline_local_stylesheets(tag, tmp_path) == tag
 
 
-@needs_pdf
+@needs_weasyprint
 def test_r4_template_pdf_keeps_its_stylesheet_and_a4_page_size() -> None:
     """Sin incrustar el CSS, WeasyPrint (sin base_url) descarta ``report.css`` EN SILENCIO y el PDF
     sale en tamaño por defecto (Carta). Con R3 incrustándolo, se respeta ``@page { size: A4 }``."""

@@ -1,12 +1,37 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { api, assertResponse } from "./client";
-import { toDekadChart, toHeatmap, toRankResponse, toSummaryPage } from "./r2-adapters";
+import { toDekadChart, toHeatmap, toRankResponse, toScenarioTags, toSummaryPage } from "./r2-adapters";
 import { toQualityView, toSoilStatusView, toZoneView, uploadFromOk, uploadFromProblem } from "./adapters";
 import type { UploadView } from "./adapters";
 import type { components } from "./types.gen";
+import i18n from "../i18n";
 import { apiBaseUrl } from "./config";
 import { getSession } from "./session";
+
+export type SoilGridsSummary = {
+  status: string;
+  status_detail: string | null;
+  depth: string;
+  note: string;
+  points?: number;
+  properties: Record<string, { value: number | null; unit: string; valid_points: number }>;
+};
+
+export function useJocotanSoilGrids(enabled: boolean) {
+  return useQuery({
+    queryKey: ["soilgrids", "jocotan"],
+    enabled,
+    queryFn: async (): Promise<SoilGridsSummary> => {
+      const response = await fetch(
+        `${import.meta.env.BASE_URL}data/soilgrids/jocotan_promedio.json`,
+      );
+      if (!response.ok) throw new Error("SoilGrids summary is not available.");
+      const raw = (await response.json()) as SoilGridsSummary & { points_inside_polygon?: number };
+      return { ...raw, points: raw.points_inside_polygon };
+    },
+  });
+}
 
 export function useZones() {
   return useQuery({
@@ -59,6 +84,38 @@ export function useParcelSoil(parcelId: string | null) {
   });
 }
 
+export function usePlantingValidation(parcelId: string | null) {
+  return useMutation({
+    mutationFn: async (request: components["schemas"]["PlantingValidationRequest"]) => {
+      if (!parcelId) throw new Error("A parcel must be selected before validating planting.");
+      const result = await api.POST("/v1/parcels/{id}/planting-validation", {
+        params: { path: { id: parcelId } },
+        body: request,
+      });
+      assertResponse(result.response, result.error);
+      if (!result.data) throw new Error("The planting validation response was empty.");
+      return result.data;
+    },
+  });
+}
+
+export function useZonePlantingValidation(zoneId: string | null) {
+  return useMutation({
+    mutationFn: async (request: components["schemas"]["PlantingValidationRequest"]) => {
+      if (!zoneId) throw new Error("A Jocotán zone must be selected before checking planting.");
+      const result = await api.GET("/v1/zones/{id}/planting-validation", {
+        params: {
+          path: { id: zoneId },
+          query: request,
+        },
+      });
+      assertResponse(result.response, result.error);
+      if (!result.data) throw new Error("The planting validation response was empty.");
+      return result.data;
+    },
+  });
+}
+
 export function useStrategyVersion(strategyId: string, version: number | null | undefined) {
   return useQuery({
     queryKey: ["strategy-version", strategyId, version],
@@ -80,7 +137,7 @@ export function useRunScenarios(runId: string | null) {
       if (!runId) throw new Error("A run must be selected before loading scenarios.");
       const result = await api.GET("/v1/runs/{id}/scenarios", { params: { path: { id: runId } } });
       assertResponse(result.response, result.error);
-      return result.data ?? [];
+      return toScenarioTags(result.data ?? []);
     },
   });
 }
@@ -177,7 +234,8 @@ export function useDekadChart(runId: string | null, options: {
           strategy: options.strategy,
           cohort_year: options.cohortYear,
           cycle: options.cycle,
-          plant_date: options.plantDate,
+          // The heat-map axis is month-day; the endpoint wants the calendar date of the cohort's planting.
+          plant_date: /^\d{2}-\d{2}$/.test(options.plantDate) ? `${options.cohortYear}-${options.plantDate}` : options.plantDate,
           scenario: options.scenario,
         } },
       });
@@ -355,12 +413,51 @@ export function useDeleteParcel(parcelId: string | null) {
   });
 }
 
-export function useLogin() {
-  return useMutation({
-    mutationFn: async (credentials: components["schemas"]["LoginRequest"]) => {
-      const result = await api.POST("/v1/auth/login", { body: credentials });
+/** Language of the messages the backend generates (the product UI is English; Spanish stays available). */
+function uiLanguage(): "es" | "en" {
+  return i18n.language.startsWith("es") ? "es" : "en";
+}
+
+export function usePlantingOptions(zoneId: string | null) {
+  return useQuery({
+    queryKey: ["planting-options", zoneId],
+    enabled: Boolean(zoneId),
+    staleTime: 5 * 60_000,
+    queryFn: async () => {
+      if (!zoneId) throw new Error("A zone is required.");
+      const result = await api.GET("/v1/zones/{id}/planting-options", { params: { path: { id: zoneId } } });
       assertResponse(result.response, result.error);
-      if (!result.data) throw new Error("The login response was empty.");
+      if (!result.data) throw new Error("The planting options response was empty.");
+      return result.data;
+    },
+  });
+}
+
+export function useRainyOnset(zoneId: string | null, year: number | null, plantingDate: string | null) {
+  return useQuery({
+    queryKey: ["rainy-onset", zoneId, year, plantingDate],
+    enabled: Boolean(zoneId) && year != null,
+    queryFn: async () => {
+      if (!zoneId || year == null) throw new Error("A zone and a year are required.");
+      const result = await api.GET("/v1/zones/{id}/rainy-season-onset", {
+        params: { path: { id: zoneId }, query: { anio: year, idioma: uiLanguage(), ...(plantingDate ? { fecha_siembra: plantingDate } : {}) } },
+      });
+      assertResponse(result.response, result.error);
+      if (!result.data) throw new Error("The rainy-season onset response was empty.");
+      return result.data;
+    },
+  });
+}
+
+export function useStationValidation(zoneId: string | null) {
+  return useQuery({
+    queryKey: ["station-validation", zoneId],
+    enabled: Boolean(zoneId),
+    queryFn: async () => {
+      if (!zoneId) throw new Error("A zone is required.");
+      const result = await api.GET("/v1/zones/{id}/station-validation", { params: { path: { id: zoneId }, query: { idioma: uiLanguage() } } });
+      assertResponse(result.response, result.error);
+      if (!result.data) throw new Error("The station validation response was empty.");
       return result.data;
     },
   });

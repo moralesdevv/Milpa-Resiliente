@@ -31,7 +31,6 @@ import os
 import re
 import sys
 import time
-from datetime import date, timedelta
 from pathlib import Path
 
 import numpy as np
@@ -112,7 +111,7 @@ def zone_weights(geojson_path: str, n: int = 400) -> list[dict]:
     X, Y = X.ravel(), Y.ravel()
     inside = np.zeros(X.shape, dtype=bool)
     for ring in rings:
-        for (xa, ya), (xb, yb) in zip(ring[:-1], ring[1:]):
+        for (xa, ya), (xb, yb) in zip(ring[:-1], ring[1:], strict=False):
             cond = (ya > Y) != (yb > Y)
             with np.errstate(divide="ignore", invalid="ignore"):
                 xint = (xb - xa) * (Y - ya) / (yb - ya) + xa
@@ -123,7 +122,7 @@ def zone_weights(geojson_path: str, n: int = 400) -> list[dict]:
     keys, counts = np.unique(ix * 100000 + iy, return_counts=True)
     total = counts.sum()
     out = []
-    for k, c in zip(keys, counts):
+    for k, c in zip(keys, counts, strict=False):
         cx, cy = int(k // 100000), int(k % 100000)
         lon_c, lat_c = cell_center(cx, cy)
         out.append({"ix": cx, "iy": cy, "lon": lon_c, "lat": lat_c, "weight": float(c / total)})
@@ -264,7 +263,7 @@ def fetch_imerg(zone: str, geojson: str, start: str, end: str, force: bool = Fal
             continue
         t_start = time.time()
         try:
-            results = _retry(lambda: ea.search_data(short_name=SHORT_NAME, version=VERSION,
+            results = _retry(lambda t0=t0, t1=t1: ea.search_data(short_name=SHORT_NAME, version=VERSION,
                                                      temporal=(t0, t1), bounding_box=tuple(bbox)), retries)
         except Exception as e:  # noqa: BLE001
             r1.log_ingestion(source=SOURCE_CODE, product=SHORT_NAME, version=VERSION, params=params,
@@ -279,13 +278,13 @@ def fetch_imerg(zone: str, geojson: str, start: str, end: str, force: bool = Fal
                 if download:
                     tmp = r1.DATA_DIR / "tmp_imerg"
                     tmp.mkdir(parents=True, exist_ok=True)
-                    files = [str(x) for x in _retry(lambda c=chunk: ea.download(c, local_path=str(tmp)), retries)]
+                    files = [str(x) for x in _retry(lambda c=chunk, tmp=tmp: ea.download(c, local_path=str(tmp)), retries)]
                 else:
                     files = _retry(lambda c=chunk: ea.open(c), retries)
             except Exception as e:  # noqa: BLE001
                 failed += [{"granule": g.data_links()[0].split("/")[-1], "error": f"open: {e}"[:150]} for g in chunk]
                 continue
-            for g, f in zip(chunk, files):
+            for g, f in zip(chunk, files, strict=False):
                 name = g.data_links()[0].split("/")[-1]
                 try:
                     df, info = read_granule(f, name, bbox)
@@ -666,7 +665,7 @@ def selftest() -> int:
                     # 2001-04-05: solo celdas de las esquinas con dato (peso 0.25 < 0.5) -> respaldo
                     corner = {(-89.55, 14.75), (-89.25, 14.75), (-89.55, 14.95), (-89.25, 14.95)}
                     m = df["date"] == "2001-04-05"
-                    df.loc[m & ~df.apply(lambda r: (r.lon, r.lat) in corner, axis=1), "precipitation"] = np.nan
+                    df.loc[m & ~df.apply(lambda r, corner=corner: (r.lon, r.lat) in corner, axis=1), "precipitation"] = np.nan
                     # 2001-05-01: una celda sin dato (peso 0.125 < 0.5 perdido) -> sigue válido, renormalizado
                     m2 = (df["date"] == "2001-05-01") & (df["lon"] == -89.55) & (df["lat"] == 14.85)
                     df.loc[m2, "precipitation"] = np.nan
@@ -696,7 +695,7 @@ def selftest() -> int:
                   abs(d.loc["2001-05-01", "precip_mm"] - 1.2 * power["2001-05-01"]) < 1e-3)
             vals = [float(i) ** 2 for i in range(12)]
             # el orden de filas del día especial es el de make_year (celdas en el orden de `w`)
-            exp = sum(c["weight"] * v for c, v in zip(w, vals))
+            exp = sum(c["weight"] * v for c, v in zip(w, vals, strict=False))
             plain = float(np.mean(vals))
             check("media ponderada por área (distinta de la media simple)",
                   abs(d.loc[special, "precip_mm"] - exp) < 1e-3 and abs(exp - plain) > 0.1,

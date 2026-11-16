@@ -31,6 +31,18 @@ export function ScenarioBadge({ scenario }: { scenario: ScenarioTag }) {
   </section>;
 }
 
+/** A person-readable description of a scenario; the technical id stays available in the badge. */
+function scenarioOptionLabel(scenario: ScenarioTag, t: (key: string, options?: Record<string, unknown>) => string): string {
+  if (scenario.scenario_id === "BASE") return t("scenario.baseLabel");
+  const parts = [
+    scenario.delta_t_c ? `+${scenario.delta_t_c} °C` : null,
+    scenario.precip_factor !== 1 ? `${Math.round((scenario.precip_factor - 1) * 100)} % ${t("scenario.rainWord")}` : null,
+    scenario.onset_delay_days ? t("scenario.onsetDelayShort", { days: scenario.onset_delay_days }) : null,
+    scenario.delta_t_c ? t(`scenario.humidityModes.${scenario.humidity_assumption}`) : null,
+  ].filter(Boolean);
+  return `${parts.join(" · ") || scenario.scenario_id} (${scenario.scenario_id})`;
+}
+
 export function ScenarioPicker({ scenarios, value, onChange, disabled = false }: {
   scenarios: ScenarioTag[];
   value: string;
@@ -45,7 +57,7 @@ export function ScenarioPicker({ scenarios, value, onChange, disabled = false }:
     <select value={value} onChange={handleChange} disabled={disabled || scenarios.length === 0}>
       <option value="">{scenarios.length ? t("scenario.selectOne") : t("scenario.noneComputed")}</option>
       {scenarios.map((scenario) => <option key={scenarioKey(scenario)} value={scenarioKey(scenario)}>
-        {scenario.label} · {scenario.scenario_id} · {t(`scenario.adaptationModes.${scenario.adaptation_mode}`)}
+        {scenarioOptionLabel(scenario, t)} · {t(`scenario.adaptationModes.${scenario.adaptation_mode}`)}
       </option>)}
     </select>
     <small>{t("scenario.notComputedHint")}</small>

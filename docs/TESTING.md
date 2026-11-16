@@ -9,7 +9,7 @@ Regla: **una prueba omitida no es una prueba aprobada.** Cada ejecución se info
 | Integración `T-I` | pytest + **PostgreSQL 16/PostGIS real**, rol real de la app | `tests/integration/` | PostGIS |
 | Seguridad y privacidad `T-S` | pytest | `tests/privacy/`, `tests/integration/test_rls.py`, `test_api_auth.py` | PostGIS |
 | Contrato `T-C` | OpenAPI, paridad de enums, fronteras, **Schemathesis** | `tests/contract/` | PostGIS (paridad, Schemathesis) |
-| PDF | pytest (marca `pdf`) | `apps/api/tests/test_reports.py`, `tests/integration/test_reports_pdf.py` | Pango (imagen Docker) |
+| PDF | pytest | `apps/api/tests/test_reports_pdf_reportlab.py`, `test_report_from_engine.py`, `tests/integration/test_reports_pdf.py` (ReportLab: sin Pango); marca `pdf` = ruta HTML opcional | Pango solo para la ruta HTML |
 | Rendimiento `T-B` | `python -m api.bench` | `apps/api/src/api/bench/` | PostGIS |
 | Aceptación `T-A`, UI `T-UI` | — | R4 (`tests/acceptance/` vacío) | **bloqueado** |
 | Ciencia `T-P`/`T-G` de `milpa_core` | — | R2 | **bloqueado** |

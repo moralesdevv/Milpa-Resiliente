@@ -12,7 +12,9 @@ representan como NaN, nunca como cero.
 from __future__ import annotations
 
 import hashlib
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field, replace
+from datetime import date
 from pathlib import Path
 from typing import Any
 
@@ -34,11 +36,13 @@ from milpa_core.enums import (
     Criterion,
     Evidence,
     PeffMethod,
+    PropertyStatus,
     QcFlag,
     StrategyAxis,
     ThresholdMetric,
     WindowMode,
 )
+from milpa_core.soil import PropertyValue, SoilContext
 from milpa_core.strategy import Component, Strategy, StrategyCycle
 
 DAILY_COLS = [
@@ -494,3 +498,61 @@ def load_curated_daily(
         r1_et0_mm=df["et0_mm"].to_numpy(float) if "et0_mm" in df.columns else None,
     )
     return series, info
+
+
+# Códigos de propiedad de la API/BD (``ref.soil_property``) -> códigos del motor, con el factor de unidad.
+# ``effective_depth`` está en cm en la BD y en m en el motor. Solo conversión de formato.
+SOIL_CODE_MAP: dict[str, tuple[str, float]] = {
+    "ph": ("ph", 1.0),
+    "organic_matter": ("om_pct", 1.0),
+    "sand": ("sand_pct", 1.0),
+    "clay": ("clay_pct", 1.0),
+    "effective_depth": ("effective_depth", 0.01),
+    "awc": ("awc_mm_m", 1.0),
+}
+
+
+def soil_context_from_rows(
+    rows: Sequence[Mapping[str, Any]], today: date | None = None
+) -> SoilContext:
+    """Construye el ``SoilContext`` del motor desde el estado por propiedad de la parcela.
+
+    Solo traduce nombres, unidades y estados: una propiedad ``desconocido`` sigue desconocida y un
+    valor nunca se inventa. ``Dr0`` (condición inicial) no existe en la API, por lo que el Modo B
+    no se activa (CT-05).
+    """
+    today = today or date.today()
+    props: dict[str, PropertyValue] = {}
+    for row in rows:
+        mapped = SOIL_CODE_MAP.get(str(row.get("property_code")))
+        if mapped is None:
+            continue
+        code, factor = mapped
+        status = PropertyStatus(str(row["status"]))
+        measured = status in {
+            PropertyStatus.MEDIDO,
+            PropertyStatus.DESACTUALIZADO,
+            PropertyStatus.NO_REPRESENTATIVO,
+        }
+        raw = row.get("m_value") if measured else row.get("d_value")
+        value = None if raw is None else float(raw) * factor
+        sampled = row.get("sampled_at")
+        sampled_date = date.fromisoformat(str(sampled)[:10]) if sampled else None
+        age = None if sampled_date is None else (today - sampled_date).days / 365.25
+        depth = (
+            (int(row["depth_from_cm"]), int(row["depth_to_cm"]))
+            if row.get("depth_from_cm") is not None and row.get("depth_to_cm") is not None
+            else None
+        )
+        props[code] = PropertyValue(
+            code,
+            status,
+            value,
+            row.get("method") if measured else None,
+            depth,
+            None if sampled_date is None else sampled_date.isoformat(),
+            representativeness=row.get("representativeness"),
+            age_years=age,
+            max_age_years=row.get("max_age_years"),
+        )
+    return SoilContext(props)

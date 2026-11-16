@@ -19,7 +19,7 @@ dev = []
 line-length = 100
 target-version = "py312"
 src = ["apps/api/src", "apps/api/tests", "tests", "testkit", "."]
-extend-exclude = ["apps/web", "packages", "data"]
+extend-exclude = ["apps/web", "packages", "data", "references", "*.md"]  # references/: copias de otros equipos (R1/R2/R4), no código del backend
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "UP", "B", "S", "C4", "SIM", "RUF", "PL", "T20"]
@@ -39,6 +39,7 @@ ignore = [
 "apps/api/tests/**" = ["S101", "S105", "S106", "S311", "PLR0915", "T20", "E501", "S608"]
 "tests/**" = ["S101", "S105", "S106", "S311", "PLR0915", "T20", "E501", "S608"]
 "testkit/**" = ["S101", "S105", "S106", "S311", "E501", "S608"]
+"tools/**" = ["T20", "S101", "E702", "PLR0915", "PLW0603", "PLW2901", "B023", "B905", "RUF001", "RUF002", "RUF005", "RUF015", "C408", "C416"]  # scripts de línea de comandos de un solo uso
 "conftest.py" = ["S101", "S105", "S106", "S608", "E501"]
 "apps/api/migrations/**" = ["E501"]
 "apps/api/src/api/cli.py" = ["T20"]
@@ -55,6 +56,14 @@ packages = ["api"]
 explicit_package_bases = true
 
 [[tool.mypy.overrides]]
+module = ["reportlab", "reportlab.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["api.reports.pdf"]
+disallow_subclassing_any = false  # el Canvas de ReportLab no tiene tipos
+
+[[tool.mypy.overrides]]
 module = ["geoalchemy2.*", "pandera.*", "weasyprint.*", "pypdf.*", "argon2.*", "pyarrow.*", "milpa_core", "milpa_core.*", "yaml"]
 ignore_missing_imports = true
 
@@ -67,7 +76,7 @@ markers = [
   "integration: requiere PostgreSQL/PostGIS real (TEST_DATABASE_ADMIN_URL)",
   "privacy: pruebas T-S de privacidad",
   "contract: pruebas T-C de contrato/OpenAPI",
-  "pdf: requiere bibliotecas nativas de WeasyPrint (Pango)",
+  "pdf: ruta HTML opcional (WeasyPrint): requiere Pango nativo",
   "slow: prueba lenta (procesos reales)",
 ]
 filterwarnings = ["error::DeprecationWarning:api.*"]

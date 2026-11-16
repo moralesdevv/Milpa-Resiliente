@@ -1,0 +1,757 @@
+{
+  "version": "2.0.0",
+  "status": "sandbox",
+  "estado_validacion": "Provisional - Pendiente validación oficial MAGA/ICTA",
+  "zona_piloto": {
+    "nombre": "Jocotán",
+    "departamento": "Chiquimula",
+    "pais": "Guatemala",
+    "zona_datos": "camotan_jocotan"
+  },
+  "ventanas_siembra": {
+    "primera": {
+      "inicio": "05-01",
+      "fin": "06-30",
+      "estado": "Pending validation - Provisional",
+      "fuentes": [
+        "MAGA_EPOCAS",
+        "USUARIO_SANDBOX"
+      ]
+    },
+    "postrera": {
+      "inicio": "08-20",
+      "fin": "09-30",
+      "estado": "Pending validation - Provisional",
+      "fuentes": [
+        "MAGA_EPOCAS",
+        "USUARIO_SANDBOX"
+      ]
+    }
+  },
+  "cultivos": {
+    "maiz": {
+      "nombre": "Maíz",
+      "variedades": [
+        "ICTA B-7",
+        "ICTA B-5",
+        "ICTA B-9",
+        "ICTA B-15"
+      ],
+      "kc_etapa_media": 1.2,
+      "kc_fao56": {
+        "ini": 0.3,
+        "mid": 1.2,
+        "end": 0.35,
+        "nota": "Kc end 0.35 = cosecha tras secado completo en campo; FAO-56 da 0.60 si se cosecha con humedad alta de grano."
+      },
+      "umbrales_hidricos": {
+        "dias_secos_consecutivos_riesgo": 10,
+        "lluvia_minima_mm_dia": 1.0,
+        "lluvia_minima_15_dias_mm": 20.0
+      },
+      "umbral_basis": "USUARIO_SANDBOX"
+    },
+    "frijol": {
+      "nombre": "Frijol",
+      "variedades": [
+        "ICTA Ostúa",
+        "ICTA Santa Gertrudis"
+      ],
+      "kc_etapa_media": 1.15,
+      "kc_fao56": {
+        "ini": 0.4,
+        "mid": 1.15,
+        "end": 0.35,
+        "nota": "FAO-56 Beans, dry; la nota 2 indica Kc mid hasta 1.20 para variedades trepadoras de 1.5-2 m."
+      },
+      "umbrales_hidricos": {
+        "dias_secos_consecutivos_riesgo": 7,
+        "lluvia_minima_mm_dia": 1.0
+      },
+      "umbral_basis": "USUARIO_SANDBOX"
+    }
+  },
+  "variedades": {
+    "maiz": [
+      {
+        "nombre": "ICTA B-7",
+        "ciclo_total_dias": 120,
+        "dias_floracion": 53,
+        "dias_cosecha": null,
+        "tipo_dato": "ciclo derivado de '4 meses'; floración encontrada (cita secundaria)",
+        "confianza": "media-baja",
+        "fuentes": [
+          "ICTA_MAIZ_ORIENTE_2015",
+          "ICTA_PROGRAMA_MAIZ",
+          "ICTA_MEMORIA_2002"
+        ],
+        "tolerante_sequia": true,
+        "ciclos_documentados": {
+          "primera": "documentado: siembra a finales de mayo o inicios de junio (ICTA 2015)",
+          "postrera": "no documentado en las fuentes consultadas"
+        },
+        "notas": "B-7TS: 'tolerante a sequía' según ICTA (sin nivel cuantitativo).",
+        "valores_en_conflicto": {
+          "ciclo_dias": {
+            "ICTA guía general (registro previo)": 95,
+            "ICTA Memoria 2002, días a cosecha (registro previo)": 110,
+            "ICTA 2015 oriente (4 meses)": 120
+          }
+        }
+      },
+      {
+        "nombre": "ICTA B-5",
+        "ciclo_total_dias": 90,
+        "dias_floracion": 48,
+        "dias_cosecha": null,
+        "tipo_dato": "encontrado (ciclo 90 d); floración encontrada (cita secundaria)",
+        "confianza": "media",
+        "fuentes": [
+          "ICTA_PROGRAMA_MAIZ",
+          "ICTA_MAIZ_ORIENTE_2015",
+          "ICTA_MEMORIA_2002"
+        ],
+        "tolerante_sequia": null,
+        "ciclos_documentados": {
+          "primera": "documentado: siembra a finales de mayo o inicios de junio (ICTA 2015)",
+          "postrera": "no documentado en las fuentes consultadas"
+        },
+        "notas": "ICTA 2015: ciclo de tres meses para lugares con escasez de lluvia.",
+        "valores_en_conflicto": null
+      },
+      {
+        "nombre": "ICTA B-9",
+        "ciclo_total_dias": null,
+        "dias_floracion": null,
+        "dias_cosecha": null,
+        "tipo_dato": "NO ENCONTRADO",
+        "confianza": "baja",
+        "fuentes": [
+          "ICTA_PROGRAMA_MAIZ"
+        ],
+        "tolerante_sequia": null,
+        "ciclos_documentados": {
+          "primera": "no documentado",
+          "postrera": "no documentado"
+        },
+        "notas": "B-9ACP: alta calidad de proteína; sin ciclo publicado en las fuentes consultadas.",
+        "valores_en_conflicto": null
+      },
+      {
+        "nombre": "ICTA B-15",
+        "ciclo_total_dias": null,
+        "dias_floracion": null,
+        "dias_cosecha": null,
+        "tipo_dato": "NO ENCONTRADO",
+        "confianza": "baja",
+        "fuentes": [
+          "ICTA_PROGRAMA_MAIZ"
+        ],
+        "tolerante_sequia": null,
+        "ciclos_documentados": {
+          "primera": "no documentado",
+          "postrera": "no documentado"
+        },
+        "notas": "B-15ACP+Zn: biofortificada con zinc y proteína; sin ciclo publicado.",
+        "valores_en_conflicto": null
+      }
+    ],
+    "frijol": [
+      {
+        "nombre": "ICTA Ostúa",
+        "ciclo_total_dias": 73,
+        "dias_floracion": 39,
+        "dias_cosecha": 73,
+        "tipo_dato": "encontrado (rangos 38-40 y 70-75); valores centrales derivados",
+        "confianza": "media",
+        "fuentes": [
+          "ICTA_FRIJOL_2011"
+        ],
+        "tolerante_sequia": null,
+        "ciclos_documentados": {
+          "primera": "no verificado en esta pasada",
+          "postrera": "no verificado en esta pasada"
+        },
+        "notas": "ICTA Cuadro 1: floración 38-40 d, cosecha 70-75 d, rendimiento 20-29 qq/mz, adaptación 50-1200 msnm; recomendada para Sur, Oriente y Norte.",
+        "valores_en_conflicto": null
+      },
+      {
+        "nombre": "ICTA Santa Gertrudis",
+        "ciclo_total_dias": 73,
+        "dias_floracion": 39,
+        "dias_cosecha": 73,
+        "tipo_dato": "encontrado (rangos 38-40 y 70-75); valores centrales derivados",
+        "confianza": "media",
+        "fuentes": [
+          "ICTA_FRIJOL_2011"
+        ],
+        "tolerante_sequia": null,
+        "ciclos_documentados": {
+          "primera": "no verificado en esta pasada",
+          "postrera": "no verificado en esta pasada"
+        },
+        "notas": "ICTA Cuadro 1: floración 38-40 d, cosecha 70-75 d, rendimiento 20-29 qq/mz, adaptación 50-1200 msnm; recomendada para Sur, Oriente y Norte.",
+        "valores_en_conflicto": null
+      }
+    ]
+  },
+  "parametros_fenologicos": [
+    {
+      "cultivo": "maiz",
+      "variedad": "ICTA B-7",
+      "etapa_fao": "Inicial",
+      "duracion_dias": 19,
+      "kc_inicio": 0.3,
+      "kc_fin": 0.3,
+      "kc_tipo": "constante (FAO-56 Tabla 12)",
+      "fuente": [
+        "ICTA_MAIZ_ORIENTE_2015",
+        "FAO56"
+      ],
+      "confianza": "media-baja",
+      "tipo_dato": "derivado",
+      "supuesto_aplicado": "Ciclo 4 meses (ICTA 2015) = 120 d con 30 d/mes; etapas repartidas con las proporciones 20/35/40/30 de FAO-56 Tabla 11 (maíz, 125 d). Kc = proxy FAO-56 Maize (grain).",
+      "supuesto_aplicado_en": "Cycle of 4 months (ICTA 2015) = 120 d at 30 d/month; stages split with the 20/35/40/30 proportions of FAO-56 Table 11 (maize, 125 d). Kc = FAO-56 Maize (grain) proxy."
+    },
+    {
+      "cultivo": "maiz",
+      "variedad": "ICTA B-7",
+      "etapa_fao": "Desarrollo",
+      "duracion_dias": 34,
+      "kc_inicio": 0.3,
+      "kc_fin": 1.2,
+      "kc_tipo": "interpolación lineal entre valores FAO-56",
+      "fuente": [
+        "ICTA_MAIZ_ORIENTE_2015",
+        "FAO56"
+      ],
+      "confianza": "media-baja",
+      "tipo_dato": "derivado",
+      "supuesto_aplicado": "Ciclo 4 meses (ICTA 2015) = 120 d con 30 d/mes; etapas repartidas con las proporciones 20/35/40/30 de FAO-56 Tabla 11 (maíz, 125 d). Kc = proxy FAO-56 Maize (grain).",
+      "supuesto_aplicado_en": "Cycle of 4 months (ICTA 2015) = 120 d at 30 d/month; stages split with the 20/35/40/30 proportions of FAO-56 Table 11 (maize, 125 d). Kc = FAO-56 Maize (grain) proxy."
+    },
+    {
+      "cultivo": "maiz",
+      "variedad": "ICTA B-7",
+      "etapa_fao": "Media",
+      "duracion_dias": 38,
+      "kc_inicio": 1.2,
+      "kc_fin": 1.2,
+      "kc_tipo": "constante (FAO-56 Tabla 12)",
+      "fuente": [
+        "ICTA_MAIZ_ORIENTE_2015",
+        "FAO56"
+      ],
+      "confianza": "media-baja",
+      "tipo_dato": "derivado",
+      "supuesto_aplicado": "Ciclo 4 meses (ICTA 2015) = 120 d con 30 d/mes; etapas repartidas con las proporciones 20/35/40/30 de FAO-56 Tabla 11 (maíz, 125 d). Kc = proxy FAO-56 Maize (grain).",
+      "supuesto_aplicado_en": "Cycle of 4 months (ICTA 2015) = 120 d at 30 d/month; stages split with the 20/35/40/30 proportions of FAO-56 Table 11 (maize, 125 d). Kc = FAO-56 Maize (grain) proxy."
+    },
+    {
+      "cultivo": "maiz",
+      "variedad": "ICTA B-7",
+      "etapa_fao": "Final",
+      "duracion_dias": 29,
+      "kc_inicio": 1.2,
+      "kc_fin": 0.35,
+      "kc_tipo": "interpolación lineal entre valores FAO-56",
+      "fuente": [
+        "ICTA_MAIZ_ORIENTE_2015",
+        "FAO56"
+      ],
+      "confianza": "media-baja",
+      "tipo_dato": "derivado",
+      "supuesto_aplicado": "Ciclo 4 meses (ICTA 2015) = 120 d con 30 d/mes; etapas repartidas con las proporciones 20/35/40/30 de FAO-56 Tabla 11 (maíz, 125 d). Kc = proxy FAO-56 Maize (grain).",
+      "supuesto_aplicado_en": "Cycle of 4 months (ICTA 2015) = 120 d at 30 d/month; stages split with the 20/35/40/30 proportions of FAO-56 Table 11 (maize, 125 d). Kc = FAO-56 Maize (grain) proxy."
+    },
+    {
+      "cultivo": "maiz",
+      "variedad": "ICTA B-5",
+      "etapa_fao": "Inicial",
+      "duracion_dias": 14,
+      "kc_inicio": 0.3,
+      "kc_fin": 0.3,
+      "kc_tipo": "constante (FAO-56 Tabla 12)",
+      "fuente": [
+        "ICTA_PROGRAMA_MAIZ",
+        "ICTA_MAIZ_ORIENTE_2015",
+        "FAO56"
+      ],
+      "confianza": "media-baja",
+      "tipo_dato": "derivado",
+      "supuesto_aplicado": "Ciclo precoz de 90 d (ICTA, página del programa; 3 meses en ICTA 2015); etapas con proporciones FAO-56 Tabla 11. Kc = proxy FAO-56.",
+      "supuesto_aplicado_en": "Early cycle of 90 d (ICTA programme page; 3 months in ICTA 2015); stages split with FAO-56 Table 11 proportions. Kc = FAO-56 proxy."
+    },
+    {
+      "cultivo": "maiz",
+      "variedad": "ICTA B-5",
+      "etapa_fao": "Desarrollo",
+      "duracion_dias": 25,
+      "kc_inicio": 0.3,
+      "kc_fin": 1.2,
+      "kc_tipo": "interpolación lineal entre valores FAO-56",
+      "fuente": [
+        "ICTA_PROGRAMA_MAIZ",
+        "ICTA_MAIZ_ORIENTE_2015",
+        "FAO56"
+      ],
+      "confianza": "media-baja",
+      "tipo_dato": "derivado",
+      "supuesto_aplicado": "Ciclo precoz de 90 d (ICTA, página del programa; 3 meses en ICTA 2015); etapas con proporciones FAO-56 Tabla 11. Kc = proxy FAO-56.",
+      "supuesto_aplicado_en": "Early cycle of 90 d (ICTA programme page; 3 months in ICTA 2015); stages split with FAO-56 Table 11 proportions. Kc = FAO-56 proxy."
+    },
+    {
+      "cultivo": "maiz",
+      "variedad": "ICTA B-5",
+      "etapa_fao": "Media",
+      "duracion_dias": 29,
+      "kc_inicio": 1.2,
+      "kc_fin": 1.2,
+      "kc_tipo": "constante (FAO-56 Tabla 12)",
+      "fuente": [
+        "ICTA_PROGRAMA_MAIZ",
+        "ICTA_MAIZ_ORIENTE_2015",
+        "FAO56"
+      ],
+      "confianza": "media-baja",
+      "tipo_dato": "derivado",
+      "supuesto_aplicado": "Ciclo precoz de 90 d (ICTA, página del programa; 3 meses en ICTA 2015); etapas con proporciones FAO-56 Tabla 11. Kc = proxy FAO-56.",
+      "supuesto_aplicado_en": "Early cycle of 90 d (ICTA programme page; 3 months in ICTA 2015); stages split with FAO-56 Table 11 proportions. Kc = FAO-56 proxy."
+    },
+    {
+      "cultivo": "maiz",
+      "variedad": "ICTA B-5",
+      "etapa_fao": "Final",
+      "duracion_dias": 22,
+      "kc_inicio": 1.2,
+      "kc_fin": 0.35,
+      "kc_tipo": "interpolación lineal entre valores FAO-56",
+      "fuente": [
+        "ICTA_PROGRAMA_MAIZ",
+        "ICTA_MAIZ_ORIENTE_2015",
+        "FAO56"
+      ],
+      "confianza": "media-baja",
+      "tipo_dato": "derivado",
+      "supuesto_aplicado": "Ciclo precoz de 90 d (ICTA, página del programa; 3 meses en ICTA 2015); etapas con proporciones FAO-56 Tabla 11. Kc = proxy FAO-56.",
+      "supuesto_aplicado_en": "Early cycle of 90 d (ICTA programme page; 3 months in ICTA 2015); stages split with FAO-56 Table 11 proportions. Kc = FAO-56 proxy."
+    },
+    {
+      "cultivo": "maiz",
+      "variedad": "ICTA B-9",
+      "etapa_fao": "Inicial",
+      "duracion_dias": 20,
+      "kc_inicio": 0.3,
+      "kc_fin": 0.3,
+      "kc_tipo": "constante (FAO-56 Tabla 12)",
+      "fuente": [
+        "FAO56"
+      ],
+      "confianza": "baja",
+      "tipo_dato": "proxy FAO-56",
+      "supuesto_aplicado": "NO ENCONTRADO: ICTA no publica ciclo ni floración de esta variedad en las fuentes consultadas. Se usa la fila FAO-56 Tabla 11 maíz grano 125 d (20/35/40/30) como referencia provisional; no es una medición de ICTA.",
+      "supuesto_aplicado_en": "NOT FOUND: ICTA publishes no cycle length or flowering for this variety in the sources consulted. The FAO-56 Table 11 row for grain maize, 125 d (20/35/40/30) is used as a provisional reference; it is not an ICTA measurement."
+    },
+    {
+      "cultivo": "maiz",
+      "variedad": "ICTA B-9",
+      "etapa_fao": "Desarrollo",
+      "duracion_dias": 35,
+      "kc_inicio": 0.3,
+      "kc_fin": 1.2,
+      "kc_tipo": "interpolación lineal entre valores FAO-56",
+      "fuente": [
+        "FAO56"
+      ],
+      "confianza": "baja",
+      "tipo_dato": "proxy FAO-56",
+      "supuesto_aplicado": "NO ENCONTRADO: ICTA no publica ciclo ni floración de esta variedad en las fuentes consultadas. Se usa la fila FAO-56 Tabla 11 maíz grano 125 d (20/35/40/30) como referencia provisional; no es una medición de ICTA.",
+      "supuesto_aplicado_en": "NOT FOUND: ICTA publishes no cycle length or flowering for this variety in the sources consulted. The FAO-56 Table 11 row for grain maize, 125 d (20/35/40/30) is used as a provisional reference; it is not an ICTA measurement."
+    },
+    {
+      "cultivo": "maiz",
+      "variedad": "ICTA B-9",
+      "etapa_fao": "Media",
+      "duracion_dias": 40,
+      "kc_inicio": 1.2,
+      "kc_fin": 1.2,
+      "kc_tipo": "constante (FAO-56 Tabla 12)",
+      "fuente": [
+        "FAO56"
+      ],
+      "confianza": "baja",
+      "tipo_dato": "proxy FAO-56",
+      "supuesto_aplicado": "NO ENCONTRADO: ICTA no publica ciclo ni floración de esta variedad en las fuentes consultadas. Se usa la fila FAO-56 Tabla 11 maíz grano 125 d (20/35/40/30) como referencia provisional; no es una medición de ICTA.",
+      "supuesto_aplicado_en": "NOT FOUND: ICTA publishes no cycle length or flowering for this variety in the sources consulted. The FAO-56 Table 11 row for grain maize, 125 d (20/35/40/30) is used as a provisional reference; it is not an ICTA measurement."
+    },
+    {
+      "cultivo": "maiz",
+      "variedad": "ICTA B-9",
+      "etapa_fao": "Final",
+      "duracion_dias": 30,
+      "kc_inicio": 1.2,
+      "kc_fin": 0.35,
+      "kc_tipo": "interpolación lineal entre valores FAO-56",
+      "fuente": [
+        "FAO56"
+      ],
+      "confianza": "baja",
+      "tipo_dato": "proxy FAO-56",
+      "supuesto_aplicado": "NO ENCONTRADO: ICTA no publica ciclo ni floración de esta variedad en las fuentes consultadas. Se usa la fila FAO-56 Tabla 11 maíz grano 125 d (20/35/40/30) como referencia provisional; no es una medición de ICTA.",
+      "supuesto_aplicado_en": "NOT FOUND: ICTA publishes no cycle length or flowering for this variety in the sources consulted. The FAO-56 Table 11 row for grain maize, 125 d (20/35/40/30) is used as a provisional reference; it is not an ICTA measurement."
+    },
+    {
+      "cultivo": "maiz",
+      "variedad": "ICTA B-15",
+      "etapa_fao": "Inicial",
+      "duracion_dias": 20,
+      "kc_inicio": 0.3,
+      "kc_fin": 0.3,
+      "kc_tipo": "constante (FAO-56 Tabla 12)",
+      "fuente": [
+        "FAO56"
+      ],
+      "confianza": "baja",
+      "tipo_dato": "proxy FAO-56",
+      "supuesto_aplicado": "NO ENCONTRADO: ICTA no publica ciclo ni floración de esta variedad en las fuentes consultadas. Se usa la fila FAO-56 Tabla 11 maíz grano 125 d (20/35/40/30) como referencia provisional; no es una medición de ICTA.",
+      "supuesto_aplicado_en": "NOT FOUND: ICTA publishes no cycle length or flowering for this variety in the sources consulted. The FAO-56 Table 11 row for grain maize, 125 d (20/35/40/30) is used as a provisional reference; it is not an ICTA measurement."
+    },
+    {
+      "cultivo": "maiz",
+      "variedad": "ICTA B-15",
+      "etapa_fao": "Desarrollo",
+      "duracion_dias": 35,
+      "kc_inicio": 0.3,
+      "kc_fin": 1.2,
+      "kc_tipo": "interpolación lineal entre valores FAO-56",
+      "fuente": [
+        "FAO56"
+      ],
+      "confianza": "baja",
+      "tipo_dato": "proxy FAO-56",
+      "supuesto_aplicado": "NO ENCONTRADO: ICTA no publica ciclo ni floración de esta variedad en las fuentes consultadas. Se usa la fila FAO-56 Tabla 11 maíz grano 125 d (20/35/40/30) como referencia provisional; no es una medición de ICTA.",
+      "supuesto_aplicado_en": "NOT FOUND: ICTA publishes no cycle length or flowering for this variety in the sources consulted. The FAO-56 Table 11 row for grain maize, 125 d (20/35/40/30) is used as a provisional reference; it is not an ICTA measurement."
+    },
+    {
+      "cultivo": "maiz",
+      "variedad": "ICTA B-15",
+      "etapa_fao": "Media",
+      "duracion_dias": 40,
+      "kc_inicio": 1.2,
+      "kc_fin": 1.2,
+      "kc_tipo": "constante (FAO-56 Tabla 12)",
+      "fuente": [
+        "FAO56"
+      ],
+      "confianza": "baja",
+      "tipo_dato": "proxy FAO-56",
+      "supuesto_aplicado": "NO ENCONTRADO: ICTA no publica ciclo ni floración de esta variedad en las fuentes consultadas. Se usa la fila FAO-56 Tabla 11 maíz grano 125 d (20/35/40/30) como referencia provisional; no es una medición de ICTA.",
+      "supuesto_aplicado_en": "NOT FOUND: ICTA publishes no cycle length or flowering for this variety in the sources consulted. The FAO-56 Table 11 row for grain maize, 125 d (20/35/40/30) is used as a provisional reference; it is not an ICTA measurement."
+    },
+    {
+      "cultivo": "maiz",
+      "variedad": "ICTA B-15",
+      "etapa_fao": "Final",
+      "duracion_dias": 30,
+      "kc_inicio": 1.2,
+      "kc_fin": 0.35,
+      "kc_tipo": "interpolación lineal entre valores FAO-56",
+      "fuente": [
+        "FAO56"
+      ],
+      "confianza": "baja",
+      "tipo_dato": "proxy FAO-56",
+      "supuesto_aplicado": "NO ENCONTRADO: ICTA no publica ciclo ni floración de esta variedad en las fuentes consultadas. Se usa la fila FAO-56 Tabla 11 maíz grano 125 d (20/35/40/30) como referencia provisional; no es una medición de ICTA.",
+      "supuesto_aplicado_en": "NOT FOUND: ICTA publishes no cycle length or flowering for this variety in the sources consulted. The FAO-56 Table 11 row for grain maize, 125 d (20/35/40/30) is used as a provisional reference; it is not an ICTA measurement."
+    },
+    {
+      "cultivo": "frijol",
+      "variedad": "ICTA Ostúa",
+      "etapa_fao": "Inicial",
+      "duracion_dias": 15,
+      "kc_inicio": 0.4,
+      "kc_fin": 0.4,
+      "kc_tipo": "constante (FAO-56 Tabla 12)",
+      "fuente": [
+        "ICTA_FRIJOL_2011",
+        "FAO56"
+      ],
+      "confianza": "media",
+      "tipo_dato": "derivado",
+      "supuesto_aplicado": "Días a cosecha 70-75 (se usa 73) y a floración 38-40 (se usa 39), ICTA Cuadro 1. Inicial+Desarrollo = 39 d (se asume que el fin del desarrollo coincide con la floración) repartidos 15:25; Media+Final = 34 d repartidos 35:20 (proporciones FAO-56 Tabla 11, frijol seco). Kc = proxy FAO-56 Beans, dry.",
+      "supuesto_aplicado_en": "Days to harvest 70-75 (73 used) and to flowering 38-40 (39 used), ICTA Table 1. Initial+Development = 39 d (end of development assumed to coincide with flowering) split 15:25; Mid+Late = 34 d split 35:20 (FAO-56 Table 11 proportions, dry beans). Kc = FAO-56 Beans, dry proxy."
+    },
+    {
+      "cultivo": "frijol",
+      "variedad": "ICTA Ostúa",
+      "etapa_fao": "Desarrollo",
+      "duracion_dias": 24,
+      "kc_inicio": 0.4,
+      "kc_fin": 1.15,
+      "kc_tipo": "interpolación lineal entre valores FAO-56",
+      "fuente": [
+        "ICTA_FRIJOL_2011",
+        "FAO56"
+      ],
+      "confianza": "media",
+      "tipo_dato": "derivado",
+      "supuesto_aplicado": "Días a cosecha 70-75 (se usa 73) y a floración 38-40 (se usa 39), ICTA Cuadro 1. Inicial+Desarrollo = 39 d (se asume que el fin del desarrollo coincide con la floración) repartidos 15:25; Media+Final = 34 d repartidos 35:20 (proporciones FAO-56 Tabla 11, frijol seco). Kc = proxy FAO-56 Beans, dry.",
+      "supuesto_aplicado_en": "Days to harvest 70-75 (73 used) and to flowering 38-40 (39 used), ICTA Table 1. Initial+Development = 39 d (end of development assumed to coincide with flowering) split 15:25; Mid+Late = 34 d split 35:20 (FAO-56 Table 11 proportions, dry beans). Kc = FAO-56 Beans, dry proxy."
+    },
+    {
+      "cultivo": "frijol",
+      "variedad": "ICTA Ostúa",
+      "etapa_fao": "Media",
+      "duracion_dias": 22,
+      "kc_inicio": 1.15,
+      "kc_fin": 1.15,
+      "kc_tipo": "constante (FAO-56 Tabla 12)",
+      "fuente": [
+        "ICTA_FRIJOL_2011",
+        "FAO56"
+      ],
+      "confianza": "media",
+      "tipo_dato": "derivado",
+      "supuesto_aplicado": "Días a cosecha 70-75 (se usa 73) y a floración 38-40 (se usa 39), ICTA Cuadro 1. Inicial+Desarrollo = 39 d (se asume que el fin del desarrollo coincide con la floración) repartidos 15:25; Media+Final = 34 d repartidos 35:20 (proporciones FAO-56 Tabla 11, frijol seco). Kc = proxy FAO-56 Beans, dry.",
+      "supuesto_aplicado_en": "Days to harvest 70-75 (73 used) and to flowering 38-40 (39 used), ICTA Table 1. Initial+Development = 39 d (end of development assumed to coincide with flowering) split 15:25; Mid+Late = 34 d split 35:20 (FAO-56 Table 11 proportions, dry beans). Kc = FAO-56 Beans, dry proxy."
+    },
+    {
+      "cultivo": "frijol",
+      "variedad": "ICTA Ostúa",
+      "etapa_fao": "Final",
+      "duracion_dias": 12,
+      "kc_inicio": 1.15,
+      "kc_fin": 0.35,
+      "kc_tipo": "interpolación lineal entre valores FAO-56",
+      "fuente": [
+        "ICTA_FRIJOL_2011",
+        "FAO56"
+      ],
+      "confianza": "media",
+      "tipo_dato": "derivado",
+      "supuesto_aplicado": "Días a cosecha 70-75 (se usa 73) y a floración 38-40 (se usa 39), ICTA Cuadro 1. Inicial+Desarrollo = 39 d (se asume que el fin del desarrollo coincide con la floración) repartidos 15:25; Media+Final = 34 d repartidos 35:20 (proporciones FAO-56 Tabla 11, frijol seco). Kc = proxy FAO-56 Beans, dry.",
+      "supuesto_aplicado_en": "Days to harvest 70-75 (73 used) and to flowering 38-40 (39 used), ICTA Table 1. Initial+Development = 39 d (end of development assumed to coincide with flowering) split 15:25; Mid+Late = 34 d split 35:20 (FAO-56 Table 11 proportions, dry beans). Kc = FAO-56 Beans, dry proxy."
+    },
+    {
+      "cultivo": "frijol",
+      "variedad": "ICTA Santa Gertrudis",
+      "etapa_fao": "Inicial",
+      "duracion_dias": 15,
+      "kc_inicio": 0.4,
+      "kc_fin": 0.4,
+      "kc_tipo": "constante (FAO-56 Tabla 12)",
+      "fuente": [
+        "ICTA_FRIJOL_2011",
+        "FAO56"
+      ],
+      "confianza": "media",
+      "tipo_dato": "derivado",
+      "supuesto_aplicado": "Días a cosecha 70-75 (se usa 73) y a floración 38-40 (se usa 39), ICTA Cuadro 1. Inicial+Desarrollo = 39 d (se asume que el fin del desarrollo coincide con la floración) repartidos 15:25; Media+Final = 34 d repartidos 35:20 (proporciones FAO-56 Tabla 11, frijol seco). Kc = proxy FAO-56 Beans, dry.",
+      "supuesto_aplicado_en": "Days to harvest 70-75 (73 used) and to flowering 38-40 (39 used), ICTA Table 1. Initial+Development = 39 d (end of development assumed to coincide with flowering) split 15:25; Mid+Late = 34 d split 35:20 (FAO-56 Table 11 proportions, dry beans). Kc = FAO-56 Beans, dry proxy."
+    },
+    {
+      "cultivo": "frijol",
+      "variedad": "ICTA Santa Gertrudis",
+      "etapa_fao": "Desarrollo",
+      "duracion_dias": 24,
+      "kc_inicio": 0.4,
+      "kc_fin": 1.15,
+      "kc_tipo": "interpolación lineal entre valores FAO-56",
+      "fuente": [
+        "ICTA_FRIJOL_2011",
+        "FAO56"
+      ],
+      "confianza": "media",
+      "tipo_dato": "derivado",
+      "supuesto_aplicado": "Días a cosecha 70-75 (se usa 73) y a floración 38-40 (se usa 39), ICTA Cuadro 1. Inicial+Desarrollo = 39 d (se asume que el fin del desarrollo coincide con la floración) repartidos 15:25; Media+Final = 34 d repartidos 35:20 (proporciones FAO-56 Tabla 11, frijol seco). Kc = proxy FAO-56 Beans, dry.",
+      "supuesto_aplicado_en": "Days to harvest 70-75 (73 used) and to flowering 38-40 (39 used), ICTA Table 1. Initial+Development = 39 d (end of development assumed to coincide with flowering) split 15:25; Mid+Late = 34 d split 35:20 (FAO-56 Table 11 proportions, dry beans). Kc = FAO-56 Beans, dry proxy."
+    },
+    {
+      "cultivo": "frijol",
+      "variedad": "ICTA Santa Gertrudis",
+      "etapa_fao": "Media",
+      "duracion_dias": 22,
+      "kc_inicio": 1.15,
+      "kc_fin": 1.15,
+      "kc_tipo": "constante (FAO-56 Tabla 12)",
+      "fuente": [
+        "ICTA_FRIJOL_2011",
+        "FAO56"
+      ],
+      "confianza": "media",
+      "tipo_dato": "derivado",
+      "supuesto_aplicado": "Días a cosecha 70-75 (se usa 73) y a floración 38-40 (se usa 39), ICTA Cuadro 1. Inicial+Desarrollo = 39 d (se asume que el fin del desarrollo coincide con la floración) repartidos 15:25; Media+Final = 34 d repartidos 35:20 (proporciones FAO-56 Tabla 11, frijol seco). Kc = proxy FAO-56 Beans, dry.",
+      "supuesto_aplicado_en": "Days to harvest 70-75 (73 used) and to flowering 38-40 (39 used), ICTA Table 1. Initial+Development = 39 d (end of development assumed to coincide with flowering) split 15:25; Mid+Late = 34 d split 35:20 (FAO-56 Table 11 proportions, dry beans). Kc = FAO-56 Beans, dry proxy."
+    },
+    {
+      "cultivo": "frijol",
+      "variedad": "ICTA Santa Gertrudis",
+      "etapa_fao": "Final",
+      "duracion_dias": 12,
+      "kc_inicio": 1.15,
+      "kc_fin": 0.35,
+      "kc_tipo": "interpolación lineal entre valores FAO-56",
+      "fuente": [
+        "ICTA_FRIJOL_2011",
+        "FAO56"
+      ],
+      "confianza": "media",
+      "tipo_dato": "derivado",
+      "supuesto_aplicado": "Días a cosecha 70-75 (se usa 73) y a floración 38-40 (se usa 39), ICTA Cuadro 1. Inicial+Desarrollo = 39 d (se asume que el fin del desarrollo coincide con la floración) repartidos 15:25; Media+Final = 34 d repartidos 35:20 (proporciones FAO-56 Tabla 11, frijol seco). Kc = proxy FAO-56 Beans, dry.",
+      "supuesto_aplicado_en": "Days to harvest 70-75 (73 used) and to flowering 38-40 (39 used), ICTA Table 1. Initial+Development = 39 d (end of development assumed to coincide with flowering) split 15:25; Mid+Late = 34 d split 35:20 (FAO-56 Table 11 proportions, dry beans). Kc = FAO-56 Beans, dry proxy."
+    }
+  ],
+  "temperatura_siembra": {
+    "media_min_c": 22.0,
+    "media_max_c": 32.0,
+    "nota": "Regla sandbox del piloto; sin cita agronómica."
+  },
+  "inicio_lluvias": {
+    "metodo": "pentadas",
+    "pentada_dias": 5,
+    "acumulado_minimo_mm": 25.0,
+    "persistencia": {
+      "modo": "al_menos_una_de_las_siguientes",
+      "pentadas_siguientes": 2,
+      "modos_disponibles": [
+        "al_menos_una_de_las_siguientes",
+        "ambas_siguientes"
+      ]
+    },
+    "continuidad_minima_mm": 0.5,
+    "busqueda": {
+      "inicio_md": "04-01",
+      "fin_md": "07-31"
+    },
+    "dias_minimos_validos_por_pentada": 5,
+    "fuente_criterio": "MAGA_INFORME_6_2025",
+    "es_metodo_oficial_insivumeh": false,
+    "estado": "Escenario Sandbox - No usar para decisiones operativas",
+    "diferencias_respecto_al_oficial": [
+      "El criterio proviene de un informe de MAGA que usa datos de INSIVUMEH e ICC; no se localizó el procedimiento metodológico propio de INSIVUMEH.",
+      "La redacción 'las péntadas anteriores y posteriores presenten más de 0.5 mm' es ambigua: aquí se exige >0.5 mm en la pentada previa y en las dos siguientes.",
+      "Se aplica a precipitación satelital zonal, no a observaciones de estación."
+    ],
+    "retraso_adaptacion": {
+      "umbral_retraso_dias": 15
+    },
+    "diferencias_respecto_al_oficial_en": [
+      "The criterion comes from a MAGA report that uses INSIVUMEH and ICC data; INSIVUMEH's own methodological procedure was not located.",
+      "The wording 'the previous and following pentads must exceed 0.5 mm' is ambiguous: here >0.5 mm is required in the previous pentad and in the two following ones.",
+      "It is applied to zonal satellite precipitation, not to station observations."
+    ]
+  },
+  "estacion_local": {
+    "nombre": "INSIVUMEH - Estación Camotán",
+    "archivo_por_defecto": "data/estaciones/camotan_insivumeh.csv",
+    "columnas": [
+      "fecha",
+      "precipitacion_mm"
+    ],
+    "unidades": "mm/día (suma diaria), resolución temporal diaria",
+    "min_observaciones_nivel_b": 365,
+    "min_observaciones_correlacion": 30,
+    "estado_inicial": "Nivel C - Pendiente"
+  },
+  "climate_thresholds": {
+    "rainfall_first_15_days_min_mm": 20.0,
+    "rainfall_window_days": 15,
+    "canicula_daily_rain_below_mm": 1.0,
+    "canicula_max_consecutive_dry_days": 10,
+    "temperature_mean_min_c": 22.0,
+    "temperature_mean_max_c": 32.0
+  },
+  "climate_data": {
+    "daily_dataset": "curated/camotan_jocotan/daily.parquet",
+    "precipitation_column": "precip_mm",
+    "satellite_precipitation_column": "precip_imerg_mm",
+    "precipitation_method": "IMERG primary with POWER fallback as curated by R1",
+    "temperature_source": "NASA POWER daily",
+    "coverage_start": "2001-01-01",
+    "coverage_end": "2025-12-31",
+    "spatial_scope": "zonal estimate, not parcel-specific and not a weather forecast"
+  },
+  "fuentes": {
+    "FAO56": {
+      "titulo": "FAO Irrigation and Drainage Paper 56, cap. 6: Tabla 11 (duración de etapas) y Tabla 12 (Kc únicos)",
+      "institucion": "FAO",
+      "url": "https://www.fao.org/4/x0490e/x0490e0b.htm",
+      "consultado": "2026-11-16",
+      "nota": "Kc ini de maíz está en una imagen de la tabla: valor 0.30 de la tabla publicada, no leído por extracción de texto; verificar contra el original.",
+      "nota_en": "The maize Kc ini sits in an image of the table: the value 0.30 is the published table value, not read by text extraction; verify against the original."
+    },
+    "ICTA_MAIZ_ORIENTE_2015": {
+      "titulo": "Recomendaciones técnicas para el cultivo de maíz en el oriente de Guatemala (Chiquimula, El Progreso, Jalapa, Jutiapa, Santa Rosa, Zacapa; 100-1400 msnm)",
+      "institucion": "ICTA",
+      "fecha": "2015-12",
+      "url": "https://www.icta.gob.gt/publicaciones/Maiz/Recomendaciones%20tecnicas%20para%20el%20cultivo%20de%20maiz%20en%20el%20oriente%20de%20Guatemala%202015.pdf",
+      "consultado": "2026-11-16",
+      "nota": "Ciclo de ICTA B-5 (3 meses) e ICTA B-7 (4 meses) para lugares con escasez de lluvia; siembra a finales de mayo o inicios de junio.",
+      "nota_en": "Cycle of ICTA B-5 (3 months) and ICTA B-7 (4 months) for places with scarce rain; sow at the end of May or early June."
+    },
+    "ICTA_PROGRAMA_MAIZ": {
+      "titulo": "Programa de maíz: variedades ICTA B-1, B-5 (ciclo precoz 90 días), B-7TS (tolerante a sequía), B-9ACP, B-15ACP+Zn",
+      "institucion": "ICTA",
+      "url": "https://www.icta.gob.gt/programademaiz.html",
+      "consultado": "2026-11-16",
+      "nota": "La página no da días a floración ni madurez de ninguna variedad; B-9 y B-15 sin ciclo.",
+      "nota_en": "The page gives no days to flowering or maturity for any variety; B-9 and B-15 have no cycle."
+    },
+    "ICTA_FRIJOL_2011": {
+      "titulo": "Producción de frijol Phaseolus vulgaris L. (ICTA/FAO), Cuadro 1: características agronómicas de variedades mejoradas",
+      "institucion": "ICTA / FAO",
+      "fecha": "2011",
+      "url": "https://www.icta.gob.gt/publicaciones/Frijol/Produccion%20de%20Frijol%20Phaseolus%20vulgaris%20L%202011.pdf",
+      "consultado": "2026-11-16",
+      "nota": "Ostúa y Santa Gertrudis: días a floración 38-40, días a cosecha 70-75, adaptación 50-1200 msnm, recomendadas para Sur, Oriente y Norte. Leído de la imagen escaneada (p. 4).",
+      "nota_en": "Ostúa and Santa Gertrudis: days to flowering 38-40, days to harvest 70-75, adaptation 50-1200 masl, recommended for South, East and North. Read from the scanned image (p. 4)."
+    },
+    "ICTA_MEMORIA_2002": {
+      "titulo": "Memoria de labores 2002 (floración de ICTA B-7 = 53 d e ICTA B-5 = 48 d en ensayos)",
+      "institucion": "ICTA",
+      "fecha": "2002",
+      "url": "https://www.icta.gob.gt/publicaciones/Memoriasicta/Memoria%20de%20labores%202002.pdf",
+      "consultado": "2026-11-15",
+      "nota": "Valores registrados en una pasada previa (catalogs/r2/reference/web_sourced_crops.yaml); NO re-verificados en esta pasada (PDF escaneado de muchas páginas).",
+      "nota_en": "Values recorded in an earlier pass (catalogs/r2/reference/web_sourced_crops.yaml); NOT re-verified in this pass (multi-page scanned PDF)."
+    },
+    "MAGA_INFORME_6_2025": {
+      "titulo": "Informe No. 6 (8 de mayo de 2025): criterio de pentadas para establecer la temporada lluviosa, con datos de INSIVUMEH e ICC",
+      "institucion": "MAGA - DIGEGR / CIEA",
+      "fecha": "2025-05-08",
+      "url": "https://www.maga.gob.gt/download/informe6-25.pdf",
+      "consultado": "2026-11-16",
+      "nota": "Texto leído directamente. Es un criterio operativo de MAGA que usa datos INSIVUMEH/ICC (adaptado de Alfaro, Cid y Enfield, 1999); no es un documento metodológico de INSIVUMEH.",
+      "nota_en": "Text read directly. It is an operational MAGA criterion using INSIVUMEH/ICC data (adapted from Alfaro, Cid and Enfield, 1999); it is not a methodological document of INSIVUMEH."
+    },
+    "MAGA_EPOCAS": {
+      "titulo": "Épocas de siembra y cosecha de cultivos agrícolas de Guatemala",
+      "institucion": "MAGA",
+      "url": "https://www.maga.gob.gt/download/epocas-siembra-cosecha-agricolas-guatemala.pdf",
+      "consultado": "2026-11-15",
+      "nota": "Contexto nacional/regional; las fechas de Jocotán de este JSON son provisionales.",
+      "nota_en": "National/regional context; the Jocotán dates in this JSON are provisional."
+    },
+    "USUARIO_SANDBOX": {
+      "titulo": "Reglas y umbrales provisionales proporcionados por el equipo del proyecto",
+      "institucion": "MILPA RESILIENTE",
+      "url": null,
+      "consultado": "2026-11-16",
+      "nota": "Sin cita agronómica; requieren validación MAGA/ICTA.",
+      "nota_en": "No agronomic citation; requires MAGA/ICTA validation."
+    }
+  },
+  "supuestos_generales": [
+    "Los Kc son proxies FAO-56 (Tabla 12) para maíz grano y frijol seco; no hay Kc medido por variedad ICTA.",
+    "Los Kc de FAO-56 corresponden a clima subhúmedo (HRmin ≈ 45 %, u2 ≈ 2 m/s); no se aplicó ajuste climático porque POWER no entrega HRmin.",
+    "Las duraciones de etapas son derivadas con proporciones FAO-56 Tabla 11; deben calibrarse con observaciones locales.",
+    "Una fecha fuera de la ventana es una advertencia de compatibilidad con el calendario configurado, no una prohibición."
+  ],
+  "supuestos_generales_en": [
+    "The Kc values are FAO-56 (Table 12) proxies for grain maize and dry beans; there is no Kc measured for ICTA varieties.",
+    "FAO-56 Kc values correspond to a sub-humid climate (RHmin ≈ 45 %, u2 ≈ 2 m/s); no climate adjustment was applied because POWER does not provide RHmin.",
+    "Stage durations are derived with FAO-56 Table 11 proportions and must be calibrated with local observations.",
+    "A date outside the window is a compatibility notice against the configured calendar, not a prohibition."
+  ],
+  "estado_validacion_en": "Provisional - Pending official MAGA/ICTA validation"
+}

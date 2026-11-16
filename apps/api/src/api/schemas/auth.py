@@ -41,6 +41,9 @@ class TokenResponse(BaseModel):
     # `role`; ninguna especificación fija este DTO). Ver docs/integration/R4_FRONTEND_CONTRACT.md.
     expires_in: int = Field(ge=1, description="Segundos de vigencia del token")
     role: UserRole
+    demo: bool = Field(
+        default=False, description="True: sesión pública de demostración (alcance limitado)"
+    )
 
 
 class UserOut(BaseModel):

@@ -92,7 +92,7 @@ def run_summary_dto(run: ScenarioRunResult, strategies) -> dict[str, Any]:
     }
 
 
-def rank_response_dto(r: RankingResult, stab: StabilityResult, extra: dict) -> dict[str, Any]:
+def rank_response_dto(r: RankingResult, stab: StabilityResult, extra: dict[str, Any]) -> dict[str, Any]:
     rows = []
     for i, s in enumerate(r.order):
         cells = {}

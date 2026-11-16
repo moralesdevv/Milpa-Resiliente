@@ -8,6 +8,7 @@ SHA-256). Si el motor no está integrado el trabajo falla con ``DEPENDENCY_NOT_I
 from __future__ import annotations
 
 import io
+import json
 from datetime import UTC, date, datetime
 from typing import Any
 from uuid import UUID, uuid4
@@ -31,6 +32,23 @@ def zone_ingest(ctx: JobContext, payload: dict[str, Any]) -> dict[str, Any]:
     ports = load_ports()
     result = ports.ingest.ingest_zone(UUID(payload["zone_id"]))  # R1: DependencyNotIntegrated
     return {"v": 1, "ingest": dict(result)}
+
+
+def _soil_snapshot(session: Any, parcel_id: UUID) -> list[dict[str, Any]]:
+    """Estado por propiedad del suelo de la parcela, en JSON (la lectura respeta RLS)."""
+    from api.repositories.farms import SoilRepository
+
+    rows = SoilRepository(session).status_rows(parcel_id)
+    snapshot: list[dict[str, Any]] = json.loads(json.dumps(rows, default=_json_default))
+    return snapshot
+
+
+def _json_default(value: Any) -> Any:
+    if isinstance(value, date | datetime):
+        return value.isoformat()
+    if isinstance(value, UUID):
+        return str(value)
+    return float(value)  # Decimal
 
 
 def _results_path(run_id: UUID, scenario_id: str, adaptation: str) -> str:
@@ -76,9 +94,11 @@ def _persist_scenario(
 @register(JobKind.analysis_run)
 def analysis_run(ctx: JobContext, payload: dict[str, Any]) -> dict[str, Any]:
     ports = load_ports()
-    outcome = ports.engine.run_base_analysis(payload)
-    info = outcome["run"]
     session = ctx.uow.session
+    parcel_id = UUID(str(payload["parcel_id"])) if payload.get("parcel_id") else None
+    soil_rows = _soil_snapshot(session, parcel_id) if parcel_id else None
+    outcome = ports.engine.run_base_analysis({**payload, "soil": soil_rows})
+    info = outcome["run"]
     release_id = session.execute(
         text("SELECT catalog_release_id FROM ref.catalog_release WHERE catalog_hash = :h"),
         {"h": info["catalog_hash"]},
@@ -97,12 +117,14 @@ def analysis_run(ctx: JobContext, payload: dict[str, Any]) -> dict[str, Any]:
         "period": [str(period_start), str(period_end)],
         "sandbox": info["sandbox"],
     }
+    if soil_rows is not None:
+        params["soil"] = soil_rows  # instantánea: permite reconstruir la corrida en otro proceso
     run_id = uuid4()
     session.add(
         AnalysisRun(
             run_id=run_id,
             zone_id=UUID(str(payload["zone_id"])),
-            parcel_id=None,
+            parcel_id=parcel_id,
             period_start=period_start,
             period_end=period_end,
             mode=info["mode"],
@@ -122,7 +144,7 @@ def analysis_run(ctx: JobContext, payload: dict[str, Any]) -> dict[str, Any]:
     ref = RunRef(
         run_id,
         UUID(str(payload["zone_id"])),
-        None,
+        parcel_id,
         info["data_hash"],
         canonical_hash(params),
         info["region_config_hash"],
@@ -130,6 +152,7 @@ def analysis_run(ctx: JobContext, payload: dict[str, Any]) -> dict[str, Any]:
         int(payload["seed"]),
         period_start,
         period_end,
+        params,
     )
     n_rows = _persist_scenario(ctx, ref, "BASE", "none", info["code_version"])
     ctx.uow.commit()

@@ -1,5 +1,7 @@
 # Sistema de trabajos (BE-04)
 
+> **Actualización 2026-11-16:** los handlers `analysis_run`, `scenario_run` y `report` ya persisten resultados reales (ver `jobs/handlers/engine_jobs.py` y `reports.py`); `zone_ingest` sigue dependiendo de `ETL_INGEST_ENABLED`.
+
 `engine.job` (PostgreSQL) + `concurrent.futures.ProcessPoolExecutor` dentro del proceso `app`. Sin Redis/Celery/ARQ (ADR-007).
 
 ## Tipos, estados y campos

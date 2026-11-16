@@ -1,0 +1,44 @@
+{
+  "municipality": "Jocotán, Chiquimula, Guatemala",
+  "source": "ISRIC SoilGrids v2.0",
+  "endpoint": "https://rest.isric.org/soilgrids/v2.0/properties/query",
+  "depth": "0-5cm",
+  "statistic": "mean",
+  "status": "ok",
+  "status_detail": null,
+  "is_measured_soil": false,
+  "note": "Estimaciones espaciales del modelo SoilGrids a 250 m; no sustituyen un análisis de laboratorio ni describen cada parcela.",
+  "points_inside_polygon": 3,
+  "properties": {
+    "clay": {
+      "value": 33.26666666666667,
+      "unit": "%",
+      "valid_points": 3
+    },
+    "sand": {
+      "value": 35.43333333333334,
+      "unit": "%",
+      "valid_points": 3
+    },
+    "silt": {
+      "value": 31.233333333333334,
+      "unit": "%",
+      "valid_points": 3
+    },
+    "soc": {
+      "value": 35.26666666666667,
+      "unit": "g/kg",
+      "valid_points": 3
+    },
+    "phh2o": {
+      "value": 6.6000000000000005,
+      "unit": "pH",
+      "valid_points": 3
+    },
+    "bdod": {
+      "value": 1.3,
+      "unit": "kg/dm3",
+      "valid_points": 3
+    }
+  }
+}

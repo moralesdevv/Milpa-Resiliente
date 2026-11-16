@@ -3,35 +3,19 @@ import type { FormEvent } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useCreateReport, useJob, useReport, useRun } from "../api/queries";
+import { downloadReportPdf } from "../api/pdf-download";
+import type { PdfDownload } from "../api/pdf-download";
 import { useSession } from "../api/session";
 import type { components } from "../api/types.gen";
 import { Empty, ErrorState, InsufficientData, Loading } from "../components/common/states";
 import { RunHeader } from "../components/run/RunHeader";
+import { ReportSectionBlock } from "../components/report/ReportSection";
 import { QueryField, RunIdField, ScreenFrame, useSharedQueryParam } from "./ScreenFrame";
 import { Icon } from "../components/common/Icon";
 
 type Privacy = components["schemas"]["ReportCreate"]["privacy_level"];
 type Locale = components["schemas"]["ReportCreate"]["locale"];
-type Section = Record<string, unknown>; // secciones: forma definida por R2 (report_model)
-
 const reproducibilityFields = ["code_version", "region_config_hash", "catalog_hash", "data_hash", "params_hash"] as const;
-
-function text(section: Section, key: string): string | null {
-  const value = (section as Record<string, unknown>)[key];
-  return typeof value === "string" && value ? value : null;
-}
-
-function SectionBlock({ section, english, showBoth }: { section: Section; english: boolean; showBoth: boolean }) {
-  const { t } = useTranslation();
-  const title = (english ? text(section, "title_en") : text(section, "title_es")) ?? text(section, "title_es") ?? text(section, "title") ?? t("common.unknownShape");
-  const body = (english ? text(section, "body_en") : text(section, "body_es")) ?? text(section, "body_es");
-  const bodyEn = text(section, "body_en");
-  return <article className="report-section">
-    <h4>{title}</h4>
-    {body && <p>{body}</p>}
-    {showBoth && !english && bodyEn && <p lang="en" className="report-section__english">{bodyEn}</p>}
-  </article>;
-}
 
 export function ReportScreen() {
   const { t, i18n } = useTranslation();
@@ -42,6 +26,7 @@ export function ReportScreen() {
   const [reportId, setReportId] = useSharedQueryParam("reportId");
   const [privacy, setPrivacy] = useState<Privacy>("internal");
   const [locale, setLocale] = useState<Locale>("es+en");
+  const [pdf, setPdf] = useState<{ state: "idle" | "busy" | "error"; result?: PdfDownload; error?: unknown }>({ state: "idle" });
   const create = useCreateReport();
   const job = useJob(create.data?.job_id ?? null);
   const report = useReport(reportId || null);
@@ -64,6 +49,14 @@ export function ReportScreen() {
   const outlineMain = t("report.outlineMain", { returnObjects: true }) as unknown as string[];
   const outlineAnnex = t("report.outlineAnnex", { returnObjects: true }) as unknown as string[];
 
+  const downloadPdf = () => {
+    if (!report.data?.pdf_url) return;
+    setPdf({ state: "busy" });
+    downloadReportPdf(report.data.report_id, report.data.pdf_url, report.data.sha256 ?? null)
+      .then((result) => setPdf({ state: "idle", result }))
+      .catch((error: unknown) => setPdf({ state: "error", error }));
+  };
+
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!runId) return;
@@ -76,7 +69,9 @@ export function ReportScreen() {
       <form className="content-card report-controls" onSubmit={submit} aria-labelledby="report-controls-title">
         <div className="section-heading"><span className="section-icon" aria-hidden="true"><Icon name="document" /></span><h2 id="report-controls-title">{t("screens.report.template")}</h2></div>
         <RunIdField value={runId} onChange={setRunId} />
-        <QueryField id="ranking-id" label={t("report.rankingId")} value={rankingId} onChange={setRankingId} />
+        <details className="report-advanced"><summary>{t("report.advanced")}</summary>
+          <QueryField id="ranking-id" label={t("report.rankingId")} value={rankingId} onChange={setRankingId} />
+        </details>
         <label className="field"><span>{t("report.privacy")}</span>
           <select value={privacy} onChange={(event) => setPrivacy(event.currentTarget.value as Privacy)}>
             <option value="internal">{t("report.internal")}</option><option value="public">{t("report.public")}</option>
@@ -84,11 +79,11 @@ export function ReportScreen() {
         </label>
         <label className="field"><span>{t("report.locale")}</span>
           <select value={locale} onChange={(event) => setLocale(event.currentTarget.value as Locale)}>
-            <option value="es">{t("report.localeEs")}</option><option value="es+en">{t("report.localeEsEn")}</option>
+            <option value="es+en">{t("report.localeBoth")}</option>
+            <option value="es">{t("report.localeEs")}</option>
           </select>
         </label>
         <button className="button" type="submit" disabled={!runId || !session || generating}>{generating ? t("common.loading") : t("report.generate")}</button>
-        {!session && <p className="chart-caption">{t("report.signInToGenerate")}</p>}
         {create.isError && <ErrorState error={create.error} onRetry={() => create.reset()} />}
         {create.data && <p className="notice" role="status" data-testid="report-job-status">{t("report.jobStatus")}: {t(`jobs.${job.data?.status ?? "queued"}`)}{job.data?.progress != null && ` · ${Math.round(job.data.progress * 100)} %`}</p>}
         {job.data?.status === "failed" && <ErrorState error={job.data.error ?? null} />}
@@ -105,12 +100,12 @@ export function ReportScreen() {
           {reportData ? <>
             <section aria-label={t("report.summary")}>
               <h3>{t("report.summary")}</h3>
-              {reportData.sections.map((section, index) => <SectionBlock key={index} section={section} english={english} showBoth={reportData.locale === "es+en"} />)}
+              {reportData.sections.map((section, index) => <ReportSectionBlock key={index} section={section} english={english} fallbackTitle={t("common.unknownShape")} />)}
               {reportData.sections.length === 0 && <Empty title={t("common.notAvailable")} />}
             </section>
             <section aria-label={t("report.annex")}>
               <h3>{t("report.annex")}</h3>
-              {reportData.annex.map((section, index) => <SectionBlock key={index} section={section} english={english} showBoth={reportData.locale === "es+en"} />)}
+              {reportData.annex.map((section, index) => <ReportSectionBlock key={index} section={section} english={english} fallbackTitle={t("common.unknownShape")} />)}
               {reportData.annex.length === 0 && <Empty title={t("common.notAvailable")} />}
             </section>
             <section aria-label={t("report.humanDecisions")}>
@@ -136,9 +131,10 @@ export function ReportScreen() {
 
     <section className="content-card" aria-labelledby="existing-report-title">
       <div className="section-heading"><span className="section-icon" aria-hidden="true"><Icon name="source" /></span><h2 id="existing-report-title">{t("report.reportId")}</h2></div>
-      <div className="report-lookup">
+      <details className="report-lookup" open={Boolean(reportId)}>
+        <summary>{t("report.openExisting")}</summary>
         <QueryField id="report-id" label={t("report.reportId")} value={reportId} onChange={setReportId} />
-      </div>
+      </details>
       {report.isError && <ErrorState error={report.error} onRetry={() => void report.refetch()} />}
       {report.data && <article className="report-metadata" data-testid="report-metadata">
         <dl className="context-list">
@@ -147,7 +143,14 @@ export function ReportScreen() {
           <dt>{t("report.privacy")}</dt><dd>{t(report.data.privacy_level === "public" ? "report.public" : "report.internal")}</dd>
           <dt>{t("report.hash")}</dt><dd><code className="hash-value">{report.data.sha256}</code></dd>
         </dl>
-        {report.data.pdf_url && <a className="button" href={report.data.pdf_url} target="_blank" rel="noreferrer">{t("report.downloadPdf")}</a>}
+        {report.data.pdf_url
+          ? <button className="button" type="button" onClick={downloadPdf} disabled={pdf.state === "busy"} data-testid="download-pdf">{pdf.state === "busy" ? t("common.loading") : t("report.downloadPdf")}</button>
+          : <InsufficientData detail={t("report.pdfMissing")} />}
+        {pdf.state === "error" && <ErrorState error={pdf.error} onRetry={downloadPdf} />}
+        {pdf.result && <p className="notice" role="status" data-testid="pdf-result">
+          {t("report.pdfSaved", { name: pdf.result.filename, kb: Math.max(1, Math.round(pdf.result.bytes / 1024)) })}{" "}
+          {pdf.result.verified === true ? t("report.pdfVerified") : pdf.result.verified === false ? t("report.pdfMismatch") : t("report.pdfNotVerified")}
+        </p>}
       </article>}
       {!reportId && <InsufficientData detail={t("report.notGenerated")} />}
       <section className="reproducibility-card" aria-labelledby="run-hashes-title">

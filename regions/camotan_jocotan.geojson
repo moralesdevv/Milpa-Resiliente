@@ -1,0 +1,18 @@
+{
+  "type": "Feature",
+  "properties": {
+    "name": "camotan_jocotan",
+    "approximate": true,
+    "note": "Celda IMERG de 0,1° (lon -89.4 a -89.3, lat 14.8 a 14.9) que contiene los puntos de referencia públicos de Camotán (14.8203, -89.3733) y Jocotán (14.8194, -89.3903), Chiquimula. NO es el límite municipal ni un polígono de parcela: el polígono oficial sigue [Pendiente] (SEGEPLAN/INE). Sin coordenadas de parcelas."
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-89.4, 14.8],
+      [-89.3, 14.8],
+      [-89.3, 14.9],
+      [-89.4, 14.9],
+      [-89.4, 14.8]
+    ]]
+  }
+}

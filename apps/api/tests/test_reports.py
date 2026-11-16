@@ -1,7 +1,8 @@
 """Informes (BE-07): contrato de entrada, plantilla provisional, privacidad, SSRF y PDF.
 
-Las pruebas marcadas ``pdf`` requieren Pango (WeasyPrint). En el host Windows se OMITEN con motivo
-explícito y se ejecutan dentro de la imagen Docker (``make test-docker``).
+Aquí se prueba la plantilla HTML (Jinja2) y la ruta OPCIONAL HTML->PDF con WeasyPrint, que requiere Pango:
+sus pruebas ``needs_weasyprint`` se omiten con motivo explícito donde Pango no está instalado. El PDF
+principal del MVP (ReportLab, Python puro, sin Docker) se prueba en ``test_reports_pdf_reportlab.py``.
 """
 
 from __future__ import annotations
@@ -25,7 +26,7 @@ from api.reports.renderer import (
     render_html,
 )
 from api.security.privacy import find_sensitive
-from testkit.reports import H, make, needs_pdf, text_of
+from testkit.reports import H, make, needs_weasyprint, text_of
 
 
 # ----------------------------------------------------------------------- contrato de entrada
@@ -168,7 +169,7 @@ def test_fetch_guard_allows_data_uris_and_counts_them() -> None:
     assert g.denied == []
 
 
-@needs_pdf
+@needs_weasyprint
 def test_ssrf_attempts_in_html_are_blocked_and_pdf_still_renders() -> None:
     hostile = """<html><head>
       <link rel="stylesheet" href="http://169.254.169.254/latest/meta-data/iam">
@@ -186,7 +187,7 @@ def test_ssrf_attempts_in_html_are_blocked_and_pdf_still_renders() -> None:
 
 
 # ----------------------------------------------------------------------- PDF
-@needs_pdf
+@needs_weasyprint
 def test_pdf_is_generated_with_expected_structure_and_sha256() -> None:
     pdf = html_to_pdf(render_html(make()))
     assert pdf.startswith(b"%PDF-") and len(pdf) > 2000
@@ -204,7 +205,7 @@ def test_pdf_is_generated_with_expected_structure_and_sha256() -> None:
     assert len(PdfReader(BytesIO(pdf)).pages) >= 2  # página principal + anexo
 
 
-@needs_pdf
+@needs_weasyprint
 def test_pdf_generation_is_deterministic() -> None:
     a = html_to_pdf(render_html(make()))
     b = html_to_pdf(render_html(make()))
@@ -213,7 +214,7 @@ def test_pdf_generation_is_deterministic() -> None:
     assert hashlib.sha256(a).hexdigest() != hashlib.sha256(c).hexdigest()
 
 
-@needs_pdf
+@needs_weasyprint
 def test_public_pdf_text_has_no_personal_data_or_coordinates() -> None:
     internal_secret = "Persona Privada"
     pdf = html_to_pdf(render_html(make()))
@@ -242,7 +243,7 @@ def test_missing_native_libs_gives_actionable_error(monkeypatch: pytest.MonkeyPa
         html_to_pdf("<p>x</p>")
 
 
-@needs_pdf
+@needs_weasyprint
 def test_data_uri_images_still_render_inside_the_restricted_fetcher() -> None:
     png = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=="
     guard = FetchGuard()

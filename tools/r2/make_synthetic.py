@@ -5,6 +5,7 @@ seca (nov–abr). Los valores son inventados para pruebas: NO son datos de la zo
 
     python tools/make_synthetic.py --out data/demo/synthetic_daily.csv
 """
+
 from __future__ import annotations
 
 import argparse
@@ -23,7 +24,9 @@ def make(start="2021-01-01", end="2025-12-31", seed=42) -> pd.DataFrame:
     wet = np.zeros(len(d))
     wet += 0.55 * np.exp(-0.5 * ((doy - 160) / 18) ** 2)  # primera
     wet += 0.60 * np.exp(-0.5 * ((doy - 265) / 22) ** 2)  # postrera
-    wet += np.array([0.25 * (1 - can[y]) for y in yrs]) * np.exp(-0.5 * ((doy - 210) / 15) ** 2)  # canícula
+    wet += np.array([0.25 * (1 - can[y]) for y in yrs]) * np.exp(
+        -0.5 * ((doy - 210) / 15) ** 2
+    )  # canícula
     wet = np.clip(wet + 0.03, 0, 0.9)
     rainy = rng.uniform(size=len(d)) < wet
     p = np.where(rainy, rng.gamma(0.9, 12.0, size=len(d)), 0.0)
@@ -33,11 +36,24 @@ def make(start="2021-01-01", end="2025-12-31", seed=42) -> pd.DataFrame:
     rh = np.clip(55 + 35 * wet + rng.normal(0, 5, len(d)), 15, 99)
     wind = np.clip(2.2 - 0.8 * wet + rng.normal(0, 0.3, len(d)), 0.3, None)
     srad = np.clip(22 - 7 * wet + rng.normal(0, 1.5, len(d)), 5, 30)
-    df = pd.DataFrame({
-        "cell_id": "synthetic_0", "obs_date": d.date, "tmax_c": tmax, "tmin_c": tmin, "tmean_c": (tmax + tmin) / 2,
-        "tdew_c": tdew, "rh_pct": rh, "wind2m_ms": wind, "srad_mj_m2": srad, "precip_mm": p,
-        "precip_source": "SYNTHETIC", "ea_method": None, "et0_mm": np.nan, "qc_flags": 0,
-    })
+    df = pd.DataFrame(
+        {
+            "cell_id": "synthetic_0",
+            "obs_date": d.date,
+            "tmax_c": tmax,
+            "tmin_c": tmin,
+            "tmean_c": (tmax + tmin) / 2,
+            "tdew_c": tdew,
+            "rh_pct": rh,
+            "wind2m_ms": wind,
+            "srad_mj_m2": srad,
+            "precip_mm": p,
+            "precip_source": "SYNTHETIC",
+            "ea_method": None,
+            "et0_mm": np.nan,
+            "qc_flags": 0,
+        }
+    )
     return df
 
 

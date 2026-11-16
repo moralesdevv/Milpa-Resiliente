@@ -7,7 +7,7 @@ from __future__ import annotations
 import hashlib
 import json
 from dataclasses import dataclass, field, replace
-from typing import Mapping
+from typing import Mapping, Any
 
 import numpy as np
 
@@ -168,7 +168,7 @@ def build_strategy_criteria(ctx: RunContext, run: ScenarioRunResult, anchor_poli
 
 def rank(ctx: RunContext, run: ScenarioRunResult, weights: Mapping[Criterion, float] | None = None,
          cfg: RankingConfig | None = None, anchor_policy: str = "window_start", anchor_md: Mapping[str, str] | None = None,
-         ph_override: float | None = None) -> tuple[RankingResult, dict]:
+         ph_override: float | None = None) -> tuple[RankingResult, dict[str, Any]]:
     w = dict(weights or ctx.region.priorities_default)
     crit, elig, chosen = build_strategy_criteria(ctx, run, anchor_policy, anchor_md, ph_override)
     byc = {k: v.by_year_crit for k, v in chosen.items() if v is not None}
@@ -210,7 +210,7 @@ def run_grid(ctx: RunContext, scenarios: list[ScenarioDef], adaptations=(Adaptat
     return out, skipped
 
 
-def compare_to_base(base_rank: RankingResult, sc_rank: RankingResult, base_run: ScenarioRunResult, sc_run: ScenarioRunResult) -> dict:
+def compare_to_base(base_rank: RankingResult, sc_rank: RankingResult, base_run: ScenarioRunResult, sc_run: ScenarioRunResult) -> dict[str, Any]:
     inv = 0
     if base_rank.status is RankingStatus.OK and sc_rank.status is RankingStatus.OK:
         pos = {s: i for i, s in enumerate(sc_rank.order)}

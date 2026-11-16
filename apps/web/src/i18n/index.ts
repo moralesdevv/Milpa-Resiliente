@@ -4,9 +4,8 @@ import { initReactI18next } from "react-i18next";
 import en from "./en.json";
 import es from "./es.json";
 
-const language = typeof navigator !== "undefined" && navigator.language.toLowerCase().startsWith("en")
-  ? "en"
-  : "es";
+// The product is English-only (NASA Space Apps audience); Spanish resources remain for reference.
+const language = "en";
 
 void i18n.use(initReactI18next).init({
   resources: {
@@ -14,7 +13,7 @@ void i18n.use(initReactI18next).init({
     en: { translation: en },
   },
   lng: language,
-  fallbackLng: "es",
+  fallbackLng: "en",
   interpolation: { escapeValue: false },
   returnNull: false,
 });
@@ -22,7 +21,7 @@ void i18n.use(initReactI18next).init({
 if (typeof document !== "undefined") {
   document.documentElement.lang = language;
   i18n.on("languageChanged", (nextLanguage) => {
-    document.documentElement.lang = nextLanguage.split("-")[0] || "es";
+    document.documentElement.lang = nextLanguage.split("-")[0] || "en";
   });
 }
 

@@ -5,6 +5,8 @@ No predice rendimiento ni afirma el pH de la parcela.
 """
 from __future__ import annotations
 
+from typing import Any
+
 from dataclasses import dataclass, field
 from typing import Callable
 
@@ -39,7 +41,7 @@ class VoiResult:
     hypotheticals: tuple[Hypothetical, ...] | None = None
     range_citation: str | None = None
     evidence: Evidence | None = None
-    extra: dict = field(default_factory=dict)
+    extra: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         # outcome es nulo si y solo si applicability ≠ evaluable

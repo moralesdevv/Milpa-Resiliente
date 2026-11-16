@@ -6,7 +6,7 @@ from typing import Any
 from ..serialize import to_jsonable
 
 
-def build_report(summary: dict, rank: dict | None, voi: dict | None, scenarios: list[dict] | None,
+def build_report(summary: dict[str, Any], rank: dict[str, Any] | None, voi: dict[str, Any] | None, scenarios: list[dict[str, Any]] | None,
                  locale: str = "es") -> dict[str, Any]:
     sections = [
         {"id": "resumen", "title_es": "Resumen", "content": {
@@ -26,4 +26,5 @@ def build_report(summary: dict, rank: dict | None, voi: dict | None, scenarios: 
         {"id": "decisiones", "title_es": "Registro de decisiones del ranking", "content": (rank or {}).get("decision_log")},
         {"id": "modo", "title_es": "Por qué este modo de cálculo", "content": summary["mode_reasons"]},
     ]
-    return to_jsonable({"locale": locale, "sections": sections, "annex": annex})
+    result: dict[str, Any] = to_jsonable({"locale": locale, "sections": sections, "annex": annex})
+    return result

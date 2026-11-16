@@ -1,0 +1,46 @@
+{
+  "source": "Copernicus DEM GLO-30, archive supplied by project owner",
+  "archive": "data/dem/copernicus_glo30_jocotan.tar.gz",
+  "raster_path": "data/dem/copernicus_glo30_jocotan.tif",
+  "archive_sha256": "992660ddad25864dc505b4b1a0d50c31cf89c9dfb697719fe0b6412d40df06b1",
+  "raster_sha256": "0cbf2474a45f61aefe6fc592890e910b1c6a13810de0e484434e8e600c33851c",
+  "raster": {
+    "crs": "EPSG:4326",
+    "bounds": [
+      -89.50069445555555,
+      14.71847223333333,
+      -89.21486112222222,
+      14.906805566666662
+    ],
+    "resolution_degrees": [
+      0.0002777777777777778,
+      0.0002777777777777778
+    ],
+    "width": 1029,
+    "height": 678,
+    "nodata": null
+  },
+  "reference_samples": {
+    "jocotan_reference": {
+      "lon": -89.3903,
+      "lat": 14.8194,
+      "elevation_m": 444.7400817871094
+    },
+    "camotan_reference": {
+      "lon": -89.3733,
+      "lat": 14.8203,
+      "elevation_m": 452.6856689453125
+    }
+  },
+  "jocotan_zone_stats": {
+    "mean_m": 894.05,
+    "min_m": 244.5,
+    "max_m": 1679.1,
+    "slope_mean_pct": 42.87,
+    "pixels": 271508,
+    "geometry": "data/regions/jocotan.geojson",
+    "geometry_note": "municipal boundary; not a parcel geometry"
+  },
+  "method_note": "Pilot elevation uses the nearest raster pixel at the public Jocotan reference coordinate; calculate zonal mean from the selected parcel geometry for parcel-specific reports.",
+  "license_note": "Verify distribution terms before public redistribution."
+}

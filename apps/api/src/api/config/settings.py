@@ -46,6 +46,11 @@ class Settings(BaseSettings):
     rate_limit_per_min: int = Field(default=120, ge=1)  # valor operativo: [Pendiente]
     milpa_mode: Literal["sandbox", "production"] = "sandbox"
     demo_readonly: bool = False
+    # Acceso público de demostración (sin contraseña): emite un token de alcance limitado para una
+    # cuenta de demostración sin credenciales utilizables. Desactivado por defecto.
+    demo_public_access: bool = False
+    demo_user_email: str = "demo@milpa.local"
+    demo_ttl_minutes: int = Field(default=120, ge=5, le=720)
 
     # --- Extensiones de R3 (documentadas en ADR) -------------------------------------------
     migration_database_url: str | None = None  # rol propietario; solo Alembic/entrypoint
@@ -68,6 +73,12 @@ class Settings(BaseSettings):
     core_region_path: Path = Path("./regions/r2/pilot_corredor_seco.yaml")
     core_strategies_path: Path = Path("./regions/r2/pilot_corredor_seco.strategies.yaml")
     core_catalogs_dir: Path = Path("./catalogs/r2")
+    planting_rules_path: Path = Path("./regions/reglas_agronomicas_jocotan.json")
+    # CSV real de la estación Camotán (INSIVUMEH). Si no existe, la validación local queda en «Nivel C - Pendiente».
+    station_csv_path: Path = Path("./data/estaciones/camotan_insivumeh.csv")
+    # Límite municipal del piloto (GeoJSON, EPSG:4326). Si se define, el servidor rechaza parcelas cuya
+    # ubicación quede fuera de él, además de exigir que esté dentro de la zona (ADR-022). Vacío = sin regla.
+    municipal_boundary_file: Path | None = None
     log_level: str = "INFO"
     web_dist_dir: Path = Path(
         "./apps/web/dist"
@@ -83,6 +94,12 @@ class Settings(BaseSettings):
         if not v.startswith("postgresql+psycopg://"):
             raise ValueError("DATABASE_URL debe ser postgresql+psycopg:// (ADR-002)")
         return v
+
+    @field_validator("municipal_boundary_file", mode="before")
+    @classmethod
+    def _blank_boundary_is_unset(cls, v: object) -> object:
+        """Una variable vacía (p. ej. ``${X:-}`` de docker-compose) significa «sin regla», no ``Path('.')``."""
+        return None if isinstance(v, str) and not v.strip() else v
 
     @field_validator("cors_origins", mode="before")
     @classmethod

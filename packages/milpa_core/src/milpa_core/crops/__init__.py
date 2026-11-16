@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Mapping
+from typing import Mapping, Any
 
 import numpy as np
 
@@ -83,7 +83,7 @@ class Variety:
     def kc_cited(self) -> bool:
         return all(s.cited for s in self.stages)
 
-    def stage_signature(self) -> tuple:
+    def stage_signature(self) -> tuple[Any, ...]:
         return tuple((s.code, s.length_days, s.gdd_end) for s in self.stages)
 
 
@@ -196,7 +196,7 @@ def _stage_lengths_from_gdd(v: Variety, tmean_from_plant: np.ndarray) -> list[in
         if k > gdd.size:
             return None
         bounds.append(max(k, bounds[-1] + 1))
-    return [b - a for a, b in zip(bounds[:-1], bounds[1:])]
+    return [b - a for a, b in zip(bounds[:-1], bounds[1:], strict=False)]
 
 
 def build_calendar(v: Variety, plant_date: np.datetime64, tmean_from_plant: np.ndarray | None = None) -> Calendar | None:
@@ -213,9 +213,9 @@ def build_calendar(v: Variety, plant_date: np.datetime64, tmean_from_plant: np.n
     stage_idx = np.concatenate([np.full(n, i) for i, n in enumerate(lengths)])
     kc = np.concatenate([
         np.full(n, s.kc_start) if n == 1 else s.kc_start + (s.kc_end - s.kc_start) * np.arange(n) / n
-        for s, n in zip(v.stages, lengths)
+        for s, n in zip(v.stages, lengths, strict=False)
     ])
-    crit = np.concatenate([np.full(n, s.critical) for s, n in zip(v.stages, lengths)])
+    crit = np.concatenate([np.full(n, s.critical) for s, n in zip(v.stages, lengths, strict=False)])
     n_total = int(sum(lengths))
     for a in (stage_idx, kc, crit):
         a.setflags(write=False)

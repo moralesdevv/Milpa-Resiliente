@@ -1,0 +1,207 @@
+{
+  "IMERG_vs_POWER": {
+    "n_days_compared": 9039,
+    "note": "IMERG y POWER son productos de grilla gruesa; coincidir entre ellos NO es validar en la zona (eso requiere una estación)",
+    "corr_daily": 0.257,
+    "bias_mm_day_imerg_minus_power": 0.163,
+    "ratio_total_imerg_over_power": 1.039,
+    "wet_day_freq_ge_1mm": {
+      "imerg": 0.344,
+      "power": 0.563
+    },
+    "corr_dekad_sum": 0.511,
+    "annual_totals_mm": {
+      "2001": {
+        "imerg": 1324.8,
+        "power": 1123.8,
+        "ratio": 1.179
+      },
+      "2002": {
+        "imerg": 1363.2,
+        "power": 1159.9,
+        "ratio": 1.175
+      },
+      "2003": {
+        "imerg": 1454.4,
+        "power": 1108.6,
+        "ratio": 1.312
+      },
+      "2004": {
+        "imerg": 1416.0,
+        "power": 944.5,
+        "ratio": 1.499
+      },
+      "2005": {
+        "imerg": 1737.6,
+        "power": 1074.1,
+        "ratio": 1.618
+      },
+      "2006": {
+        "imerg": 1672.8,
+        "power": 1479.5,
+        "ratio": 1.131
+      },
+      "2007": {
+        "imerg": 1548.0,
+        "power": 1592.8,
+        "ratio": 0.972
+      },
+      "2008": {
+        "imerg": 1888.8,
+        "power": 1885.9,
+        "ratio": 1.002
+      },
+      "2009": {
+        "imerg": 1593.6,
+        "power": 1354.8,
+        "ratio": 1.176
+      },
+      "2010": {
+        "imerg": 1843.2,
+        "power": 1512.4,
+        "ratio": 1.219
+      },
+      "2011": {
+        "imerg": 2126.4,
+        "power": 1764.0,
+        "ratio": 1.205
+      },
+      "2012": {
+        "imerg": 1617.6,
+        "power": 1519.1,
+        "ratio": 1.065
+      },
+      "2013": {
+        "imerg": 1528.8,
+        "power": 1513.9,
+        "ratio": 1.01
+      },
+      "2014": {
+        "imerg": 1610.4,
+        "power": 1800.7,
+        "ratio": 0.894
+      },
+      "2015": {
+        "imerg": 1351.2,
+        "power": 1522.0,
+        "ratio": 0.888
+      },
+      "2016": {
+        "imerg": 1185.6,
+        "power": 1345.1,
+        "ratio": 0.881
+      },
+      "2017": {
+        "imerg": 1896.0,
+        "power": 1613.8,
+        "ratio": 1.175
+      },
+      "2018": {
+        "imerg": 1123.2,
+        "power": 1182.8,
+        "ratio": 0.95
+      },
+      "2019": {
+        "imerg": 1516.8,
+        "power": 1367.2,
+        "ratio": 1.109
+      },
+      "2020": {
+        "imerg": 1996.8,
+        "power": 1908.8,
+        "ratio": 1.046
+      },
+      "2021": {
+        "imerg": 1176.0,
+        "power": 2178.6,
+        "ratio": 0.54
+      },
+      "2022": {
+        "imerg": 1924.8,
+        "power": 2931.3,
+        "ratio": 0.657
+      },
+      "2023": {
+        "imerg": 1267.2,
+        "power": 1662.3,
+        "ratio": 0.762
+      },
+      "2024": {
+        "imerg": 1579.2,
+        "power": 1518.1,
+        "ratio": 1.04
+      }
+    },
+    "monthly_bias_mm_day": {
+      "1": -2.211,
+      "2": -1.17,
+      "3": -1.827,
+      "4": 0.229,
+      "5": -0.062,
+      "6": 2.769,
+      "7": 2.488,
+      "8": 1.439,
+      "9": 2.449,
+      "10": 0.658,
+      "11": -1.126,
+      "12": -1.79
+    }
+  },
+  "POWER_spikes": {
+    "definicion": "POWER >= 100 mm y IMERG < 10 mm el mismo día (umbrales de diagnóstico, no de QC)",
+    "n_days": 9,
+    "top": [
+      {
+        "date": "2024-03-20",
+        "power_mm": 384.4,
+        "imerg_mm": 0.0
+      },
+      {
+        "date": "2023-01-09",
+        "power_mm": 345.1,
+        "imerg_mm": 0.0
+      },
+      {
+        "date": "2022-05-06",
+        "power_mm": 333.4,
+        "imerg_mm": 0.0
+      },
+      {
+        "date": "2022-03-06",
+        "power_mm": 263.2,
+        "imerg_mm": 0.0
+      },
+      {
+        "date": "2021-05-28",
+        "power_mm": 245.6,
+        "imerg_mm": 7.2
+      },
+      {
+        "date": "2021-05-27",
+        "power_mm": 202.6,
+        "imerg_mm": 0.0
+      },
+      {
+        "date": "2022-03-05",
+        "power_mm": 178.3,
+        "imerg_mm": 0.0
+      },
+      {
+        "date": "2022-05-05",
+        "power_mm": 123.3,
+        "imerg_mm": 2.4
+      },
+      {
+        "date": "2023-01-08",
+        "power_mm": 119.9,
+        "imerg_mm": 0.0
+      }
+    ],
+    "power_mm_en_esos_dias_por_anio": {
+      "2021": 448.2,
+      "2022": 898.1,
+      "2023": 465.0,
+      "2024": 384.4
+    }
+  }
+}

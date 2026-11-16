@@ -29,6 +29,26 @@ def login(body: LoginRequest, uow: UowDep, settings: SettingsDep) -> TokenRespon
     )
 
 
+@router.post(
+    "/demo-session",
+    response_model=TokenResponse,
+    summary="Sesión pública de demostración",
+    description="Sin credenciales. Solo si el servidor habilita `DEMO_PUBLIC_ACCESS`. El token es de una "
+    "cuenta sin parcelas ni contraseña utilizable y su alcance está limitado a lectura de resultados y a "
+    "crear corridas de zona, escenarios, rankings e informes (todo lo demás responde 403).",
+    responses=error_responses(404, 429, 503),
+)
+def demo_session(uow: UowDep, settings: SettingsDep) -> TokenResponse:
+    result = AuthService(uow, settings).demo_session()
+    return TokenResponse(
+        access_token=result.token,
+        expires_at=result.expires_at,
+        expires_in=settings.demo_ttl_minutes * 60,
+        role=result.role,
+        demo=True,
+    )
+
+
 @router.get(
     "/me",
     response_model=UserOut,

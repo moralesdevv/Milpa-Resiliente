@@ -1,7 +1,28 @@
 # Despliegue y entorno (BE-09)
 
+> **Actualización 2026-11-16:** variables nuevas: `DEMO_PUBLIC_ACCESS` (sesión pública de demo, por defecto `false`; si `true` el entrypoint crea la cuenta sin contraseña con `create-demo-user`), `DEMO_USER_EMAIL`, `DEMO_TTL_MINUTES`, `CORE_REGION_PATH`, `CORE_STRATEGIES_PATH`, `CORE_CATALOGS_DIR`. El entrypoint ejecuta `register-engine` tras las migraciones. La imagen incluye `milpa-core` (construcción aún sin verificar en este equipo).
+
 ## Requisitos
-Docker + Docker Compose v2. Para desarrollo local sin Docker: Python 3.12 + `uv` + un PostgreSQL 16/PostGIS (ver §3). Windows nativo **no** puede generar PDF (WeasyPrint necesita Pango): use la imagen.
+Docker + Docker Compose v2. Para desarrollo local sin Docker: Python 3.12 + `uv` + un PostgreSQL 16/PostGIS (ver §3). El PDF se genera con ReportLab (Python puro, ADR-021): **no** requiere Docker ni Pango, tampoco en Windows nativo. PostgreSQL 16 + PostGIS sí es requisito (la API lo necesita; no es el PDF). `scripts/start_local.ps1` usa `DATABASE_URL` si está definida; solo si falta intenta el contenedor de desarrollo.
+
+## 0. Publicar la demo como sitio web (hackatón)
+Un solo contenedor sirve la API **y** la SPA (`/`), más PostgreSQL/PostGIS. Pasos:
+```bash
+cp .env.example .env
+#   POSTGRES_PASSWORD, APP_DB_PASSWORD (distintas), JWT_SECRET (>= 32 caracteres, python -c "import secrets; print(secrets.token_urlsafe(48))")
+#   DEMO_PUBLIC_ACCESS=true     # LAUNCH DEMO entra sin login (alcance limitado, ADR-019)
+#   MILPA_MODE=sandbox          # los parámetros agronómicos siguen provisionales (evidencia C)
+#   CORS_ORIGINS=https://su-dominio     # si el front se sirve desde otro origen
+docker compose up --build -d
+```
+Al primer arranque, con `DEMO_PUBLIC_ACCESS=true` (o `BOOTSTRAP_DEMO=true`), `entrypoint.sh` migra, registra el catálogo del motor y la
+cuenta demo, y ejecuta `infra/scripts/bootstrap-demo.sh` (idempotente): copia los datos **reales** ya curados de `camotan_jocotan`
+(NASA POWER + GPM IMERG), registra manifiesto, zona, procedencia y elevación/pendiente del DEM Copernicus GLO-30. No descarga nada.
+- Cualquier PaaS con Docker + PostgreSQL con PostGIS (Render, Railway, Fly.io…) sirve: construya `infra/Dockerfile.app` (destino `runtime`),
+  defina las mismas variables (`DATABASE_URL` del rol sin privilegios, `MIGRATION_DATABASE_URL` del propietario solo para el arranque) y exponga el puerto 8000. Compruebe `/healthz`.
+- El token **EARTHDATA_TOKEN no es necesario** para la demo (los datos IMERG ya están curados y no se redistribuyen en bruto); las ingestas nuevas sí lo necesitan.
+- Las teselas del mapa vienen de CARTO (datos de OpenStreetMap, con atribución); para otro proveedor defina `VITE_MAP_TILE_URL`/`VITE_MAP_ATTRIBUTION` al construir.
+- Estado de verificación: ver `docs/FINAL_PROJECT_AUDIT.md` (la construcción de la imagen se anota ahí con su resultado real).
 
 ## 1. Arranque con Compose (dos servicios: `db`, `app`)
 ```bash

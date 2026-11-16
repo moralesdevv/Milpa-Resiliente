@@ -22,15 +22,14 @@ Página principal (zona, resumen es / es+en, secciones) · Anexo técnico (`run_
 
 ## Cómo generar un PDF de prueba
 ```bash
-# Necesita Pango: dentro de la imagen
-docker build -f infra/Dockerfile.app --target test -t milpa-app:test .
-docker run --rm -v "$PWD/out:/out" milpa-app:test python -m api.cli report-sample --out /out/sample.pdf
+# ReportLab (ADR-021): sin Docker ni Pango, también en Windows
+python -m api.cli report-sample --out data/results/sample_report.pdf
 # (imprime ruta, tamaño y sha256; datos sintéticos, plantilla provisional)
 ```
-`make report` hace lo mismo en un host con Pango. En Windows nativo WeasyPrint no carga (falta `libgobject`): el error es explícito («ejecute dentro de la imagen Docker»).
+`make report` hace lo mismo. WeasyPrint (ruta HTML) es un extra opcional (`html-pdf`) y sí necesita Pango.
 
 ## Pruebas
-`apps/api/tests/test_reports.py` (contrato, plantilla, privacidad, SSRF, PDF, determinismo) y `tests/integration/test_reports_pdf.py` (BD real: hash registrado, descarga verificada, manipulación ⇒ 500, acceso por pertenencia). Las pruebas `pdf` requieren Pango: se omiten en el host y se ejecutan en `make test-docker`.
+`apps/api/tests/test_reports.py` (contrato, plantilla, privacidad, SSRF, PDF, determinismo) y `tests/integration/test_reports_pdf.py` (BD real: hash registrado, descarga verificada, manipulación ⇒ 500, acceso por pertenencia). Las pruebas del PDF de ReportLab (`test_reports_pdf_reportlab.py`, `test_report_from_engine.py`) corren en cualquier host; solo las de la ruta HTML opcional (marca `pdf`) requieren Pango y se omiten con motivo.
 
 ## Para integrar la plantilla de R4 y el modelo de R2
 Añadir `ReportModel → ReportInput` (o sustituir el contrato por ADR), subir `TEMPLATE_VERSION`, mantener `FetchGuard`, el filtro público y las pruebas; actualizar `INTEGRATION_STATUS.md`.

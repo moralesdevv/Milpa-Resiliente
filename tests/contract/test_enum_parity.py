@@ -149,3 +149,25 @@ def test_typescript_parity_requires_r4_generated_types() -> None:
     text_ = ts.read_text(encoding="utf-8")
     for member in [m.value for m in JobStatus] + [m.value for m in UserRole]:
         assert f'"{member}"' in text_, member
+
+
+# --- R2 (milpa_core) <-> SQL ---------------------------------------------------------------------
+R2_TO_SQL_NAME = {"adaptation_mode_t": "adaptation_t", "humidity_assumption_t": "humidity_t"}
+
+
+def test_milpa_core_enums_equal_the_database_enum_types(admin_engine: Engine) -> None:
+    """Cada tipo ENUM de milpa_core que existe en la base tiene los mismos valores y el mismo orden."""
+    milpa_enums = pytest.importorskip("milpa_core.enums")
+    declared = re.findall(r"CREATE TYPE (\w+) AS ENUM \((.*?)\);", milpa_enums.export_sql())
+    assert declared, "milpa_core no exportó tipos"
+    compared = 0
+    for name, body in declared:
+        values = re.findall(r"'([^']*)'", body)
+        sql_values = sql_enum_values(admin_engine, R2_TO_SQL_NAME.get(name, name))
+        if (
+            not sql_values
+        ):  # tipo sin ENUM en la base (se guarda como texto con CHECK o no se persiste)
+            continue
+        assert sql_values == values, name
+        compared += 1
+    assert compared >= 14  # los tipos persistidos como ENUM de PostgreSQL

@@ -1,6 +1,49 @@
 {
   "components": {
     "schemas": {
+      "AdaptationDelayOut": {
+        "properties": {
+          "advertencias": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Advertencias",
+            "type": "array"
+          },
+          "conclusion": {
+            "title": "Conclusion",
+            "type": "string"
+          },
+          "dias_diferencia": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dias Diferencia"
+          },
+          "mensaje": {
+            "title": "Mensaje",
+            "type": "string"
+          },
+          "nota": {
+            "title": "Nota",
+            "type": "string"
+          }
+        },
+        "required": [
+          "dias_diferencia",
+          "advertencias",
+          "conclusion",
+          "mensaje",
+          "nota"
+        ],
+        "title": "AdaptationDelayOut",
+        "type": "object"
+      },
       "AdaptationMode": {
         "enum": [
           "none",
@@ -8,6 +51,53 @@
         ],
         "title": "AdaptationMode",
         "type": "string"
+      },
+      "AgriContextOut": {
+        "description": "Cultivos, temporadas y decisiones pendientes del region pack (sin definir nada nuevo).",
+        "properties": {
+          "crops": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Crops",
+            "type": "array"
+          },
+          "pending": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Pending",
+            "type": "array"
+          },
+          "region": {
+            "title": "Region",
+            "type": "string"
+          },
+          "seasons": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Seasons",
+            "type": "array"
+          },
+          "source": {
+            "title": "Source",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "region",
+          "source"
+        ],
+        "title": "AgriContextOut",
+        "type": "object"
       },
       "CellState": {
         "enum": [
@@ -1706,6 +1796,59 @@
         "x-contract-status": "pending_r2",
         "x-source": "references/R4/contracts/openapi.v0.draft.yaml (borrador local de R4 derivado del README §15)"
       },
+      "PentadOut": {
+        "properties": {
+          "completa": {
+            "title": "Completa",
+            "type": "boolean"
+          },
+          "dias_totales": {
+            "title": "Dias Totales",
+            "type": "integer"
+          },
+          "dias_validos": {
+            "title": "Dias Validos",
+            "type": "integer"
+          },
+          "fin": {
+            "format": "date",
+            "title": "Fin",
+            "type": "string"
+          },
+          "inicio": {
+            "format": "date",
+            "title": "Inicio",
+            "type": "string"
+          },
+          "pentada": {
+            "title": "Pentada",
+            "type": "integer"
+          },
+          "precipitacion_mm": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "null si algún día de la pentada no tiene dato (nunca se rellena con cero)",
+            "title": "Precipitacion Mm"
+          }
+        },
+        "required": [
+          "pentada",
+          "inicio",
+          "fin",
+          "precipitacion_mm",
+          "dias_validos",
+          "dias_totales",
+          "completa"
+        ],
+        "title": "PentadOut",
+        "type": "object"
+      },
       "Period": {
         "additionalProperties": false,
         "properties": {
@@ -1756,6 +1899,424 @@
           "end"
         ],
         "title": "PeriodOut",
+        "type": "object"
+      },
+      "PlantingOptionCrop": {
+        "properties": {
+          "clave": {
+            "title": "Clave",
+            "type": "string"
+          },
+          "nombre": {
+            "title": "Nombre",
+            "type": "string"
+          },
+          "variedades": {
+            "items": {
+              "$ref": "#/components/schemas/PlantingOptionVariety"
+            },
+            "title": "Variedades",
+            "type": "array"
+          }
+        },
+        "required": [
+          "clave",
+          "nombre",
+          "variedades"
+        ],
+        "title": "PlantingOptionCrop",
+        "type": "object"
+      },
+      "PlantingOptionCycle": {
+        "properties": {
+          "ciclo": {
+            "title": "Ciclo",
+            "type": "string"
+          },
+          "estado": {
+            "title": "Estado",
+            "type": "string"
+          },
+          "fin": {
+            "description": "MM-DD",
+            "title": "Fin",
+            "type": "string"
+          },
+          "inicio": {
+            "description": "MM-DD",
+            "title": "Inicio",
+            "type": "string"
+          }
+        },
+        "required": [
+          "ciclo",
+          "inicio",
+          "fin",
+          "estado"
+        ],
+        "title": "PlantingOptionCycle",
+        "type": "object"
+      },
+      "PlantingOptionVariety": {
+        "properties": {
+          "ciclo_total_dias": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ciclo Total Dias"
+          },
+          "confianza": {
+            "title": "Confianza",
+            "type": "string"
+          },
+          "nombre": {
+            "title": "Nombre",
+            "type": "string"
+          },
+          "tipo_dato": {
+            "title": "Tipo Dato",
+            "type": "string"
+          },
+          "tolerante_sequia": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tolerante Sequia"
+          }
+        },
+        "required": [
+          "nombre",
+          "ciclo_total_dias",
+          "tipo_dato",
+          "confianza",
+          "tolerante_sequia"
+        ],
+        "title": "PlantingOptionVariety",
+        "type": "object"
+      },
+      "PlantingOptionsResponse": {
+        "description": "Opciones del formulario de siembra: salen del JSON de reglas, no del código del frontend.",
+        "properties": {
+          "aviso": {
+            "title": "Aviso",
+            "type": "string"
+          },
+          "ciclos": {
+            "items": {
+              "$ref": "#/components/schemas/PlantingOptionCycle"
+            },
+            "title": "Ciclos",
+            "type": "array"
+          },
+          "cultivos": {
+            "items": {
+              "$ref": "#/components/schemas/PlantingOptionCrop"
+            },
+            "title": "Cultivos",
+            "type": "array"
+          },
+          "estado_validacion": {
+            "title": "Estado Validacion",
+            "type": "string"
+          }
+        },
+        "required": [
+          "cultivos",
+          "ciclos",
+          "estado_validacion",
+          "aviso"
+        ],
+        "title": "PlantingOptionsResponse",
+        "type": "object"
+      },
+      "PlantingValidationRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "ciclo": {
+            "anyOf": [
+              {
+                "maxLength": 20,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "primera | postrera; si falta se infiere de la fecha",
+            "title": "Ciclo"
+          },
+          "cultivo": {
+            "default": "maiz",
+            "maxLength": 40,
+            "minLength": 1,
+            "title": "Cultivo",
+            "type": "string"
+          },
+          "dias_secos_recientes": {
+            "anyOf": [
+              {
+                "maximum": 366.0,
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Días secos consecutivos recientes (dato del usuario)",
+            "title": "Dias Secos Recientes"
+          },
+          "fecha_siembra": {
+            "format": "date",
+            "title": "Fecha Siembra",
+            "type": "string"
+          },
+          "idioma": {
+            "default": "es",
+            "enum": [
+              "es",
+              "en"
+            ],
+            "title": "Idioma",
+            "type": "string"
+          },
+          "lluvia_15_dias_mm": {
+            "anyOf": [
+              {
+                "maximum": 2000.0,
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Lluvia acumulada en 15 días (dato del usuario)",
+            "title": "Lluvia 15 Dias Mm"
+          },
+          "variedad": {
+            "maxLength": 80,
+            "minLength": 1,
+            "title": "Variedad",
+            "type": "string"
+          }
+        },
+        "required": [
+          "fecha_siembra",
+          "variedad"
+        ],
+        "title": "PlantingValidationRequest",
+        "type": "object"
+      },
+      "PlantingValidationResponse": {
+        "properties": {
+          "advertencias": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Advertencias",
+            "type": "array"
+          },
+          "alcance": {
+            "title": "Alcance",
+            "type": "string"
+          },
+          "alertas": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Alertas",
+            "type": "array"
+          },
+          "ciclo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ciclo"
+          },
+          "cobertura_climatica": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Cobertura Climatica",
+            "type": "object"
+          },
+          "cultivo": {
+            "default": "Maíz",
+            "title": "Cultivo",
+            "type": "string"
+          },
+          "datos_suficientes": {
+            "title": "Datos Suficientes",
+            "type": "boolean"
+          },
+          "dias_lluvia_disponibles": {
+            "title": "Dias Lluvia Disponibles",
+            "type": "integer"
+          },
+          "es_valido": {
+            "title": "Es Valido",
+            "type": "boolean"
+          },
+          "estado_reglas": {
+            "title": "Estado Reglas",
+            "type": "string"
+          },
+          "estado_validacion": {
+            "default": "",
+            "title": "Estado Validacion",
+            "type": "string"
+          },
+          "fecha_en_ventana": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fecha En Ventana"
+          },
+          "fecha_siembra": {
+            "format": "date",
+            "title": "Fecha Siembra",
+            "type": "string"
+          },
+          "fuentes": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Fuentes",
+            "type": "array"
+          },
+          "fuentes_precipitacion": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Fuentes Precipitacion",
+            "type": "object"
+          },
+          "kc_etapa_media": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Kc Etapa Media"
+          },
+          "origen_senales_hidricas": {
+            "default": "serie histórica zonal",
+            "title": "Origen Senales Hidricas",
+            "type": "string"
+          },
+          "parametros_fenologicos": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parametros Fenologicos"
+          },
+          "precipitacion_15_dias_mm": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Precipitacion 15 Dias Mm"
+          },
+          "racha_seca_maxima_dias": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Racha Seca Maxima Dias"
+          },
+          "recomendacion": {
+            "title": "Recomendacion",
+            "type": "string"
+          },
+          "senal_sequia": {
+            "default": false,
+            "title": "Senal Sequia",
+            "type": "boolean"
+          },
+          "supuestos": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Supuestos",
+            "type": "array"
+          },
+          "temperatura_media_fecha_c": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Temperatura Media Fecha C"
+          },
+          "umbrales_aplicados": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Umbrales Aplicados",
+            "type": "array"
+          },
+          "variedad": {
+            "title": "Variedad",
+            "type": "string"
+          }
+        },
+        "required": [
+          "es_valido",
+          "datos_suficientes",
+          "alertas",
+          "recomendacion",
+          "fecha_siembra",
+          "variedad",
+          "dias_lluvia_disponibles",
+          "fuentes_precipitacion",
+          "cobertura_climatica",
+          "alcance",
+          "estado_reglas"
+        ],
+        "title": "PlantingValidationResponse",
         "type": "object"
       },
       "PriorityProfileIn": {
@@ -2238,6 +2799,108 @@
         "type": "object",
         "x-contract-note": "Contrato no definido en la especificación; propuesto por R3, sujeto a ADR-010.",
         "x-contract-status": "provisional_r3"
+      },
+      "RainySeasonOnsetResponse": {
+        "properties": {
+          "anio": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Anio"
+          },
+          "aviso": {
+            "title": "Aviso",
+            "type": "string"
+          },
+          "criterio": {
+            "additionalProperties": true,
+            "title": "Criterio",
+            "type": "object"
+          },
+          "entradas": {
+            "additionalProperties": true,
+            "title": "Entradas",
+            "type": "object"
+          },
+          "es_metodo_oficial_insivumeh": {
+            "default": false,
+            "title": "Es Metodo Oficial Insivumeh",
+            "type": "boolean"
+          },
+          "estado": {
+            "title": "Estado",
+            "type": "string"
+          },
+          "fecha_estimada_inicio": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fecha Estimada Inicio"
+          },
+          "fuente_precipitacion": {
+            "title": "Fuente Precipitacion",
+            "type": "string"
+          },
+          "limitaciones": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limitaciones",
+            "type": "array"
+          },
+          "metodo": {
+            "title": "Metodo",
+            "type": "string"
+          },
+          "precipitacion_pentadas": {
+            "items": {
+              "$ref": "#/components/schemas/PentadOut"
+            },
+            "title": "Precipitacion Pentadas",
+            "type": "array"
+          },
+          "resultado": {
+            "description": "detectado | no_detectado | datos_insuficientes",
+            "title": "Resultado",
+            "type": "string"
+          },
+          "retraso_adaptacion": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AdaptationDelayOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "fecha_estimada_inicio",
+          "metodo",
+          "precipitacion_pentadas",
+          "estado",
+          "limitaciones",
+          "fuente_precipitacion",
+          "criterio",
+          "anio",
+          "resultado",
+          "entradas",
+          "aviso"
+        ],
+        "title": "RainySeasonOnsetResponse",
+        "type": "object"
       },
       "RankRequest": {
         "additionalProperties": false,
@@ -3691,6 +4354,77 @@
         "x-contract-status": "pending_r2",
         "x-source": "references/R4/contracts/openapi.v0.draft.yaml (borrador local de R4 derivado del README §15)"
       },
+      "StationValidationResponse": {
+        "properties": {
+          "aviso": {
+            "title": "Aviso",
+            "type": "string"
+          },
+          "carga_habilitada": {
+            "description": "false: la interfaz no procesa archivos; el CSV lo coloca el operador en el servidor",
+            "title": "Carga Habilitada",
+            "type": "boolean"
+          },
+          "es_ejemplo_ficticio": {
+            "default": false,
+            "title": "Es Ejemplo Ficticio",
+            "type": "boolean"
+          },
+          "estado_validacion": {
+            "title": "Estado Validacion",
+            "type": "string"
+          },
+          "filas": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "integer"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Filas"
+          },
+          "fuente_sugerida": {
+            "title": "Fuente Sugerida",
+            "type": "string"
+          },
+          "mensaje": {
+            "title": "Mensaje",
+            "type": "string"
+          },
+          "metricas": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Metricas"
+          },
+          "producto_satelital": {
+            "title": "Producto Satelital",
+            "type": "string"
+          }
+        },
+        "required": [
+          "estado_validacion",
+          "mensaje",
+          "metricas",
+          "fuente_sugerida",
+          "producto_satelital",
+          "carga_habilitada",
+          "aviso"
+        ],
+        "title": "StationValidationResponse",
+        "type": "object"
+      },
       "StrategyAxis": {
         "enum": [
           "association",
@@ -4056,6 +4790,12 @@
             "title": "Access Token",
             "type": "string"
           },
+          "demo": {
+            "default": false,
+            "description": "True: sesión pública de demostración (alcance limitado)",
+            "title": "Demo",
+            "type": "boolean"
+          },
           "expires_at": {
             "format": "date-time",
             "title": "Expires At",
@@ -4272,6 +5012,16 @@
           }
         ],
         "properties": {
+          "agri_context": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AgriContextOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "cells": {
             "items": {
               "$ref": "#/components/schemas/ZoneCellOut"
@@ -4466,6 +5216,58 @@
         "summary": "Salud de la aplicación y de la base de datos",
         "tags": [
           "health"
+        ]
+      }
+    },
+    "/v1/auth/demo-session": {
+      "post": {
+        "description": "Sin credenciales. Solo si el servidor habilita `DEMO_PUBLIC_ACCESS`. El token es de una cuenta sin parcelas ni contraseña utilizable y su alcance está limitado a lectura de resultados y a crear corridas de zona, escenarios, rankings e informes (todo lo demás responde 403).",
+        "operationId": "demo_session_v1_auth_demo_session_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Recurso inexistente o no visible"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Límite de tasa superado"
+          },
+          "503": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Dependencia o dato no disponible"
+          }
+        },
+        "summary": "Sesión pública de demostración",
+        "tags": [
+          "auth"
         ]
       }
     },
@@ -5458,6 +6260,117 @@
           }
         ],
         "summary": "Consultar parcela",
+        "tags": [
+          "parcels"
+        ]
+      }
+    },
+    "/v1/parcels/{id}/planting-validation": {
+      "post": {
+        "description": "Roles: dueño (agricultor) o técnico asignado con consentimiento vigente. Usa reglas sandbox configuradas y la serie histórica zonal curada; no constituye un pronóstico ni una validación específica de la parcela.",
+        "operationId": "validate_planting_v1_parcels__id__planting_validation_post",
+        "parameters": [
+          {
+            "description": "Identificador de la parcela",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "description": "Identificador de la parcela",
+              "format": "uuid",
+              "title": "Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlantingValidationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlantingValidationResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "No autenticado"
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Acceso denegado"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Recurso inexistente o no visible"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Error de validación"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Límite de tasa superado"
+          },
+          "503": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Dependencia o dato no disponible"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Validar fecha y variedad de siembra para Jocotán",
         "tags": [
           "parcels"
         ]
@@ -8049,6 +8962,458 @@
         ]
       }
     },
+    "/v1/zones/{id}/planting-options": {
+      "get": {
+        "description": "Lee reglas_agronomicas_jocotan.json; los valores son provisionales hasta la validación oficial MAGA/ICTA.",
+        "operationId": "planting_options_v1_zones__id__planting_options_get",
+        "parameters": [
+          {
+            "description": "Identificador de la zona",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "description": "Identificador de la zona",
+              "format": "uuid",
+              "title": "Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlantingOptionsResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "No autenticado"
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Acceso denegado"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Recurso inexistente o no visible"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Error de validación"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Límite de tasa superado"
+          },
+          "503": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Dependencia o dato no disponible"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Cultivos, variedades y ciclos configurados para la validación de siembra",
+        "tags": [
+          "zones"
+        ]
+      }
+    },
+    "/v1/zones/{id}/planting-validation": {
+      "get": {
+        "description": "Evaluación de solo lectura con reglas provisionales (reglas_agronomicas_jocotan.json) y, si no se indican datos propios, clima histórico zonal. Disponible en sesión demo; no es pronóstico ni medición parcelaria. Una fecha fuera de la ventana es una advertencia de compatibilidad, no una prohibición.",
+        "operationId": "validate_zone_planting_v1_zones__id__planting_validation_get",
+        "parameters": [
+          {
+            "description": "Identificador de la zona",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "description": "Identificador de la zona",
+              "format": "uuid",
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "fecha_siembra",
+            "required": true,
+            "schema": {
+              "format": "date",
+              "title": "Fecha Siembra",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "variedad",
+            "required": true,
+            "schema": {
+              "maxLength": 80,
+              "minLength": 1,
+              "title": "Variedad",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cultivo",
+            "required": false,
+            "schema": {
+              "default": "maiz",
+              "maxLength": 40,
+              "minLength": 1,
+              "title": "Cultivo",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "ciclo",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 20,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Ciclo"
+            }
+          },
+          {
+            "in": "query",
+            "name": "dias_secos_recientes",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 366,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Dias Secos Recientes"
+            }
+          },
+          {
+            "in": "query",
+            "name": "lluvia_15_dias_mm",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 2000,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Lluvia 15 Dias Mm"
+            }
+          },
+          {
+            "in": "query",
+            "name": "idioma",
+            "required": false,
+            "schema": {
+              "default": "es",
+              "enum": [
+                "es",
+                "en"
+              ],
+              "title": "Idioma",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlantingValidationResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "No autenticado"
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Acceso denegado"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Recurso inexistente o no visible"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Error de validación"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Límite de tasa superado"
+          },
+          "503": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Dependencia o dato no disponible"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Validar cultivo, variedad, ciclo y fecha de siembra en Jocotán",
+        "tags": [
+          "zones"
+        ]
+      }
+    },
+    "/v1/zones/{id}/rainy-season-onset": {
+      "get": {
+        "description": "Aplica un criterio de pentadas configurable (MAGA Informe 6/2025) a la precipitación diaria curada de la zona. No es un boletín ni el método oficial de INSIVUMEH; no usar como única base de decisiones. Con fecha_siembra compara en días la siembra con el inicio estimado.",
+        "operationId": "rainy_season_onset_v1_zones__id__rainy_season_onset_get",
+        "parameters": [
+          {
+            "description": "Identificador de la zona",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "description": "Identificador de la zona",
+              "format": "uuid",
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "anio",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 2100,
+                  "minimum": 1981,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Anio"
+            }
+          },
+          {
+            "in": "query",
+            "name": "fecha_siembra",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Fecha Siembra"
+            }
+          },
+          {
+            "in": "query",
+            "name": "idioma",
+            "required": false,
+            "schema": {
+              "default": "es",
+              "enum": [
+                "es",
+                "en"
+              ],
+              "title": "Idioma",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RainySeasonOnsetResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "No autenticado"
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Acceso denegado"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Recurso inexistente o no visible"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Error de validación"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Límite de tasa superado"
+          },
+          "503": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Dependencia o dato no disponible"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Estimación SANDBOX del inicio de la época lluviosa (pentadas)",
+        "tags": [
+          "zones"
+        ]
+      }
+    },
     "/v1/zones/{id}/runs": {
       "post": {
         "description": "Roles: tecnico, admin. Trabajo asíncrono. Requiere `milpa_core` (R2); sin él el trabajo falla con `DEPENDENCY_NOT_INTEGRATED`.",
@@ -8176,6 +9541,121 @@
         "tags": [
           "zones",
           "runs"
+        ]
+      }
+    },
+    "/v1/zones/{id}/station-validation": {
+      "get": {
+        "description": "Por defecto «Nivel C - Pendiente»: no hay serie histórica de la estación. Solo un CSV real colocado por el operador en el servidor, con suficientes días coincidentes, puede pasar a «Nivel B - Validado localmente». El archivo de ejemplo ficticio nunca cambia el estado.",
+        "operationId": "station_validation_v1_zones__id__station_validation_get",
+        "parameters": [
+          {
+            "description": "Identificador de la zona",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "description": "Identificador de la zona",
+              "format": "uuid",
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "idioma",
+            "required": false,
+            "schema": {
+              "default": "es",
+              "enum": [
+                "es",
+                "en"
+              ],
+              "title": "Idioma",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StationValidationResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "No autenticado"
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Acceso denegado"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Recurso inexistente o no visible"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Error de validación"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Límite de tasa superado"
+          },
+          "503": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Dependencia o dato no disponible"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Estado de la validación de la lluvia satelital contra la estación Camotán",
+        "tags": [
+          "zones"
         ]
       }
     }

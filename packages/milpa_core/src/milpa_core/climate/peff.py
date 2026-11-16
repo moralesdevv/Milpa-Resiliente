@@ -7,25 +7,28 @@ serie), los métodos mensuales devuelven NaN para ese mes y sus decenas/días.
 """
 from __future__ import annotations
 
+from collections.abc import Callable
+from typing import Any
+
 import numpy as np
 
 from ..enums import MONTHLY_PEFF, PeffMethod
 from .dekad import month_key, ymd
 
 
-def usda_scs_fao_month(p_month):
+def usda_scs_fao_month(p_month: Any) -> np.ndarray:
     """Pef = P·(125−0.2P)/125 si P ≤ 250; 125 + 0.1P si P > 250  [Verificar]."""
     p = np.asarray(p_month, dtype=float)
     return np.where(p <= 250.0, p * (125.0 - 0.2 * p) / 125.0, 125.0 + 0.1 * p)
 
 
-def fao_dependable_month(p_month):
+def fao_dependable_month(p_month: Any) -> np.ndarray:
     """Pef = 0.6P−10 si P ≤ 70; 0.8P−24 si P > 70; mínimo 0  [Verificar]."""
     p = np.asarray(p_month, dtype=float)
     return np.maximum(0.0, np.where(p <= 70.0, 0.6 * p - 10.0, 0.8 * p - 24.0))
 
 
-MONTHLY_FORMULA = {
+MONTHLY_FORMULA: dict[PeffMethod, Callable[[Any], np.ndarray]] = {
     PeffMethod.USDA_SCS_FAO: usda_scs_fao_month,
     PeffMethod.FAO_DEPENDABLE: fao_dependable_month,
 }
@@ -63,7 +66,7 @@ def pef_daily(dates: np.ndarray, p_mm: np.ndarray, method: PeffMethod, phi: floa
     return out
 
 
-def pef_monthly(dates: np.ndarray, p_mm: np.ndarray, method: PeffMethod, phi: float | None = None):
+def pef_monthly(dates: np.ndarray, p_mm: np.ndarray, method: PeffMethod, phi: float | None = None) -> Any:
     """(month_keys, P_mes, Pef_mes) para pruebas e informe."""
     d = pef_daily(dates, p_mm, method, phi)
     mk = month_key(dates)

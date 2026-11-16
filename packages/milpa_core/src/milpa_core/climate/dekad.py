@@ -4,7 +4,7 @@ from __future__ import annotations
 import numpy as np
 
 
-def ymd(dates: np.ndarray):
+def ymd(dates: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     d = np.asarray(dates, dtype="datetime64[D]")
     y = d.astype("datetime64[Y]").astype(int) + 1970
     m = d.astype("datetime64[M]").astype(int) % 12 + 1
@@ -14,10 +14,10 @@ def ymd(dates: np.ndarray):
 
 def doy(dates: np.ndarray) -> np.ndarray:
     d = np.asarray(dates, dtype="datetime64[D]")
-    return (d - d.astype("datetime64[Y]")).astype(int) + 1
+    return np.asarray((d - d.astype("datetime64[Y]")).astype(int) + 1)
 
 
-def dekad_of(dates: np.ndarray):
+def dekad_of(dates: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Devuelve (year, dekad_idx 1..36, key entero año*100+dekad)."""
     y, m, day = ymd(dates)
     k = np.where(day <= 10, 1, np.where(day <= 20, 2, 3))
@@ -37,4 +37,4 @@ def dekad_length(year: int, dekad_idx: int) -> int:
 
 def month_key(dates: np.ndarray) -> np.ndarray:
     y, m, _ = ymd(dates)
-    return y * 100 + m
+    return np.asarray(y * 100 + m)

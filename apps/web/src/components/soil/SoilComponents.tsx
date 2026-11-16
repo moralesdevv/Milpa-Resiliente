@@ -63,7 +63,6 @@ export function SoilUpload({ parcelId }: { parcelId: string }) {
     <button className="button" type="button" disabled={!canSend || upload.isPending} onClick={() => file && upload.mutate(file)}>
       {upload.isPending ? t("common.loading") : t("soil.uploadSend")}
     </button>
-    {!session && <p className="chart-caption">{t("soil.signInToUpload")}</p>}
     {!parcelId && <p className="chart-caption">{t("soil.noParcel")}</p>}
     {upload.isError && <ErrorState error={upload.error} />}
     {upload.data && <div role="status" data-testid="upload-result">
@@ -107,7 +106,6 @@ export function SoilDeclarationForm({ parcelId }: { parcelId: string }) {
       <label className="field"><span>{t("soil.basis")}</span><input type="text" value={basis} onChange={(event) => setBasis(event.currentTarget.value)} placeholder={t("soil.basisPlaceholder")} /></label>
     </div>
     <button className="button" type="submit" disabled={!valid || declare.isPending}>{declare.isPending ? t("common.loading") : t("soil.declareSend")}</button>
-    {!session && <p className="chart-caption">{t("soil.signInToUpload")}</p>}
     <p className="chart-caption">{t("soil.declareHelp")}</p>
     {declare.isError && <ErrorState error={declare.error} />}
     {declare.isSuccess && <p role="status" className="notice">{t("soil.declaredOk")}</p>}

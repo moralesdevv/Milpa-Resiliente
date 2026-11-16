@@ -12,6 +12,7 @@ import { RunHeader } from "../components/run/RunHeader";
 import { AdaptationToggle, ScenarioBadge, ScenarioPicker, scenarioKey } from "../components/scenario/ScenarioComponents";
 import { ScenarioLauncher } from "../components/scenario/ScenarioLauncher";
 import { StrategyCatalog } from "../components/scenario/StrategyCatalog";
+import { StrategyCompare } from "../components/scenario/StrategyCompare";
 import { criteria, rebalance } from "../lib/weights";
 import type { Criterion, Weights } from "../lib/weights";
 import { RunIdField, ScreenFrame, useSharedQueryParam } from "./ScreenFrame";
@@ -123,7 +124,7 @@ export function RotationLabScreen() {
     <section className="content-card" aria-labelledby="catalog-heading">
       <div className="section-heading"><span className="section-icon" aria-hidden="true"><Icon name="list" /></span><h2 id="catalog-heading">{t("strategy.catalogTitle")}</h2></div>
       <p className="chart-caption">{t("strategy.dateIsNotRotation")}</p>
-      <StrategyCatalog />
+      <StrategyCatalog runStrategies={(summary.data?.items ?? []).map((item) => ({ id: item.strategy_version_id, name: item.name, changes: (item.changes_from_reference as string[]).map((axis) => axis.replace(/_/g, " ")), horizonYears: item.horizon_years, cycles: item.by_cycle.map((cycle) => ({ idx: cycle.cycle_idx, crop: String(cycle.variety_id).replace(/_/g, " ") })) }))} />
     </section>
 
     <section className="content-card" aria-labelledby="scenario-jobs-heading">
@@ -138,6 +139,11 @@ export function RotationLabScreen() {
       {summary.data?.items.length ? <RiskCards strategies={summary.data.items} /> : null}
       {summary.data && summary.data.items.length === 0 && <InsufficientData detail={t("common.insufficientData")} />}
     </section>
+
+    {summary.data && summary.data.items.length > 1 && selectedScenario && <section className="content-card" aria-labelledby="compare-heading">
+      <div className="section-heading"><span className="section-icon" aria-hidden="true"><Icon name="compare" /></span><h2 id="compare-heading">Compare strategies</h2></div>
+      <StrategyCompare strategies={summary.data.items} ranking={rankData} scenarioLabel={selectedScenario.scenario_id} />
+    </section>}
 
     <section className="content-card" aria-labelledby="weights-heading">
       <div className="section-heading"><span className="section-icon" aria-hidden="true"><Icon name="sliders" /></span><h2 id="weights-heading">{t("ranking.weights")}</h2></div>

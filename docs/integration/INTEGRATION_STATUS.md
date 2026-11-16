@@ -1,5 +1,7 @@
 # Estado de integración (R3 ↔ R1 / R2 / R4)
 
+> **Actualización 2026-11-16:** R2 ya NO está pendiente. Estado: `milpa_core` integrado (ADR-020); `make reproduce` completo (datos R1 + corrida base R2 sobre la serie sintética rotulada); endpoints de resultados devuelven DTO reales. Siguen pendientes: corridas con parcela/suelo, PDF fuera de Docker, fuentes no integradas (ver `docs/DATA_SOURCES.md` y la tabla de estado en My zone).
+
 Actualizado: 2026-11-15 (integración de `references/` en la raíz, ADR-018). Estados permitidos: `pending` · `contract_defined` · `adapter_ready` · `waiting_for_dependency` · `integrated` · `verified`.
 `integrated` = el adaptador pasa pruebas **contra el componente real** (no contra dobles). `verified` = además existe una prueba de aceptación reproducible en CI. **Ninguna interfaz está `verified`**: GitHub Actions no se ha ejecutado, y la ingesta real (red + token NASA) ni la integración con R2 se han ejercido.
 

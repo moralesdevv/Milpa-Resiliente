@@ -14,6 +14,8 @@ from typing import Any
 EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 # Coordenadas de más de tres decimales (README §22).
 COORD_RE = re.compile(r"(?<![\w.])-?\d{1,3}\.\d{4,}(?![\w])")
+# Un DOI (p. ej. 10.25966/564j-4331) tiene la forma de un decimal largo, pero es una cita, no una coordenada.
+DOI_RE = re.compile(r"(?<![\w.])10\.\d{4,9}/\S+")
 UUID_RE = re.compile(r"\b[0-9a-fA-F]{8}-(?:[0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}\b")
 JWT_RE = re.compile(r"eyJ[A-Za-z0-9_-]{5,}\.[A-Za-z0-9_-]{5,}\.[A-Za-z0-9_-]*")
 
@@ -33,7 +35,7 @@ def find_sensitive(text: str, *, include_uuid: bool = False) -> list[str]:
     found: list[str] = []
     if EMAIL_RE.search(text):
         found.append("email")
-    if COORD_RE.search(text):
+    if COORD_RE.search(DOI_RE.sub(" ", text)):
         found.append("coordinates")
     if JWT_RE.search(text):
         found.append("jwt")

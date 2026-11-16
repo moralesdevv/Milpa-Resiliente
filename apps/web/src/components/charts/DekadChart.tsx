@@ -111,8 +111,8 @@ export function DekadChart({ data }: { data: ChartData | null }) {
           <td>{point.pef_mm ? <Indicator indicator={point.pef_mm} compact /> : t("common.notAvailable")}</td>
           <td>{point.etc_mm ? <Indicator indicator={point.etc_mm} compact /> : t("common.notAvailable")}</td>
           <td>{point.exposure_mm ? <Indicator indicator={point.exposure_mm} compact /> : t("common.notAvailable")}</td>
-          <td>{point.critical_stage ?? t("common.notAvailable")}</td>
-          <td>{point.over_threshold === null || point.over_threshold === undefined ? t("common.notAvailable") : point.over_threshold ? `⚑ ${t("calendar.yes")}` : t("calendar.no")}</td>
+          <td>{point.critical_stage ?? t("calendar.noCriticalStage")}</td>
+          <td>{point.over_threshold === null || point.over_threshold === undefined ? t("calendar.noThresholdHere") : point.over_threshold ? `⚑ ${t("calendar.yes")}` : t("calendar.no")}</td>
         </tr>)}</tbody>
       </table></div>
     </details>

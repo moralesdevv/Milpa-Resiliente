@@ -119,7 +119,7 @@ class CuratedClimate:
         return self.base.precip_mm
 
     def tmean_c(self) -> np.ndarray:
-        return (self.base.tmax_c + self.base.tmin_c) / 2.0
+        return np.asarray((self.base.tmax_c + self.base.tmin_c) / 2.0)
 
     def sl(self, start: np.datetime64, end_inclusive: np.datetime64) -> slice:
         i0 = self.base.index_of(start)

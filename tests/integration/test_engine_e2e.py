@@ -18,7 +18,7 @@ from fastapi.testclient import TestClient
 from sqlalchemy import Engine, text
 
 from api import cli
-from api.adapters.milpa_core import CoreAssets, MilpaCoreEngine, import_core
+from api.adapters.milpa_core import CoreAssets, MilpaCoreEngine, MilpaCoreEvidence, import_core
 from api.adapters.not_integrated import default_ports
 from api.jobs.dispatch import InlineDispatcher, WorkerConfig
 from api.main import create_app
@@ -62,6 +62,7 @@ def e2e(
     )
     ports = default_ports()
     ports.engine = MilpaCoreEngine(core, assets)
+    ports.evidence = MilpaCoreEvidence()
     monkeypatch.setattr("api.jobs.handlers.engine_jobs.load_ports", lambda: ports)
     monkeypatch.setattr(cli, "_owner_engine", lambda: admin_engine)
     assert cli.cmd_register_engine(argparse.Namespace(catalogs=str(ROOT / "catalogs" / "r2"))) == 0
@@ -98,7 +99,9 @@ def test_base_run_scenarios_and_reads_use_the_real_engine(
     e2e: TestClient, world: World, admin_engine: Engine, data_dir: Path
 ) -> None:
     h = _token(e2e, world.tech)
-    created = e2e.post(f"/v1/zones/{world.zone}/runs", json=BODY, headers={**h, "Idempotency-Key": "r1"})
+    created = e2e.post(
+        f"/v1/zones/{world.zone}/runs", json=BODY, headers={**h, "Idempotency-Key": "r1"}
+    )
     assert created.status_code in (200, 202), created.text
     job = _wait_job(e2e, h, created.json())
     assert job["status"] == "ok", job
@@ -132,3 +135,96 @@ def test_base_run_scenarios_and_reads_use_the_real_engine(
     assert ranked.json()["stability"]["seed"] == 1 and ranked.json()["ranking"]
     tags = e2e.get(f"/v1/runs/{run_id}/scenarios", headers=h).json()
     assert {t["scenario_id"] for t in tags} >= {"BASE", "T+1_P-10_D+0_Hrh"}
+
+
+def test_public_demo_session_explores_without_credentials_and_is_scope_limited(
+    e2e: TestClient,
+    world: World,
+    admin_engine: Engine,
+    settings: Any,
+    app_engine: Engine,
+    worker_config: WorkerConfig,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from api.config import Settings
+
+    # Servidor con demo habilitada y cuenta de demostración sin contraseña utilizable.
+    demo_settings = Settings(
+        **{**settings.model_dump(), "jwt_secret": settings.jwt_secret, "demo_public_access": True}
+    )
+    monkeypatch.setattr(cli, "_owner_engine", lambda: admin_engine)
+    assert cli.cmd_create_demo_user(argparse.Namespace(email=demo_settings.demo_user_email)) == 0
+    from api.adapters.not_integrated import default_ports
+
+    ports = default_ports()
+    app = create_app(
+        demo_settings,
+        engine=app_engine,
+        ports=ports,
+        dispatcher=InlineDispatcher(worker_config),
+        recover_on_start=False,
+    )
+    with TestClient(app, raise_server_exceptions=False) as c:
+        r = c.post("/v1/auth/demo-session")
+        assert r.status_code == 200 and r.json()["demo"] is True
+        h = {"Authorization": f"Bearer {r.json()['access_token']}"}
+        assert c.get("/v1/zones", headers=h).status_code == 200
+        # lo privado y administrativo queda fuera del alcance de la demo
+        assert c.get(f"/v1/parcels/{world.parcel_a}", headers=h).status_code == 403
+        assert c.delete(f"/v1/parcels/{world.parcel_a}", headers=h).status_code == 403
+        # la cuenta de demo no se puede usar con contraseña
+        assert (
+            c.post(
+                "/v1/auth/login", json={"email": demo_settings.demo_user_email, "password": "demo"}
+            ).status_code
+            == 401
+        )
+    # sin DEMO_PUBLIC_ACCESS el endpoint no existe para el público
+    assert e2e.post("/v1/auth/demo-session").status_code == 404
+
+
+CSV_PH = (
+    "parcel_code,sample_date,depth_from_cm,depth_to_cm,ph,ph_method\n"
+    "PARCELA-A,2025-01-15,0,20,6.4,water_1_2_5\n"
+)
+
+
+def test_parcel_run_uses_soil_and_voi_separates_availability_from_outcome(
+    e2e: TestClient, world: World
+) -> None:
+    """T-A·A y T-A·D: sin pH el VoI es evaluable; con pH medido es ``already_measured``."""
+    world.f.soil_property("ph")
+    h = _token(e2e, world.tech)
+
+    def run_with_parcel(key: str) -> UUID:
+        r = e2e.post(
+            f"/v1/zones/{world.zone}/runs",
+            json={**BODY, "parcel_id": str(world.parcel_a)},
+            headers={**h, "Idempotency-Key": key},
+        )
+        assert r.status_code in (200, 202), r.text
+        job = _wait_job(e2e, h, r.json())
+        assert job["status"] == "ok", job
+        return UUID(job["result"]["run_id"])
+
+    unknown = run_with_parcel("p-unknown")
+    run = e2e.get(f"/v1/runs/{unknown}", headers=h).json()
+    assert run["mode"] == "exposure" and run["parcel_id"] == str(world.parcel_a)
+    voi = e2e.post(f"/v1/runs/{unknown}/soil-voi", json={"scenario_id": "BASE"}, headers=h)
+    assert voi.status_code == 200, voi.text
+    assert (
+        voi.json()["applicability"] == "evaluable"
+    )  # pH desconocido: se puede evaluar el valor de medirlo
+
+    up = e2e.post(
+        f"/v1/parcels/{world.parcel_a}/soil-samples",
+        content=CSV_PH,
+        headers={**h, "Content-Type": "text/csv"},
+    )
+    assert up.status_code == 200 and up.json()["persisted"] is True, up.text
+    soil = e2e.get(f"/v1/parcels/{world.parcel_a}/soil", headers=h).json()
+    assert next(p for p in soil if p["property_code"] == "ph")["status"] == "medido"
+    measured = run_with_parcel("p-measured")
+    voi2 = e2e.post(f"/v1/runs/{measured}/soil-voi", json={"scenario_id": "BASE"}, headers=h)
+    assert voi2.status_code == 200, voi2.text
+    assert voi2.json()["applicability"] == "already_measured" and voi2.json().get("outcome") is None

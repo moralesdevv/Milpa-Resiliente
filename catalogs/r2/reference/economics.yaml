@@ -1,0 +1,19 @@
+status: pending_local_market_validation
+sources:
+  prices: SRC-MAGA
+  food_composition: SRC-INCAP
+records:
+  - crop: maiz_blanco
+    reference_yield: pending
+    price_gtq_per_unit: pending
+    variable_cost_gtq_per_unit: pending
+    source_date: pending
+  - crop: frijol_negro
+    reference_yield: pending
+    price_gtq_per_unit: pending
+    variable_cost_gtq_per_unit: pending
+    source_date: pending
+definitions:
+  gross_income: reference_yield_times_price
+  gross_margin: gross_income_minus_variable_costs
+  net_benefit: not_in_mvp

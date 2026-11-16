@@ -472,7 +472,7 @@ def test_provenance_zone_level_is_public_to_authenticated_but_parcel_level_is_no
 
 def test_every_v1_route_requires_authentication(client: TestClient) -> None:
     """RBAC: ninguna ruta de /v1 salvo login es accesible sin token."""
-    open_routes = {("POST", "/v1/auth/login")}
+    open_routes = {("POST", "/v1/auth/login"), ("POST", "/v1/auth/demo-session")}
     schema = client.get("/openapi.json").json()
     checked = 0
     for path, ops in schema["paths"].items():

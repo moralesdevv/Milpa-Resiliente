@@ -423,14 +423,14 @@ def run_all(admin_url: str, runs: int, n_parcels: int, parquet_rows: int) -> dic
         # ---- PDF
         try:
             from api.cli import sample_report_input
-            from api.reports.renderer import FetchGuard, html_to_pdf, render_html
+            from api.reports.pdf import render_pdf
 
             data = sample_report_input("public", "es+en")
-            html_to_pdf("<p>precalentamiento</p>")
+            render_pdf(data)
             results.append(
                 timed(
-                    "PDF: render Jinja2 + WeasyPrint (plantilla PROVISIONAL, 2 páginas)",
-                    lambda: html_to_pdf(render_html(data), FetchGuard()),
+                    "PDF: render ReportLab (plantilla PROVISIONAL)",
+                    lambda: render_pdf(data),
                     max(5, runs // 4),
                     1,
                 )
@@ -438,9 +438,9 @@ def run_all(admin_url: str, runs: int, n_parcels: int, parquet_rows: int) -> dic
         except Exception as exc:
             results.append(
                 Result(
-                    "PDF: render Jinja2 + WeasyPrint",
+                    "PDF: render ReportLab",
                     "omitido",
-                    note=f"{type(exc).__name__}: WeasyPrint/Pango no disponible en este host (ejecutar en la imagen Docker)",
+                    note=f"{type(exc).__name__}: no se pudo generar el PDF",
                 )
             )
 

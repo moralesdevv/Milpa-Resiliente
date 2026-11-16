@@ -22,13 +22,19 @@ class TokenClaims:
     role: UserRole
     jti: str
     expires_at: datetime
+    demo: bool = False
 
 
 def create_access_token(
-    settings: Settings, user_id: UUID, role: UserRole, *, now: datetime | None = None
+    settings: Settings,
+    user_id: UUID,
+    role: UserRole,
+    *,
+    now: datetime | None = None,
+    demo: bool = False,
 ) -> tuple[str, datetime]:
     now = now or datetime.now(UTC)
-    exp = now + timedelta(minutes=settings.jwt_ttl_minutes)
+    exp = now + timedelta(minutes=settings.demo_ttl_minutes if demo else settings.jwt_ttl_minutes)
     payload = {
         "sub": str(user_id),
         "role": role.value,
@@ -38,6 +44,8 @@ def create_access_token(
         "aud": settings.jwt_audience,
         "jti": uuid4().hex,
     }
+    if demo:
+        payload["demo"] = True  # alcance limitado: ver api.security.demo
     token = jwt.encode(payload, settings.jwt_secret.get_secret_value(), algorithm=ALGORITHM)
     return token, exp
 
@@ -59,6 +67,7 @@ def decode_access_token(settings: Settings, token: str) -> TokenClaims:
                 role=UserRole(data["role"]),
                 jti=data["jti"],
                 expires_at=datetime.fromtimestamp(data["exp"], tz=UTC),
+                demo=bool(data.get("demo", False)),
             )
         except (jwt.PyJWTError, ValueError, KeyError) as exc:
             last_error = exc

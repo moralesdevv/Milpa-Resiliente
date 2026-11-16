@@ -18,6 +18,13 @@ SNAPSHOT = ROOT / "docs" / "openapi" / "openapi.json"
 # Tabla de endpoints de la especificación R3 §10.2 (método, ruta). Cualquier cambio exige ADR.
 SPEC_ENDPOINTS = {
     ("post", "/v1/auth/login"),
+    ("post", "/v1/auth/demo-session"),  # ADR-019: sesión pública de demostración (alcance limitado)
+    # ADR-023: validación agronómica de Jocotán (solo lectura; planting-validation por parcela/zona es anterior)
+    ("get", "/v1/zones/{id}/planting-validation"),
+    ("post", "/v1/parcels/{id}/planting-validation"),
+    ("get", "/v1/zones/{id}/planting-options"),
+    ("get", "/v1/zones/{id}/rainy-season-onset"),
+    ("get", "/v1/zones/{id}/station-validation"),
     ("get", "/v1/auth/me"),
     ("get", "/v1/zones"),
     ("get", "/v1/zones/{id}"),
@@ -52,7 +59,7 @@ SPEC_ENDPOINTS = {
     ("delete", "/v1/jobs/{id}"),
     ("get", "/healthz"),
 }
-PUBLIC = {("post", "/v1/auth/login"), ("get", "/healthz")}
+PUBLIC = {("post", "/v1/auth/login"), ("post", "/v1/auth/demo-session"), ("get", "/healthz")}
 ASYNC_202 = {
     ("post", "/v1/zones"),
     ("delete", "/v1/parcels/{id}"),

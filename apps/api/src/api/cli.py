@@ -15,6 +15,7 @@ import os
 import sys
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import Any
 
 from sqlalchemy import Engine, create_engine, text
 
@@ -160,11 +161,12 @@ def sample_report_input(privacy: str, locale: str) -> ReportInput:
 
 
 def cmd_report_sample(a: argparse.Namespace) -> int:
-    from api.reports.renderer import FetchGuard, ReportRenderError, html_to_pdf, render_html
+    from api.reports.pdf import render_pdf
+    from api.reports.renderer import ReportRenderError
     from api.reproducibility.hashing import sha256_bytes
 
     try:
-        pdf = html_to_pdf(render_html(sample_report_input(a.privacy, a.locale)), FetchGuard())
+        pdf = render_pdf(sample_report_input(a.privacy, a.locale))
     except ReportRenderError as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 2
@@ -187,10 +189,16 @@ def cmd_reproduce(a: argparse.Namespace) -> int:
         print(f"FALTA: {m}", file=sys.stderr)
     for n in status.notes:
         print(f"NOTA: {n}", file=sys.stderr)
-    print(
-        f"reproduce: NO completado (código {status.exit_code}). No se simula éxito.",
-        file=sys.stderr,
-    )
+    if status.exit_code == 0:
+        print(
+            "reproduce: completado y verificado (datos de R1 + corrida base de R2).",
+            file=sys.stderr,
+        )
+    else:
+        print(
+            f"reproduce: NO completado (código {status.exit_code}). No se simula éxito.",
+            file=sys.stderr,
+        )
     return status.exit_code
 
 
@@ -222,6 +230,57 @@ def cmd_check_core(_: argparse.Namespace) -> int:
         print(f"PENDIENTE: {p}", file=sys.stderr)
     print("milpa_core: contrato de fachada OK" if rep.ok else "milpa_core: NO integrado")
     return 0 if rep.ok else 2
+
+
+def cmd_check_boundary(a: argparse.Namespace) -> int:
+    """Valida un límite municipal (GeoJSON) y muestra su huella: reproduce lo que verifica el servidor."""
+    from api.geo.boundary import BoundaryError, load_boundary
+
+    try:
+        boundary = load_boundary(Path(a.path))
+    except BoundaryError as exc:
+        print(f"Límite NO utilizable: {exc}", file=sys.stderr)
+        return 2
+    print(
+        json.dumps(
+            {
+                "municipio": boundary.name,
+                "departamento": boundary.department,
+                "cod_mun": boundary.municipal_code,
+                "cod_depto": boundary.department_code,
+                "vertices": boundary.n_vertices,
+                "bbox_lon_lat": boundary.bbox,
+                "sha256": boundary.sha256,
+                "fuente_declarada": boundary.source_note or "no declarada en el archivo",
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+    )
+    return 0
+
+
+def cmd_create_demo_user(a: argparse.Namespace) -> int:
+    """Crea (idempotente) la cuenta de la sesión pública de demostración.
+
+    La contraseña es aleatoria y se descarta: nadie puede iniciar sesión con ella; solo existe el token
+    de ``POST /v1/auth/demo-session`` (alcance limitado, ``api.security.demo``).
+    """
+    import secrets
+
+    from api.security.passwords import hash_password
+
+    pw_hash = hash_password(secrets.token_urlsafe(32) + "aA1!")
+    with _owner_engine().begin() as c:
+        c.execute(
+            text(
+                "INSERT INTO auth.app_user (email, password_hash, role) VALUES (:e, :h, :r) "
+                "ON CONFLICT (email) DO NOTHING"
+            ),
+            {"e": a.email.strip().lower(), "h": pw_hash, "r": UserRole.tecnico.value},
+        )
+    print(f"cuenta de demostración lista: {a.email}")
+    return 0
 
 
 def cmd_register_engine(a: argparse.Namespace) -> int:
@@ -281,6 +340,17 @@ def cmd_register_engine(a: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_freeze_engine(a: argparse.Namespace) -> int:
+    """Congela la huella de la corrida base del motor sobre ``data/demo`` (EXPECTED_ENGINE.json)."""
+    from api.reproducibility import engine_check
+
+    demo = Path(a.data_dir) / "demo"
+    expected = json.loads((demo / "EXPECTED.json").read_text(encoding="utf-8"))
+    out = engine_check.freeze(demo, str(expected["zone"]), Path.cwd())
+    print(f"escrito {out}")
+    return 0
+
+
 def cmd_hash(a: argparse.Namespace) -> int:
     from api.reproducibility.hashing import sha256_file
 
@@ -312,6 +382,16 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--farmer-email", required=True)
     s.set_defaults(fn=cmd_assign)
     s = sub.add_parser(
+        "freeze-engine", help="Congela la huella de la corrida base del motor sobre data/demo"
+    )
+    s.add_argument("--data-dir", default="data")
+    s.set_defaults(fn=cmd_freeze_engine)
+    s = sub.add_parser(
+        "create-demo-user", help="Cuenta sin contraseña utilizable para la sesión pública de demo"
+    )
+    s.add_argument("--email", default="demo@milpa.local")
+    s.set_defaults(fn=cmd_create_demo_user)
+    s = sub.add_parser(
         "register-engine", help="Registrar catálogo de R2 y grilla de escenarios (propietario)"
     )
     s.add_argument("--catalogs", default="catalogs/r2")
@@ -319,6 +399,12 @@ def build_parser() -> argparse.ArgumentParser:
     s = sub.add_parser("openapi", help="Exportar OpenAPI")
     s.add_argument("--out", default="docs/openapi/openapi.json")
     s.set_defaults(fn=cmd_openapi)
+    _add_verification_commands(sub)
+    return p
+
+
+def _add_verification_commands(sub: Any) -> None:
+    """Subcomandos de informes, reproducibilidad y comprobaciones (separados por tamaño)."""
     s = sub.add_parser("report-sample", help="PDF de prueba con plantilla PROVISIONAL")
     s.add_argument("--out", default="data/results/sample_report.pdf")
     s.add_argument("--privacy", choices=["internal", "public"], default="public")
@@ -331,12 +417,16 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("manifest")
     s.add_argument("--base", default=".")
     s.set_defaults(fn=cmd_verify_manifest)
+    s = sub.add_parser(
+        "check-boundary", help="Validar un límite municipal GeoJSON y mostrar su SHA-256"
+    )
+    s.add_argument("path", nargs="?", default="regions/jocotan_chiquimula_boundary.geojson")
+    s.set_defaults(fn=cmd_check_boundary)
     s = sub.add_parser("check-core", help="Verificar la fachada de milpa_core (R2)")
     s.set_defaults(fn=cmd_check_core)
     s = sub.add_parser("hash", help="SHA-256 de un archivo")
     s.add_argument("path")
     s.set_defaults(fn=cmd_hash)
-    return p
 
 
 def main(argv: list[str] | None = None) -> int:

@@ -18,6 +18,8 @@ dependencies = [
 imerg = ["earthaccess>=0.9", "xarray>=2024.1", "h5netcdf>=1.3"]
 # DEM Copernicus 30 m (fetch dem)
 dem = ["rasterio>=1.3"]
+# SoilGrids municipal extraction (tools/etl_soilgrids.py)
+soilgrids = ["geopandas>=1.0", "shapely>=2.0", "requests>=2.32"]
 
 [project.scripts]
 milpa-etl = "milpa_etl.cli:main"

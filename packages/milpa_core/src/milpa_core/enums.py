@@ -10,7 +10,7 @@ from enum import Enum
 
 class StrEnum(str, Enum):
     def __str__(self) -> str:  # pragma: no cover - cosmético
-        return self.value
+        return str(self.value)
 
 
 class Provenance(StrEnum):
@@ -194,7 +194,7 @@ class Reason(StrEnum):
     UMBRAL_SANDBOX = "umbral provisional — no usar para decisión"
 
 
-ALL_ENUMS = [
+ALL_ENUMS: list[type[StrEnum]] = [
     Provenance, Evidence, PropertyStatus, Mode, Label, CellState, CriterionStatus, Criterion,
     RankingStatus, StabilityFlag, VoiApplicability, VoiOutcome, AdaptationMode,
     HumidityAssumption, StrategyAxis, WindowMode, IndicatorKind, PeffMethod, EaMethod,
@@ -213,7 +213,7 @@ def _snake(name: str) -> str:
 
 def export_sql() -> str:
     """DDL de tipos para la migración de R1/R3 (paridad de enums, T-C)."""
-    lines = []
+    lines: list[str] = []
     for e in ALL_ENUMS:
         vals = ", ".join(f"'{m.value}'" for m in e)
         lines.append(f"CREATE TYPE {_snake(e.__name__)}_t AS ENUM ({vals});")

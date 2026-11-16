@@ -14,6 +14,8 @@ def make_settings(db: TestDb, data_dir: Path, **over: Any) -> Settings:
         "database_url": db.app_url,
         "jwt_secret": JWT_SECRET_TEST,
         "data_dir": data_dir,
+        # Las pruebas no dependen del frontend compilado del equipo (apps/web/dist).
+        "web_dist_dir": data_dir / "sin-frontend-compilado",
         "rate_limit_per_min": 100_000,
         "login_lock_threshold": 3,
         "milpa_mode": "sandbox",

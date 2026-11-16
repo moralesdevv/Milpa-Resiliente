@@ -22,7 +22,7 @@ from testkit import PASSWORD
 from testkit.app import World
 
 CHECKS = [not_a_server_error, response_schema_conformance, content_type_conformance]
-EXPECTED_OPERATIONS = 34
+EXPECTED_OPERATIONS = 40
 
 
 def run_operations(app: Any, headers: dict[str, str], max_examples: int) -> int:

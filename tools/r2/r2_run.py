@@ -1,12 +1,13 @@
 """Corrida de R2 de extremo a extremo: serie curada → motor → payloads JSON para R3/R4.
 
-    # con la serie curada de R1
-    python tools/r2_run.py --daily data/curated/chiquimula_prueba/daily.parquet --out results/demo
-    # sin R1 (serie sintética rotulada)
-    python tools/r2_run.py --synthetic --out examples
-    # con la grilla de escenarios (45 + lecturas de adaptación)
-    python tools/r2_run.py --synthetic --grid --out examples
+# con la serie curada de R1
+python tools/r2_run.py --daily data/curated/chiquimula_prueba/daily.parquet --out results/demo
+# sin R1 (serie sintética rotulada)
+python tools/r2_run.py --synthetic --out examples
+# con la grilla de escenarios (45 + lecturas de adaptación)
+python tools/r2_run.py --synthetic --grid --out examples
 """
+
 from __future__ import annotations
 
 import argparse
@@ -24,8 +25,15 @@ sys.path.insert(0, str(ROOT / "packages" / "milpa_core" / "src"))
 sys.path.insert(0, str(ROOT / "tools" / "r2"))
 
 from milpa_adapter import load_catalogs, load_curated_daily, load_region, load_strategies  # noqa: E402
-
-from milpa_core import BASE, make_context, rank, rank_stability, run_analysis, soil_voi, standard_grid  # noqa: E402
+from milpa_core import (  # noqa: E402
+    BASE,
+    make_context,
+    rank,
+    rank_stability,
+    run_analysis,
+    soil_voi,
+    standard_grid,
+)
 from milpa_core.dto import rank_response_dto, run_summary_dto  # noqa: E402
 from milpa_core.enums import AdaptationMode, export_json, export_sql  # noqa: E402
 from milpa_core.exposure import dekad_chart  # noqa: E402
@@ -44,12 +52,27 @@ def dump(obj, path: Path):
 def cycle_table(run) -> pd.DataFrame:
     rows = []
     for r in run.cycle_results:
-        rows.append({"strategy": r.strategy, "cohort_year": r.cohort_year, "cycle_idx": r.cycle_idx, "variety": r.variety,
-                     "anchor_md": r.anchor_md, "plant_date": r.plant_date, "harvest_date": r.harvest_date,
-                     "agri_year": r.agri_year, "state": r.state.value, "provisional": r.provisional,
-                     "reason": ";".join(r.reasons), "exposure_mm": r.severity_mm,
-                     "missing_pct": None if r.evaluability is None else r.evaluability.missing_precip_pct,
-                     "state_low": r.state_by_level["low"].value, "state_high": r.state_by_level["high"].value})
+        rows.append(
+            {
+                "strategy": r.strategy,
+                "cohort_year": r.cohort_year,
+                "cycle_idx": r.cycle_idx,
+                "variety": r.variety,
+                "anchor_md": r.anchor_md,
+                "plant_date": r.plant_date,
+                "harvest_date": r.harvest_date,
+                "agri_year": r.agri_year,
+                "state": r.state.value,
+                "provisional": r.provisional,
+                "reason": ";".join(r.reasons),
+                "exposure_mm": r.severity_mm,
+                "missing_pct": None
+                if r.evaluability is None
+                else r.evaluability.missing_precip_pct,
+                "state_low": r.state_by_level["low"].value,
+                "state_high": r.state_by_level["high"].value,
+            }
+        )
     return pd.DataFrame(rows)
 
 
@@ -64,7 +87,9 @@ def save_table(df: pd.DataFrame, path: Path):
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--region", default=str(ROOT / "regions" / "r2" / "pilot_corredor_seco.yaml"))
-    ap.add_argument("--strategies", default=str(ROOT / "regions" / "r2" / "pilot_corredor_seco.strategies.yaml"))
+    ap.add_argument(
+        "--strategies", default=str(ROOT / "regions" / "r2" / "pilot_corredor_seco.strategies.yaml")
+    )
     ap.add_argument("--catalogs", default=str(ROOT / "catalogs" / "r2"))
     ap.add_argument("--daily", help="curated/<zona>/daily.parquet de R1 (o CSV)")
     ap.add_argument("--synthetic", action="store_true", help="usar serie sintética rotulada")
@@ -79,6 +104,7 @@ def main(argv=None):
     strategies = load_strategies(a.strategies)
     if a.synthetic:
         from make_synthetic import make
+
         tmp = Path(a.out) / "_synthetic_daily.csv"
         tmp.parent.mkdir(parents=True, exist_ok=True)
         make(region.window_start, region.window_end).to_csv(tmp, index=False)
@@ -86,11 +112,22 @@ def main(argv=None):
     else:
         if not a.daily:
             ap.error("--daily o --synthetic")
-        series, info = load_curated_daily(a.daily, extra["cell_id"], region.window_start, region.window_end)
+        series, info = load_curated_daily(
+            a.daily, extra["cell_id"], region.window_start, region.window_end
+        )
     run_id = str(uuid.uuid4())
-    ctx = make_context(region, catalogs, series, strategies, crops_enabled=extra["crops_enabled"],
-                       ranking_cfg=extra["ranking_cfg"], stability_cfg=extra["stability_cfg"], voi_cfg=extra["voi_cfg"],
-                       soil_cfg=extra["soil_cfg"], run_id=run_id)
+    ctx = make_context(
+        region,
+        catalogs,
+        series,
+        strategies,
+        crops_enabled=extra["crops_enabled"],
+        ranking_cfg=extra["ranking_cfg"],
+        stability_cfg=extra["stability_cfg"],
+        voi_cfg=extra["voi_cfg"],
+        soil_cfg=extra["soil_cfg"],
+        run_id=run_id,
+    )
     out = Path(a.out)
     base = run_analysis(ctx, BASE, AdaptationMode.NONE, a.step_days)
     t_base = time.time() - t0
@@ -100,7 +137,10 @@ def main(argv=None):
     if info.get("r1_et0_mm") is not None and np.isfinite(info["r1_et0_mm"]).any():
         r1 = info["r1_et0_mm"]
         ok = np.isfinite(r1) & np.isfinite(ctx.base_climate.et0_mm)
-        et0_check = {"mean_abs_diff_mm": float(np.mean(np.abs(r1[ok] - ctx.base_climate.et0_mm[ok]))), "n": int(ok.sum())}
+        et0_check = {
+            "mean_abs_diff_mm": float(np.mean(np.abs(r1[ok] - ctx.base_climate.et0_mm[ok]))),
+            "n": int(ok.sum()),
+        }
 
     summary = run_summary_dto(base, strategies)
     summary["et0_parity_vs_R1"] = et0_check
@@ -116,12 +156,30 @@ def main(argv=None):
             continue
         hc = heatmap_cycle(list(base.cycle_results), s.code, sw.cycle_idx)
         hs = heatmap_strategy(list(base.strategy_risk), s.code)
-        p90 = [next((c.stats["severity_p90_mm"] for c in base.cycle_risk if c.strategy == s.code and c.cycle_idx == sw.cycle_idx
-                     and c.anchor_md == d), None) for d in hc["plant_md"]]
-        hc["consistent_windows"] = consistent_windows(hc["plant_md"], hc["pct_critical_by_date"], p90)
+        p90 = [
+            next(
+                (
+                    c.stats["severity_p90_mm"]
+                    for c in base.cycle_risk
+                    if c.strategy == s.code and c.cycle_idx == sw.cycle_idx and c.anchor_md == d
+                ),
+                None,
+            )
+            for d in hc["plant_md"]
+        ]
+        hc["consistent_windows"] = consistent_windows(
+            hc["plant_md"], hc["pct_critical_by_date"], p90
+        )
         heat[s.code] = {"cycle": hc, "strategy": hs}
-    dump({"mode": base.decision.mode.value, "label": base.decision.label.value, "scenario": base.tag, "heatmaps": heat},
-         out / "heatmap.json")
+    dump(
+        {
+            "mode": base.decision.mode.value,
+            "label": base.decision.label.value,
+            "scenario": base.tag,
+            "heatmaps": heat,
+        },
+        out / "heatmap.json",
+    )
 
     # gráfico por decena: primera cohorte, primera fecha, de cada estrategia
     charts = {}
@@ -147,7 +205,9 @@ def main(argv=None):
     sc_json = None
     if a.grid:
         t1 = time.time()
-        ads = [AdaptationMode.NONE] + ([AdaptationMode.ONSET_RULE] if region.onset_rule_enabled else [])
+        ads = [AdaptationMode.NONE] + (
+            [AdaptationMode.ONSET_RULE] if region.onset_rule_enabled else []
+        )
         runs, skipped = run_grid(ctx, standard_grid(), ads, a.step_days)
         comps = []
         for (sid, ad), r in runs.items():
@@ -160,20 +220,38 @@ def main(argv=None):
             comps.append(c)
             save_table(cycle_table(r), out / "results" / run_id / sid / ad / "cycle_result")
         hum = humidity_sensitivity_flags(runs, region.communication_tol_pct)
-        sc_json = {"n_runs": len(runs), "skipped": {f"{k[0]}|{k[1]}": v for k, v in skipped.items()},
-                   "comparisons": comps, "escenario_sensible_a_humedad": hum, "seconds": round(time.time() - t1, 1),
-                   "label": "escenario sintético — no es pronóstico"}
+        sc_json = {
+            "n_runs": len(runs),
+            "skipped": {f"{k[0]}|{k[1]}": v for k, v in skipped.items()},
+            "comparisons": comps,
+            "escenario_sensible_a_humedad": hum,
+            "seconds": round(time.time() - t1, 1),
+            "label": "escenario sintético — no es pronóstico",
+        }
         dump(sc_json, out / "scenarios.json")
 
     report = build_report(summary, rank_json, to_jsonable(voi), (sc_json or {}).get("comparisons"))
     dump(report, out / "report_model.json")
     dump(export_json(), out / "enums.json")
     (out / "enums.sql").write_text(export_sql() + "\n", encoding="utf-8")
-    print(json.dumps({"run_id": run_id, "mode": base.decision.mode.value, "n_cycle_results": len(base.cycle_results),
-                      "ranking_status": rk.status.value, "order": list(rk.order), "stability": st.flag.value,
-                      "voi": voi.outcome.value if voi.outcome else voi.applicability.value,
-                      "base_seconds": round(t_base, 1), "et0_parity_vs_R1": et0_check, "out": str(out)},
-                     ensure_ascii=False, indent=2))
+    print(
+        json.dumps(
+            {
+                "run_id": run_id,
+                "mode": base.decision.mode.value,
+                "n_cycle_results": len(base.cycle_results),
+                "ranking_status": rk.status.value,
+                "order": list(rk.order),
+                "stability": st.flag.value,
+                "voi": voi.outcome.value if voi.outcome else voi.applicability.value,
+                "base_seconds": round(t_base, 1),
+                "et0_parity_vs_R1": et0_check,
+                "out": str(out),
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+    )
 
 
 if __name__ == "__main__":

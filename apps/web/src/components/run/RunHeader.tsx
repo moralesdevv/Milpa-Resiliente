@@ -23,10 +23,10 @@ export function RunHeader({ runId }: { runId: string }) {
   return <section className="run-header" aria-label={t("run.title")} data-testid="run-header">
     <div className="run-header__main">
       <span className="mode-chip" data-testid="mode-label">{t(`mode.${label}`)}</span>
-      <code>{run.data.run_id}</code>
+      <code title={run.data.run_id} aria-label={run.data.run_id}>{t("run.shortId", { id: run.data.run_id.slice(0, 8) })}</code>
     </div>
     {reasons.length > 0 && <p className="run-header__reasons">
-      {t("run.modeReasons")}: {reasons.map((reason) => t(`run.reasons.${reason}`, reason)).join(", ")}
+      {t("run.modeReasons")}: {reasons.map((reason) => reason.startsWith("catalog:") ? t("run.reasonCatalog", { variety: reason.slice(8).replace(/_/g, " ") }) : t(`run.reasons.${reason}`, reason)).join("; ")}
     </p>}
     {sandbox && <ProvisionalBanner>{t("run.sandbox")}</ProvisionalBanner>}
     {synthetic && <ProvisionalBanner>{t("run.syntheticFixture")}</ProvisionalBanner>}

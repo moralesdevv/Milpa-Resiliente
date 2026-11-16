@@ -6,6 +6,8 @@ algún componente lo es.
 """
 from __future__ import annotations
 
+from typing import Any
+
 from dataclasses import dataclass, field
 
 import numpy as np
@@ -33,8 +35,8 @@ class Segment:
     etc_mm: float
     pef_mm: float
     exposure_mm: float
-    limit_mm: dict  # level → valor escalado o None
-    over: dict  # level → bool | None
+    limit_mm: dict[str, Any]  # level → valor escalado o None
+    over: dict[str, Any]  # level → bool | None
 
 
 @dataclass(frozen=True)
@@ -44,7 +46,7 @@ class ComponentExposure:
     role: str
     area_fraction: float
     severity_mm: float
-    state: dict  # level → CellState
+    state: dict[str, Any]  # level → CellState
     provisional: bool
     reasons: tuple[str, ...]
     segments: tuple[Segment, ...]
@@ -67,14 +69,14 @@ class CycleResult:
     mode: Mode
     peff_method: str
     state: CellState
-    state_by_level: dict
+    state_by_level: dict[str, Any]
     severity_mm: float | None
     provisional: bool
     reasons: tuple[str, ...]
     evaluability: Evaluability | None
     components: tuple[ComponentExposure, ...] = ()
     evidence: Evidence | None = None
-    state_by_peff: dict = field(default_factory=dict)  # método → estado central (sensibilidad)
+    state_by_peff: dict[str, Any] = field(default_factory=dict)  # método → estado central (sensibilidad)
     stress_days: float | None = None  # Modo B
     adapted: bool = False
 
@@ -144,7 +146,7 @@ def _component_exposure(comp, clim: CuratedClimate, catalogs: Catalogs, method: 
                 reasons.append(Reason.PROVISIONAL_SIN_CITA.value)
     thr: dict[str, Threshold | None] = {s.code: catalogs.threshold(v.crop, s.code, method) for s in crit_stages}
     missing_thr = [k for k, t in thr.items() if t is None]
-    for k, t in thr.items():
+    for _k, t in thr.items():
         if t is None:
             continue
         thr_ev.append(t.evidence if t.cited else Evidence.C)
@@ -157,7 +159,7 @@ def _component_exposure(comp, clim: CuratedClimate, catalogs: Catalogs, method: 
                                 "peff_method": None if t.peff_method is None else str(t.peff_method),
                                 "citation": t.citation, "provisional": not t.cited})
     segments = []
-    stage_over: dict[str, dict] = {}
+    stage_over: dict[str, dict[str, Any]] = {}
     for sr in segs_raw:
         e = max(0.0, sr["etc_mm"] - sr["pef_mm"])
         t = thr.get(sr["stage"])
@@ -251,7 +253,7 @@ def evaluate_cycle_exposure(ci: CycleInstance, clim: CuratedClimate, catalogs: C
                        by_peff, adapted=ci.adapted)
 
 
-def dekad_chart(ci: CycleInstance, clim: CuratedClimate, catalogs: Catalogs, region: RegionConfig, method: str | None = None) -> dict:
+def dekad_chart(ci: CycleInstance, clim: CuratedClimate, catalogs: Catalogs, region: RegionConfig, method: str | None = None) -> dict[str, Any]:
     """Payload del gráfico por decena (DekadChartDTO, sin envoltura Indicator: la añade report/serialize)."""
     from ..crops import system_etc_exploratory
 

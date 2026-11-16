@@ -105,7 +105,7 @@ python -m api.cli register-engine          # R2 catalog + 45 scenario definition
 milpa-etl fetch power --zone chiquimula_prueba --lat 14.83 --lon -89.44 --start 20010101 --end 20251231
 milpa-etl register zone --zone chiquimula_prueba --geojson regions/chiquimula_prueba.geojson \
           --region-config regions/pilot_corredor_seco.yaml
-python -m api.cli create-user --email you@example.org --role tecnico
+python -m api.cli create-demo-user            # account behind the public demo (no sign-in in the UI)
 uvicorn --factory api.main:create_app --port 8000
 cd apps/web && npm ci && npm run build
 ```
