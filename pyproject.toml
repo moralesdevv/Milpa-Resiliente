@@ -1,0 +1,73 @@
+[project]
+name = "milpa-resiliente"
+version = "0.1.0"
+description = "MILPA RESILIENTE 3.3 - workspace Python (R3 aporta apps/api; R1/R2 aportan packages/*)"
+requires-python = ">=3.12,<3.13"
+readme = "README.md"
+dependencies = []
+
+# Workspace uv. packages/milpa_etl (R1) se integró desde references/ (docs/auditoria, ADR-018).
+# packages/milpa_core (R2) se agrega cuando R2 lo entregue; R3 NO lo crea ni lo simula.
+[tool.uv.workspace]
+members = ["apps/api", "packages/milpa_etl"]
+
+[dependency-groups]
+dev = []
+
+# ---------------------------------------------------------------- Ruff
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["apps/api/src", "apps/api/tests", "tests", "testkit", "."]
+extend-exclude = ["apps/web", "packages", "data"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "S", "C4", "SIM", "RUF", "PL", "T20"]
+ignore = [
+  "PLR0913",  # firmas con muchos argumentos en servicios/repositorios son aceptables
+  "PLR2004",  # constantes literales en validaciones simples
+  "RUF012",
+  "E501",      # el formateador gestiona el ancho; quedan cadenas/SQL largas legítimas
+  "B008",     # Depends() en defaults es el idioma de FastAPI
+  "PLC0415",  # imports perezosos intencionales (WeasyPrint/Pango nativo, CLI, dependencias opcionales)
+  "PLR0917",  # firmas con muchos argumentos posicionales en servicios/repositorios
+  "PLR0912",
+  "UP046",    # Generic[T] explícito: compatible con el plugin de mypy/pydantic
+]
+
+[tool.ruff.lint.per-file-ignores]
+"apps/api/tests/**" = ["S101", "S105", "S106", "S311", "PLR0915", "T20", "E501", "S608"]
+"tests/**" = ["S101", "S105", "S106", "S311", "PLR0915", "T20", "E501", "S608"]
+"testkit/**" = ["S101", "S105", "S106", "S311", "E501", "S608"]
+"conftest.py" = ["S101", "S105", "S106", "S608", "E501"]
+"apps/api/migrations/**" = ["E501"]
+"apps/api/src/api/cli.py" = ["T20"]
+"apps/api/src/api/bench/**" = ["T20", "S311"]
+
+# ---------------------------------------------------------------- mypy
+# CLAUDE.md: mypy estricto en milpa_core (R2). Para R3 se aplica estricto desde el inicio.
+[tool.mypy]
+python_version = "3.12"
+strict = true
+plugins = ["pydantic.mypy"]
+mypy_path = "apps/api/src"
+packages = ["api"]
+explicit_package_bases = true
+
+[[tool.mypy.overrides]]
+module = ["geoalchemy2.*", "pandera.*", "weasyprint.*", "pypdf.*", "argon2.*", "pyarrow.*"]
+ignore_missing_imports = true
+
+# ---------------------------------------------------------------- pytest
+[tool.pytest.ini_options]
+testpaths = ["apps/api/tests", "tests", "packages/milpa_etl/tests"]
+pythonpath = ["."]
+addopts = "-ra --strict-markers"
+markers = [
+  "integration: requiere PostgreSQL/PostGIS real (TEST_DATABASE_ADMIN_URL)",
+  "privacy: pruebas T-S de privacidad",
+  "contract: pruebas T-C de contrato/OpenAPI",
+  "pdf: requiere bibliotecas nativas de WeasyPrint (Pango)",
+  "slow: prueba lenta (procesos reales)",
+]
+filterwarnings = ["error::DeprecationWarning:api.*"]

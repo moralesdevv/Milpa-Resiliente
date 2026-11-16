@@ -1,0 +1,129 @@
+{#-
+  Plantilla del informe de decisión (MILPA RESILIENTE 3.3, §18). Entregable de R4 para R3.
+  - Una hoja A4 principal + anexo técnico. Sin recursos externos (WeasyPrint con url_fetcher local).
+  - No calcula nada: presenta lo que entrega `report_model` (R2). Contrato de variables: docs/REPORT_TEMPLATE.md.
+  - Autoescape activo: el generador debe cargar la plantilla con autoescape=True.
+-#}
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>{{ labels.title }} · {{ report.run_id }}</title>
+  <link rel="stylesheet" href="report.css">
+</head>
+<body class="privacy-{{ report.privacy_level }}">
+
+<main class="page-main">
+  <header>
+    <p class="eyebrow">MILPA RESILIENTE 3.3 · {{ labels.privacy }}: {{ labels.privacy_names[report.privacy_level] }}</p>
+    <h1>{{ labels.title }}</h1>
+    <p class="fixed-notice">{{ labels.not_automatic }}</p>
+  </header>
+
+  {# Banner de modo y de provisionalidad: texto y etiqueta vienen del motor. #}
+  <section class="banner-row" aria-label="{{ labels.mode_banner }}">
+    <p class="mode-banner"><strong>{{ mode.label_text }}</strong>
+      {% if mode.reasons %}· {{ labels.mode_reasons }}: {{ mode.reasons | join(", ") }}{% endif %}</p>
+    {% if provisional %}<p class="provisional-banner">{{ labels.provisional }}</p>{% endif %}
+    {% if synthetic_fixture %}<p class="provisional-banner">{{ labels.synthetic }}</p>{% endif %}
+  </section>
+
+  <section>
+    <h2>{{ labels.summary }}</h2>
+    <p>{{ summary_es }}</p>
+  </section>
+
+  {% block english_summary %}{% endblock %}
+
+  <section>
+    <h2>{{ labels.strategies }}</h2>
+    <table>
+      <thead><tr><th>{{ labels.strategy }}</th><th>{{ labels.freq }}</th><th>P90</th><th>CVaR90</th><th>{{ labels.worst_year }}</th><th>n</th><th>{{ labels.evidence }}</th></tr></thead>
+      <tbody>
+      {% for s in strategies %}
+        <tr><th>{{ s.name }}</th><td>{{ s.freq_critical }}</td><td>{{ s.severity_p90 }}</td><td>{{ s.severity_cvar90 }}</td><td>{{ s.worst_year }}</td><td>{{ s.n_valid }}/{{ s.n_expected }}</td><td>{{ s.evidence }}</td></tr>
+      {% else %}
+        <tr><td colspan="7">{{ labels.no_data }}</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>{{ labels.ranking }}</h2>
+    {% if ranking and ranking.status == "ok" %}
+      <ol>{% for r in ranking.rows %}<li>{{ r.name }} — {{ r.total }}</li>{% endfor %}</ol>
+      <p>{{ labels.weights_used }}: {% for k, v in ranking.weights.items() %}{{ k }} {{ v }}{% if not loop.last %}, {% endif %}{% endfor %}.
+         {{ labels.weight_coverage }}: {{ ranking.weight_coverage }}.</p>
+      <p class="stability stability-{{ ranking.stability.flag }}">{{ labels.stability }}: <strong>{{ ranking.stability.flag_text }}</strong>. {{ labels.stability_note }}</p>
+      {% for c in ranking.stability.conflicts %}<p class="conflict">{{ c }}</p>{% endfor %}
+    {% else %}
+      <p>{{ labels.ranking_insufficient }}</p>
+    {% endif %}
+  </section>
+
+  <section>
+    <h2>{{ labels.uncertainty }}</h2>
+    <ul>{% for item in limitations %}<li>{{ item }}</li>{% endfor %}</ul>
+  </section>
+
+  <section>
+    <h2>{{ labels.missing }}</h2>
+    <ul>{% for item in missing_data %}<li>{{ item }}</li>{% else %}<li>{{ labels.none }}</li>{% endfor %}</ul>
+  </section>
+
+  <section>
+    <h2>{{ labels.field_conditions }}</h2>
+    <ul>{% for item in field_conditions %}<li>{{ item }}</li>{% else %}<li>{{ labels.none }}</li>{% endfor %}</ul>
+    <p>{{ labels.human_decisions }}</p>
+  </section>
+
+  <footer class="repro">
+    <p>run_id: <code>{{ report.run_id }}</code> · code_version: <code>{{ report.code_version }}</code> · data_hash: <code>{{ report.data_hash }}</code></p>
+    <p>region_config_hash: <code>{{ report.region_config_hash }}</code> · catalog_hash: <code>{{ report.catalog_hash }}</code> · params_hash: <code>{{ report.params_hash }}</code> · seed: <code>{{ report.seed }}</code></p>
+  </footer>
+</main>
+
+<section class="annex">
+  <h1>{{ labels.annex }}</h1>
+
+  <h2>{{ labels.methodology }}</h2>
+  <p>{{ annex.methodology }}</p>
+
+  <h2>{{ labels.assumptions }}</h2>
+  <ul>{% for a in annex.assumptions %}<li>{{ a }}</li>{% endfor %}</ul>
+
+  <h2>{{ labels.sources }}</h2>
+  <table>
+    <thead><tr><th>{{ labels.product }}</th><th>{{ labels.institution }}</th><th>{{ labels.version }}</th><th>{{ labels.origin }}</th></tr></thead>
+    <tbody>{% for src in annex.sources %}
+      <tr><th>{{ src.product_name }}</th><td>{{ src.institution }}</td><td>{{ src.version or "—" }}</td><td>{{ labels.nasa if src.is_nasa else labels.not_nasa }}</td></tr>
+    {% endfor %}</tbody>
+  </table>
+
+  <h2>{{ labels.provenance }}</h2>
+  <table>
+    <thead><tr><th>{{ labels.indicator }}</th><th>{{ labels.evidence }}</th><th>{{ labels.provenance_kind }}</th><th>{{ labels.method }}</th></tr></thead>
+    <tbody>{% for p in annex.indicators %}
+      <tr><th>{{ p.label }}</th><td>{{ p.evidence or "—" }}</td><td>{{ p.provenance }}</td><td>{{ p.method }}</td></tr>
+    {% endfor %}</tbody>
+  </table>
+
+  <h2>{{ labels.scenarios }}</h2>
+  <ul>{% for sc in annex.scenarios %}
+    <li><strong>{{ sc.scenario_id }}</strong> — {{ labels.scenario_tag }}: ΔT {{ sc.delta_t_c }} °C, ×{{ sc.precip_factor }}, {{ sc.onset_delay_days }} d, {{ sc.humidity_assumption_text }}, {{ sc.adaptation_text }}</li>
+  {% else %}<li>{{ labels.none }}</li>{% endfor %}</ul>
+
+  <h2>{{ labels.by_cycle }}</h2>
+  <table>
+    <thead><tr><th>{{ labels.strategy }}</th><th>{{ labels.cycle }}</th><th>{{ labels.freq }}</th><th>P90</th><th>CVaR90</th><th>n</th></tr></thead>
+    <tbody>{% for c in annex.cycles %}
+      <tr><th>{{ c.strategy }}</th><td>{{ c.cycle }}</td><td>{{ c.freq_critical }}</td><td>{{ c.severity_p90 }}</td><td>{{ c.severity_cvar90 }}</td><td>{{ c.n_valid }}/{{ c.n_expected }}</td></tr>
+    {% endfor %}</tbody>
+  </table>
+
+  <h2>{{ labels.references }}</h2>
+  <ol class="references">{% for ref in annex.references %}<li>{{ ref }}</li>{% else %}<li>{{ labels.none }}</li>{% endfor %}</ol>
+</section>
+</body>
+</html>

@@ -1,0 +1,9 @@
+* text=auto
+*.sh text eol=lf
+*.sql text eol=lf
+*.py text eol=lf
+Makefile text eol=lf
+*.yml text eol=lf
+
+# Paquete de demostración congelado: los hashes de EXPECTED.json son de bytes exactos; sin conversión de saltos de línea
+data/demo/** -text

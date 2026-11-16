@@ -1,0 +1,68 @@
+# catalogs/evidence_rules.yaml — reglas A/B/C por indicador (apartado 21 del PDF)
+#
+# ESTADO: PROPUESTA. La validación metodológica de estas reglas es una decisión
+# pendiente (DP-09). Hasta cerrarla, A/B/C es una convención de trabajo y no una
+# certificación. Un nivel nunca sube: la evidencia de un indicador es el MÍNIMO de
+# la de sus insumos.
+
+version: 0
+status: propuesta
+
+rules:
+  # --- Lluvia ---------------------------------------------------------------
+  # El PDF asigna B a IMERG. Hoy la lluvia viene de POWER PRECTOTCORR, que el PDF
+  # solo prevé como serie de contraste o respaldo. NO hay regla en el PDF para
+  # usarla como primaria: se propone C provisional hasta decidirlo con R2.
+  precip_power_provisional:
+    indicator: precip_mm
+    provenance: modelado
+    evidence: C
+    cap: C
+    note: "POWER PRECTOTCORR usada como primaria; propuesta, pendiente de R2"
+
+  # Apartado 21 del PDF: IMERG es B; baja a C si la proporción de días de respaldo supera
+  # fallback_share_max [Pendiente] O si no hay validación en la zona.
+  # Aquí "validación en la zona" = comparación con una estación local (precip_validation.json
+  # con la clave IMERG_vs_station). IMERG frente a POWER NO cuenta: ambos son de grilla gruesa.
+  precip_imerg_b:
+    indicator: precip_mm
+    provenance: satelital
+    evidence: B
+    cap: B
+    requires: station_validation
+    lowers_to_C_if:
+      fallback_share_gt: pending   # fallback_share_max [Pendiente]; hoy solo se informa el porcentaje
+    note: "IMERG Final V07 con validación en la zona"
+
+  precip_imerg_c_no_validation:
+    indicator: precip_mm
+    provenance: satelital
+    evidence: C
+    cap: C
+    note: "IMERG Final V07 sin validación en la zona (sin estación): baja a C por el apartado 21"
+
+  # --- ET0 --------------------------------------------------------------------
+  et0_b_dewpoint:
+    indicator: et0_mm
+    provenance: modelado
+    evidence: B
+    cap: B
+    note: "ea por punto de rocío (T2MDEW) y Rs de POWER, sin radiación modelada"
+
+  et0_c_rad_modeled:
+    indicator: et0_mm
+    provenance: modelado
+    evidence: C
+    cap: C
+    note: "Rs modelada con Hargreaves-Samani en al menos un día"
+
+  # --- Precipitación efectiva ---------------------------------------------------
+  pef_min_inputs:
+    indicator: pef_mm
+    provenance: modelado
+    evidence: min_of_inputs
+    cap: min
+    note: "Mínima entre la lluvia y la cita del método; método primario aún pendiente (DP-06)"
+
+limits:
+  max_level_without_local_verification: B

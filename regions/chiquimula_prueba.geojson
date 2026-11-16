@@ -1,0 +1,18 @@
+{
+  "type": "Feature",
+  "properties": {
+    "name": "chiquimula_prueba",
+    "approximate": true,
+    "note": "Rectángulo aproximado dibujado a mano alrededor de Chiquimula, Jocotán y Camotán. NO es el límite oficial: reemplazar por el de SEGEPLAN/INE y verificar sobre un mapa [Verificar]. Sin coordenadas de parcelas."
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-89.60, 14.75],
+      [-89.20, 14.75],
+      [-89.20, 14.95],
+      [-89.60, 14.95],
+      [-89.60, 14.75]
+    ]]
+  }
+}

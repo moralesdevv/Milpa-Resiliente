@@ -1,0 +1,16 @@
+{
+  "name": "milpa-resiliente",
+  "private": true,
+  "workspaces": [
+    "apps/web"
+  ],
+  "scripts": {
+    "web:dev": "npm run dev --workspace @milpa-resiliente/web",
+    "web:dev:mock": "npm run dev:mock --workspace @milpa-resiliente/web",
+    "web:build": "npm run build --workspace @milpa-resiliente/web",
+    "web:test": "npm run test --workspace @milpa-resiliente/web",
+    "web:test:e2e": "npm run test:e2e --workspace @milpa-resiliente/web",
+    "web:test:copy": "npm run test:copy --workspace @milpa-resiliente/web",
+    "web:types": "npm run types:generate --workspace @milpa-resiliente/web"
+  }
+}

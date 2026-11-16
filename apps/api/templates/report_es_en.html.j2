@@ -1,0 +1,9 @@
+{#- Variante «es+en»: añade el resumen ejecutivo en inglés a la plantilla en español. -#}
+{% extends "report_es.html.j2" %}
+{% block english_summary %}
+  <section lang="en" class="summary-en">
+    <h2>{{ labels.summary_en_title }}</h2>
+    <p>{{ summary_en }}</p>
+    <p class="fixed-notice">{{ labels.not_automatic_en }}</p>
+  </section>
+{% endblock %}

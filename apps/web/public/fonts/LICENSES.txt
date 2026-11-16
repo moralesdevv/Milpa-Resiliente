@@ -1,0 +1,5 @@
+Fuentes autoalojadas (sin peticiones a terceros):
+- Atkinson Hyperlegible Next: SIL Open Font License 1.1 (Braille Institute).
+- Archivo: SIL Open Font License 1.1 (Omnibus-Type).
+- Bricolage Grotesque: SIL Open Font License 1.1 (Mathieu Triay), distribuida vía Fontsource.
+- JetBrains Mono: SIL Open Font License 1.1 (JetBrains), distribuida vía Fontsource.

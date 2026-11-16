@@ -1,0 +1,7 @@
+# PostgreSQL 16 + PostGIS 3.4 con inicialización del rol de aplicación (sin BYPASSRLS).
+FROM postgis/postgis:16-3.4
+COPY infra/db/initdb/ /docker-entrypoint-initdb.d/
+# Solo nuestro script: los de la imagen base los "source" el entrypoint y no deben ser ejecutables.
+RUN chmod 0755 /docker-entrypoint-initdb.d/10-roles.sh
+# Valores por defecto seguros del servidor: no registrar sentencias (podrían contener datos privados).
+CMD ["postgres", "-c", "log_statement=none", "-c", "log_min_duration_statement=-1", "-c", "password_encryption=scram-sha-256"]

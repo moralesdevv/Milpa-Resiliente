@@ -1,0 +1,10 @@
+parcel_code,sample_date,depth_from_cm,depth_to_cm,lab,ph,ph_method,om_pct,om_method,sand_pct,silt_pct,clay_pct,texture_method,cec_cmol_kg,cec_method,effective_root_depth_cm,awc_mm_per_m,awc_method
+P-014,2025-03-12,0,20,SINTETICO invalido,11.2,H2O_1:2.5,,,,,,,,,,,
+P-014,2025-03-12,0,20,SINTETICO invalido,5.9,,,,,,,,,,,,
+P-014,2025-03-12,0,20,SINTETICO invalido,,,,,50,30,30,hidrometro,,,,,
+P-014,2099-01-01,0,20,SINTETICO invalido,5.8,H2O_1:2.5,,,,,,,,,,,
+P-014,2025-03-12,20,10,SINTETICO invalido,5.8,H2O_1:2.5,,,,,,,,,,,
+P-014,2025-03-12,0,20,SINTETICO invalido,"6,5",H2O_1:2.5,,,,,,,,,,,
+P-014,2025-03-12,0,20,SINTETICO invalido,,,,,45,35,-5,hidrometro,,,,,
+,2025-03-12,0,20,SINTETICO invalido,5.8,H2O_1:2.5,,,,,,,,,,,
+P-014,2025-03-12,0,20,=HYPERLINK("http://ejemplo.invalido"),5.8,H2O_1:2.5,,,,,,,,,,,

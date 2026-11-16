@@ -1,0 +1,8 @@
+# Región alterna SINTÉTICA ROTULADA (README §23): sirve para comprobar que una región se agrega con archivos.
+# No describe un lugar real ni contiene valores agronómicos (P9): todo lo que tendría efecto agronómico
+# queda `pending`, igual que en pilot_corredor_seco.yaml. Estado sandbox.
+region: example_alt_region
+status: sandbox
+label: "datos sintéticos rotulados: fixture de prueba, no representa una región real"
+zone: { name: zona_sintetica, polygon_file: pending }
+agri_year_start: pending

@@ -1,0 +1,13 @@
+{
+  "zone": "zona_sintetica",
+  "seed": 0,
+  "data_hash": "a64b22fff8deee6e537727a4907876af9976f9ccb99e10cf266558fd4530cea4",
+  "label": "datos sintéticos",
+  "files_sha256": {
+    "zona_sintetica/coverage.parquet": "a1d67371508c45b50f6cf50d1ade492ec7f7bdcc28f7c9ae56031ea472ceb3ee",
+    "zona_sintetica/curated_meta.json": "caa173e68e0b947588f22d9dd7e00e889130aaa086d61dae197bd04bf87e9b32",
+    "zona_sintetica/daily.parquet": "085b74d3fdff799d41e0c0557c735970981e08b5f4ea9f9f8fba830729b8cba4",
+    "zona_sintetica/dekad.parquet": "9de3fc084a1fcbb71d7394444ad638cf879408872e324e19f52262f297f4beb9"
+  },
+  "parquet": true
+}

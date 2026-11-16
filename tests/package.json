@@ -1,0 +1,6 @@
+{
+  "name": "milpa-resiliente-tests",
+  "private": true,
+  "type": "module",
+  "description": "Pruebas de aceptación (Playwright). Se ejecutan desde apps/web: npm run web:test:e2e"
+}

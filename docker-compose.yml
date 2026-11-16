@@ -1,0 +1,74 @@
+# MILPA RESILIENTE — MVP: exactamente dos servicios (db, app). Sin colas, caché ni servicios extra.
+# Uso: cp .env.example .env  &&  docker compose up --build
+name: milpa
+
+services:
+  db:
+    build:
+      context: .
+      dockerfile: infra/Dockerfile.db
+    image: milpa-db:local
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-milpa}
+      POSTGRES_USER: ${POSTGRES_USER:-milpa_owner}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?defina POSTGRES_PASSWORD en .env}
+      APP_DB_ROLE: ${APP_DB_ROLE:-milpa_app}
+      APP_DB_PASSWORD: ${APP_DB_PASSWORD:?defina APP_DB_PASSWORD en .env}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks: [internal]
+    # La base de datos NO publica puertos: solo la red interna `internal` la alcanza.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    security_opt: ["no-new-privileges:true"]
+
+  app:
+    build:
+      context: .
+      dockerfile: infra/Dockerfile.app
+      target: runtime
+    image: milpa-app:local
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+psycopg://${APP_DB_ROLE:-milpa_app}:${APP_DB_PASSWORD}@db:5432/${POSTGRES_DB:-milpa}
+      MIGRATION_DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-milpa_owner}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-milpa}
+      APP_DB_ROLE: ${APP_DB_ROLE:-milpa_app}
+      RUN_MIGRATIONS: ${RUN_MIGRATIONS:-true}
+      DATA_DIR: /data
+      JWT_SECRET: ${JWT_SECRET:?defina JWT_SECRET en .env (>= 32 caracteres)}
+      JWT_TTL_MINUTES: ${JWT_TTL_MINUTES:-15}
+      EARTHDATA_TOKEN: ${EARTHDATA_TOKEN:-}
+      ETL_INGEST_ENABLED: ${ETL_INGEST_ENABLED:-false}
+      ETL_STEP_TIMEOUT_SECONDS: ${ETL_STEP_TIMEOUT_SECONDS:-3600}
+      ENABLE_EXACT_GEOMETRY: ${ENABLE_EXACT_GEOMETRY:-false}
+      MAP_TILE_URL: ${MAP_TILE_URL:-}
+      MAP_ATTRIBUTION: ${MAP_ATTRIBUTION:-}
+      MAX_UPLOAD_MB: ${MAX_UPLOAD_MB:-2}
+      RATE_LIMIT_PER_MIN: ${RATE_LIMIT_PER_MIN:-120}
+      MILPA_MODE: ${MILPA_MODE:-sandbox}
+      DEMO_READONLY: ${DEMO_READONLY:-false}
+      CORS_ORIGINS: ${CORS_ORIGINS:-}
+    ports:
+      - "${APP_PUBLISH:-127.0.0.1:8000}:8000"
+    volumes:
+      - data:/data
+    networks: [internal]
+    user: "10001:10001"
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    # No se montan secretos en capas de imagen: todo entra por entorno en tiempo de ejecución.
+
+volumes:
+  pgdata:
+  data:
+
+networks:
+  internal:
+    driver: bridge

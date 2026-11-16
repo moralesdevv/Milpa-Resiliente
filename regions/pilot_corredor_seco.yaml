@@ -1,0 +1,4 @@
+region: pilot_corredor_seco
+status: sandbox
+zone: { name: pending, polygon_file: pending }
+agri_year_start: pending

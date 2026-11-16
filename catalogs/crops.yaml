@@ -1,0 +1,63 @@
+# catalogs/crops.yaml — catálogo SANDBOX de cultivos (MILPA RESILIENTE 3.3, §11.14)
+#
+# Regla P9: ningún valor agronómico inventado. Todo parámetro con efecto
+# agronómico (Kc, duración de etapas, ventanas críticas, raíz, umbrales)
+# queda en `pending` hasta tener cita (DP-02, DP-04, DP-05, DP-12).
+# Solo se llenan datos de identificación de cultivo (nombre, familia
+# botánica), que no son parámetros agronómicos.
+#
+# Con MILPA_MODE=production, cualquier `pending` hace fallar la validación.
+# Con MILPA_MODE=sandbox el motor corre y rotula todo como provisional.
+
+catalog_version: sandbox-0.1
+status: sandbox
+
+crops:
+  - code: maiz
+    name_es: Maíz
+    name_en: Maize
+    scientific_name: Zea mays
+    family: Poaceae
+    is_legume: false
+    fixes_n_conditions: null        # no aplica (no leguminosa)
+    varieties:
+      # Sin ficha de ICTA/MAGA no hay variedad en el catálogo (§8).
+      # Cuando exista, copiar la plantilla comentada de abajo.
+      []
+    # --- plantilla de variedad (NO es dato; todo pending) ---
+    # varieties:
+    #   - name: pending
+    #     phenology_basis: days        # o gdd (con gdd_base_c y gdd_total citados)
+    #     cycle_days: pending
+    #     fallow_kc: { value: pending, citation: pending }
+    #     stages:
+    #       - { code: INI,       length_days: pending, kc_start: pending, kc_end: pending, critical: false, citation: pending }
+    #       - { code: DEV,       length_days: pending, kc_start: pending, kc_end: pending, critical: false, citation: pending }
+    #       - { code: FLOWERING, length_days: pending, kc_start: pending, kc_end: pending, critical: true,  citation: pending }
+    #       - { code: GRAIN_FILL,length_days: pending, kc_start: pending, kc_end: pending, critical: true,  citation: pending }
+    #       - { code: LATE,      length_days: pending, kc_start: pending, kc_end: pending, critical: false, citation: pending }
+    #     root_depth: { z_min_m: pending, z_max_m: pending, citation: pending }       # solo Modo B
+    #     depletion_fraction_p: { value: pending, citation: pending }                 # solo Modo B
+    #     risk_thresholds:
+    #       - { stage: FLOWERING, metric: dekad_exposure_mm, peff_method: usda_scs_fao,
+    #           value: pending, sens_low: pending, sens_high: pending, evidence: pending, citation: pending }
+
+  - code: frijol
+    name_es: Frijol
+    name_en: Common bean
+    scientific_name: Phaseolus vulgaris
+    family: Fabaceae
+    is_legume: true
+    # La fijación de N es condicional (nodulación, biomasa, manejo de residuos), §11.5.
+    fixes_n_conditions: pending
+    varieties:
+      []
+    # Plantilla de variedad: igual que la de maíz, con las etapas que cite la fuente.
+
+# Parámetros de nivel región/catálogo que siguen pendientes (ver §30):
+pending_decisions:
+  - DP-02   # cultivos habilitados y variedades locales
+  - DP-04   # Kc, duración de etapas, ventanas críticas
+  - DP-05   # umbrales de estrés por cultivo, etapa y método de Pef
+  - DP-10   # matriz de tolerancia de pH
+  - DP-12   # parámetros de Modo B

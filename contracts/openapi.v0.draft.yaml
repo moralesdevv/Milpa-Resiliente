@@ -1,0 +1,1544 @@
+openapi: 3.1.0
+info:
+  title: MILPA RESILIENTE API (R4 derived draft)
+  version: 0.0.0-draft
+  description: >-
+    Provisional frontend contract derived only from MILPA RESILIENTE 3.3 §§13,
+    15 and 16. It is not the R3 OpenAPI v0, is not signed, and must be reconciled
+    against R2/R3 payloads before replacing or publishing an official contract.
+servers:
+  - url: http://localhost:8000
+    description: Local development/API proxy; replace through Vite configuration.
+security:
+  - BearerAuth: []
+paths:
+  /v1/auth/login:
+    post:
+      operationId: login
+      summary: Create a short-lived session.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Session (R4 draft shape; R3 must confirm).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/auth/me:
+    get:
+      operationId: getCurrentUser
+      summary: Read the current user profile.
+      responses:
+        '200':
+          description: User profile; response fields are not specified in §15.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenObject'
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/zones:
+    get:
+      operationId: listZones
+      summary: List accessible zones.
+      responses:
+        '200':
+          description: Accessible zone summaries; exact DTO is not specified in §15.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ZoneSummaryDTO'
+        default:
+          $ref: '#/components/responses/Problem'
+    post:
+      operationId: createZone
+      summary: Create a zone and enqueue ingestion/curation.
+      description: Technician/admin only; returns a 202 job in the API design.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OpenObject'
+      responses:
+        '202':
+          description: Job accepted (R4 draft Job shape).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/zones/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      operationId: getZone
+      summary: Read zone context and available sources.
+      responses:
+        '200':
+          description: Zone context; exact DTO is not specified in §15.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ZoneDTO'
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/zones/{id}/data-quality:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      operationId: getZoneDataQuality
+      summary: Read variable/year coverage and source sensitivity.
+      responses:
+        '200':
+          description: Quality/cov­erage payload; exact DTO is not specified in §15.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataQualityDTO'
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/parcels:
+    post:
+      operationId: createParcel
+      summary: Create a parcel without storing exact geometry in the MVP.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OpenObject'
+      responses:
+        '201':
+          description: Created parcel; exact DTO is not specified in §15.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenObject'
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/parcels/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      operationId: getParcel
+      summary: Read an accessible parcel without exact geometry.
+      responses:
+        '200':
+          description: Parcel; exact DTO is not specified in §15.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParcelDTO'
+        default:
+          $ref: '#/components/responses/Problem'
+    delete:
+      operationId: deleteParcel
+      summary: Enqueue definitive deletion of parcel data.
+      responses:
+        '202':
+          description: Deletion job accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/parcels/{id}/soil:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      operationId: getParcelSoil
+      summary: Read status by soil property.
+      responses:
+        '200':
+          description: One status per property.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SoilPropertyStatusDTO'
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/parcels/{id}/soil-samples:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    post:
+      operationId: uploadSoilSamples
+      summary: Upload a soil CSV with row-level validation.
+      description: >-
+        The exact form field and response schema are not specified in §15; both
+        remain open until R3 publishes its contract.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SoilUploadForm'
+      responses:
+        '200':
+          description: Accepted properties and row-level errors; exact DTO is not specified in §15.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoilUploadResult'
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/parcels/{id}/soil-declarations/{property}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+      - name: property
+        in: path
+        required: true
+        schema:
+          type: string
+    put:
+      operationId: declareSoilProperty
+      summary: Store a declared soil property with its basis.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SoilDeclarationRequest'
+      responses:
+        '200':
+          description: Updated property status; exact DTO is not specified in §15.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoilPropertyStatusDTO'
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/parcels/{id}/priority-profile:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    put:
+      operationId: updatePriorityProfile
+      summary: Store declared criterion weights and constraints.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OpenObject'
+      responses:
+        '200':
+          description: Stored profile; exact DTO is not specified in §15.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenObject'
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/catalog/crops:
+    get:
+      operationId: listCrops
+      summary: Read the cited crop catalog.
+      responses:
+        '200':
+          description: Crop catalog; exact DTO is not specified in §15.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OpenObject'
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/catalog/strategies:
+    get:
+      operationId: listStrategies
+      summary: Read available versioned strategies.
+      responses:
+        '200':
+          description: Paginated strategy catalog; item DTO is not specified in §15.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageStrategyCatalogItem'
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/catalog/strategies/{id}/versions/{v}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: v
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      operationId: getStrategyVersion
+      summary: Read one immutable strategy version.
+      responses:
+        '200':
+          description: Strategy version; exact DTO is not specified in §15.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenObject'
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/catalog/references:
+    get:
+      operationId: listReferences
+      summary: Read cited reference entries.
+      responses:
+        '200':
+          description: References; exact DTO is not specified in §15.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OpenObject'
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/zones/{id}/runs:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    post:
+      operationId: createAnalysisRun
+      summary: Enqueue a base run.
+      description: Technician/admin only; the exact run request schema is not specified in §15.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OpenObject'
+      responses:
+        '202':
+          description: Analysis job accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenObject'
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/runs/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      operationId: getRun
+      summary: Read run state, mode, reasons and reproducibility hashes.
+      responses:
+        '200':
+          description: Run status; exact DTO is not specified in §15.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RunDTO'
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/runs/{id}/scenarios:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      operationId: listRunScenarios
+      summary: List scenario/adaptation combinations already computed.
+      responses:
+        '200':
+          description: Available combinations; exact collection DTO is not specified in §15.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScenarioTag'
+        default:
+          $ref: '#/components/responses/Problem'
+    post:
+      operationId: runScenarios
+      summary: Enqueue scenario grid or requested combinations.
+      description: Technician/admin only; request fields are not specified in §15.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScenarioRunRequest'
+      responses:
+        '202':
+          description: Scenario job accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+        '409':
+          $ref: '#/components/responses/Problem'
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/runs/{id}/climate-history:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      operationId: getClimateHistory
+      summary: Read 25-year climate summary and descriptive trends.
+      responses:
+        '200':
+          description: Climate-history DTO is not specified in §15.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClimateHistoryDTO'
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/runs/{id}/summary:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+      - name: scenario
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: adaptation
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/AdaptationMode'
+    get:
+      operationId: getRunSummary
+      summary: Read paginated risk results by strategy and cycle.
+      responses:
+        '200':
+          description: Paginated strategy risk summary.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageStrategyRiskDTO'
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/runs/{id}/heatmap:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+      - name: view
+        in: query
+        required: true
+        schema:
+          type: string
+          enum: [cycle, strategy]
+      - name: strategy
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: cycle
+        in: query
+        schema:
+          type: integer
+      - name: variety
+        in: query
+        schema:
+          type: string
+      - name: scenario
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: adaptation
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/AdaptationMode'
+    get:
+      operationId: getHeatmap
+      summary: Read planting-date heatmap by cycle or strategy.
+      responses:
+        '200':
+          description: Heatmap payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HeatmapDTO'
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/runs/{id}/dekad-chart:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+      - name: strategy
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: cohort_year
+        in: query
+        required: true
+        schema:
+          type: integer
+      - name: cycle
+        in: query
+        required: true
+        schema:
+          type: integer
+      - name: plant_date
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+      - name: scenario
+        in: query
+        required: true
+        schema:
+          type: string
+    get:
+      operationId: getDekadChart
+      summary: Read one cohort/cycle chart.
+      responses:
+        '200':
+          description: Dekad chart payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DekadChartDTO'
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/runs/{id}/rank:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    post:
+      operationId: rankStrategies
+      summary: Recalculate ranking and weight sensitivity from persisted results.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RankRequest'
+      responses:
+        '200':
+          description: Ranking, partial table, stability and explanations.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RankResponse'
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/runs/{id}/soil-voi:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    post:
+      operationId: calculateSoilVoi
+      summary: Evaluate the value of soil pH information.
+      responses:
+        '200':
+          description: Soil VoI result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoilVoiResponse'
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/provenance/{ip_id}:
+    parameters:
+      - name: ip_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      operationId: getProvenance
+      summary: Read complete provenance for an indicator.
+      responses:
+        '200':
+          description: Indicator provenance.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProvenanceInfo'
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/reports:
+    post:
+      operationId: createReport
+      summary: Enqueue backend report generation.
+      description: >-
+        Draft request fields are inferred from report.report (§13) and the
+        user-visible choices in §18; R3 must confirm them.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportRequestDraft'
+      responses:
+        '202':
+          description: Report job accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/reports/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      operationId: getReport
+      summary: Read report status and sections.
+      responses:
+        '200':
+          description: Report metadata.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportDTO'
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/reports/{id}/pdf:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      operationId: downloadReportPdf
+      summary: Download the backend-generated PDF.
+      responses:
+        '200':
+          description: PDF generated by the backend.
+          content:
+            application/pdf:
+              schema:
+                type: string
+                contentMediaType: application/pdf
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/jobs/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      operationId: getJob
+      summary: Read job state and progress.
+      responses:
+        '200':
+          description: Job; exact DTO is not specified in §15.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+        default:
+          $ref: '#/components/responses/Problem'
+    delete:
+      operationId: cancelJob
+      summary: Cancel a job where permitted.
+      responses:
+        '204':
+          description: Job cancellation accepted.
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/healthz:
+    get:
+      operationId: getHealth
+      summary: Read service health without private data.
+      security: []
+      responses:
+        '200':
+          description: Public health state.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenObject'
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    Problem:
+      description: RFC 7807 error extended with project code and hint.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+  schemas:
+    OpenObject:
+      type: object
+      additionalProperties: true
+      description: >-
+        Payload not fully specified in the architecture PDF. Kept open in this
+        R4 draft; do not infer or present its fields as official.
+    PageOpenObject:
+      type: object
+      required: [items, next_cursor]
+      properties:
+        items:
+          type: array
+          items: { $ref: '#/components/schemas/OpenObject' }
+        next_cursor: { type: [string, 'null'] }
+      additionalProperties: false
+    PageStrategyRiskDTO:
+      type: object
+      required: [items, next_cursor]
+      properties:
+        items:
+          type: array
+          items: { $ref: '#/components/schemas/StrategyRiskDTO' }
+        next_cursor: { type: [string, 'null'] }
+      additionalProperties: false
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email: { type: string }
+        password: { type: string }
+      additionalProperties: false
+    Session:
+      type: object
+      required: [access_token, expires_in, role]
+      properties:
+        access_token: { type: string }
+        expires_in: { type: integer, description: Seconds. }
+        role:
+          type: string
+          enum: [tecnico, agricultor, admin]
+      additionalProperties: true
+    JobStatus:
+      type: string
+      enum: [queued, running, ok, failed, cancelled]
+    Job:
+      type: object
+      required: [job_id, status]
+      properties:
+        job_id: { type: string }
+        status: { $ref: '#/components/schemas/JobStatus' }
+        progress: { type: [number, 'null'], minimum: 0, maximum: 1 }
+        result:
+          type: [object, 'null']
+          description: "Draft: may carry report_id or run_id once status is ok."
+          properties:
+            report_id: { type: [string, 'null'] }
+            run_id: { type: [string, 'null'] }
+          additionalProperties: true
+        error: { oneOf: [{ $ref: '#/components/schemas/Problem' }, { type: 'null' }] }
+      additionalProperties: true
+    RunDTO:
+      type: object
+      required: [run_id, status, mode, label, mode_reasons]
+      properties:
+        run_id: { type: string }
+        status: { type: string }
+        mode: { $ref: '#/components/schemas/Mode' }
+        label: { $ref: '#/components/schemas/Label' }
+        mode_reasons:
+          type: array
+          items: { type: string }
+        sandbox: { type: boolean, description: "True when catalogs carry pending parameters." }
+        synthetic_fixture: { type: boolean, description: "True for labeled synthetic test fixtures." }
+        code_version: { type: [string, 'null'] }
+        region_config_hash: { type: [string, 'null'] }
+        catalog_hash: { type: [string, 'null'] }
+        data_hash: { type: [string, 'null'] }
+        params_hash: { type: [string, 'null'] }
+        seed: { type: [integer, 'null'] }
+      additionalProperties: true
+    ZoneCell:
+      type: object
+      required: [cell_id, source, weight, south, west, north, east]
+      description: "Zone-level climate cell (never a parcel). Bounds are the cell extent."
+      properties:
+        cell_id: { type: string }
+        source: { type: string }
+        weight: { $ref: '#/components/schemas/IndicatorNumber' }
+        south: { type: number }
+        west: { type: number }
+        north: { type: number }
+        east: { type: number }
+      additionalProperties: false
+    ZoneCrop:
+      type: object
+      required: [code, name_es, name_en, seasons, calendar_validated]
+      properties:
+        code: { type: string }
+        name_es: { type: string }
+        name_en: { type: string }
+        seasons:
+          type: array
+          items: { type: string }
+        calendar_validated: { type: boolean, description: "false renders the pending mark." }
+      additionalProperties: false
+    ZoneContext:
+      type: object
+      properties:
+        state: { type: string }
+        message: { type: string }
+        cells:
+          type: array
+          items: { $ref: '#/components/schemas/ZoneCell' }
+        crops:
+          type: array
+          items: { $ref: '#/components/schemas/ZoneCrop' }
+        pending:
+          type: array
+          items: { type: string }
+        synthetic_fixture: { type: boolean }
+      additionalProperties: true
+    CoverageRow:
+      type: object
+      required: [variable, year, missing_pct]
+      properties:
+        variable: { type: string }
+        year: { type: integer }
+        missing_pct: { $ref: '#/components/schemas/IndicatorNumber' }
+      additionalProperties: false
+    SourceComparison:
+      type: object
+      required: [pair, bias, correlation]
+      properties:
+        pair: { type: string, description: "For example IMERG vs POWER." }
+        bias: { $ref: '#/components/schemas/IndicatorNumber' }
+        correlation: { $ref: '#/components/schemas/IndicatorNumber' }
+      additionalProperties: false
+    DataQualityDTO:
+      type: object
+      properties:
+        state: { type: string }
+        message: { type: string }
+        coverage:
+          type: array
+          items: { $ref: '#/components/schemas/CoverageRow' }
+        comparisons:
+          type: array
+          items: { $ref: '#/components/schemas/SourceComparison' }
+        ea_sensitivity: { oneOf: [{ $ref: '#/components/schemas/IndicatorNumber' }, { type: 'null' }] }
+        sources:
+          type: array
+          items: { $ref: '#/components/schemas/SourceRef' }
+      additionalProperties: true
+    ClimateYear:
+      type: object
+      required: [year, precip_mm, et0_mm, n_valid_days]
+      properties:
+        year: { type: integer }
+        precip_mm: { $ref: '#/components/schemas/IndicatorNumber' }
+        et0_mm: { $ref: '#/components/schemas/IndicatorNumber' }
+        n_valid_days: { $ref: '#/components/schemas/IndicatorInteger' }
+      additionalProperties: false
+    ClimateTrend:
+      type: object
+      required: [variable, change_per_decade, description_es]
+      properties:
+        variable: { type: string }
+        change_per_decade: { $ref: '#/components/schemas/IndicatorNumber' }
+        description_es: { type: string }
+      additionalProperties: false
+    ClimateHistoryDTO:
+      type: object
+      properties:
+        state: { type: string }
+        message: { type: string }
+        years:
+          type: array
+          items: { $ref: '#/components/schemas/ClimateYear' }
+        trends:
+          type: array
+          items: { $ref: '#/components/schemas/ClimateTrend' }
+        provenance: { $ref: '#/components/schemas/ProvenanceInfo' }
+      additionalProperties: true
+    ParcelDTO:
+      type: object
+      required: [parcel_id, zone_id]
+      properties:
+        parcel_id: { type: string }
+        zone_id: { type: string }
+        display_grid_m: { type: [integer, 'null'], description: "Generalization grid, at least 1000 m." }
+        display_lat: { type: [number, 'null'], description: "Grid-snapped center, never an exact point." }
+        display_lon: { type: [number, 'null'] }
+      additionalProperties: false
+    SoilUploadForm:
+      type: object
+      required: [file]
+      properties:
+        file: { type: string, format: binary }
+    SoilRowError:
+      type: object
+      required: [row, message]
+      properties:
+        row: { type: integer }
+        column: { type: [string, 'null'] }
+        message: { type: string }
+      additionalProperties: false
+    SoilUploadAccepted:
+      type: object
+      required: [property_code, rows]
+      properties:
+        property_code: { type: string }
+        rows: { type: integer }
+      additionalProperties: false
+    SoilUploadResult:
+      type: object
+      required: [accepted, errors]
+      properties:
+        accepted:
+          type: array
+          items: { $ref: '#/components/schemas/SoilUploadAccepted' }
+        errors:
+          type: array
+          items: { $ref: '#/components/schemas/SoilRowError' }
+      additionalProperties: false
+    SoilDeclarationRequest:
+      type: object
+      required: [value, unit, basis]
+      properties:
+        value: { type: number }
+        unit: { type: string }
+        basis: { type: string, minLength: 3 }
+      additionalProperties: false
+    StrategyCycle:
+      type: object
+      required: [cycle_idx, crops, season]
+      properties:
+        cycle_idx: { type: integer }
+        crops:
+          type: array
+          items: { type: string }
+        season: { type: string }
+        planting_window: { type: [string, 'null'] }
+      additionalProperties: false
+    StrategyCatalogItem:
+      type: object
+      required: [strategy_version_id, name, changes_from_reference, cycles]
+      properties:
+        strategy_version_id: { type: string }
+        name: { type: string }
+        is_reference: { type: boolean }
+        changes_from_reference:
+          type: array
+          items: { $ref: '#/components/schemas/StrategyAxis' }
+        cycles:
+          type: array
+          items: { $ref: '#/components/schemas/StrategyCycle' }
+      additionalProperties: true
+    PageStrategyCatalogItem:
+      type: object
+      required: [items, next_cursor]
+      properties:
+        items:
+          type: array
+          items: { $ref: '#/components/schemas/StrategyCatalogItem' }
+        next_cursor: { type: [string, 'null'] }
+      additionalProperties: false
+    ScenarioRunRequest:
+      type: object
+      properties:
+        grid: { type: boolean, description: "Run the standard 27 + 18 grid." }
+        scenario_ids:
+          type: array
+          items: { type: string }
+      additionalProperties: false
+    ThresholdUsed:
+      type: object
+      required: [stage, value, unit, peff_method, provisional]
+      properties:
+        stage: { type: string }
+        value: { type: number }
+        unit: { type: string }
+        peff_method: { type: string }
+        citation: { type: [string, 'null'] }
+        provisional: { type: boolean }
+      additionalProperties: false
+    ConsistentWindow:
+      type: object
+      required: [start_md, end_md]
+      properties:
+        start_md: { type: string }
+        end_md: { type: string }
+      additionalProperties: false
+    StageBand:
+      type: object
+      required: [stage, start, end, critical]
+      properties:
+        stage: { type: string }
+        start: { type: string, format: date }
+        end: { type: string, format: date }
+        critical: { type: boolean }
+      additionalProperties: true
+    CumPoint:
+      type: object
+      required: [idx, pef_cum_mm, etc_cum_mm]
+      properties:
+        idx: { type: integer }
+        pef_cum_mm: { $ref: '#/components/schemas/IndicatorNumber' }
+        etc_cum_mm: { $ref: '#/components/schemas/IndicatorNumber' }
+      additionalProperties: true
+    StabilityRequest:
+      type: object
+      properties:
+        n_samples: { type: integer }
+        mode:
+          type: string
+          enum: [dirichlet, ball]
+        concentration: { type: number }
+        radius: { type: number }
+        seed: { type: integer }
+      additionalProperties: false
+    PartialRow:
+      type: object
+      required: [strategy_version_id, name, values]
+      properties:
+        strategy_version_id: { type: string }
+        name: { type: string }
+        values:
+          type: object
+          additionalProperties:
+            oneOf: [{ $ref: '#/components/schemas/IndicatorNumber' }, { type: 'null' }]
+        reason: { type: [string, 'null'] }
+      additionalProperties: false
+    Decision:
+      type: object
+      required: [kind, message_es]
+      properties:
+        kind:
+          type: string
+          enum: [criterion_excluded, weights_renormalised, strategy_kept, other]
+        criterion: { oneOf: [{ $ref: '#/components/schemas/Criterion' }, { type: 'null' }] }
+        message_es: { type: string }
+        message_en: { type: [string, 'null'] }
+      additionalProperties: false
+    PairExplanation:
+      type: object
+      required: [a_strategy_id, b_strategy_id, text_es]
+      properties:
+        a_strategy_id: { type: string }
+        b_strategy_id: { type: string }
+        text_es: { type: string }
+        text_en: { type: [string, 'null'] }
+      additionalProperties: false
+    Conflict:
+      type: object
+      required: [text_es]
+      properties:
+        criteria:
+          type: array
+          items: { $ref: '#/components/schemas/Criterion' }
+        text_es: { type: string }
+        text_en: { type: [string, 'null'] }
+      additionalProperties: false
+    ZoneSummaryDTO:
+      type: object
+      required: [zone_id, region_id, name]
+      description: >-
+        Local draft subset derived from geo.zone (§13.3) and My zone (§18).
+        R3 must confirm the public DTO shape and field names.
+      properties:
+        zone_id: { type: string, format: uuid }
+        region_id: { type: string, format: uuid }
+        name: { type: string }
+        elevation_m: { oneOf: [{ $ref: '#/components/schemas/IndicatorNumber' }, { type: 'null' }] }
+        slope_pct: { oneOf: [{ $ref: '#/components/schemas/IndicatorNumber' }, { type: 'null' }] }
+      additionalProperties: true
+    ZoneDTO:
+      allOf:
+        - $ref: '#/components/schemas/ZoneSummaryDTO'
+        - type: object
+          properties:
+            sources:
+              type: array
+              items: { $ref: '#/components/schemas/SourceRef' }
+            context:
+              $ref: '#/components/schemas/ZoneContext'
+              description: Zone cells, weights and other context fields await the R3 DTO.
+    Problem:
+      type: object
+      required: [type, title, status, code]
+      properties:
+        type: { type: string, format: uri }
+        title: { type: string }
+        status: { type: integer }
+        code: { type: string }
+        detail: { type: string }
+        request_id: { type: string }
+        errors:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        hint: { type: string }
+    Provenance:
+      type: string
+      enum: [medido, satelital, estimado, modelado, declarado, desconocido]
+    Evidence:
+      type: [string, 'null']
+      enum: [A, B, C, null]
+    PropertyStatus:
+      type: string
+      enum: [medido, estimado, declarado, desconocido, desactualizado, no_representativo, no_disponible]
+    Mode:
+      type: string
+      enum: [exposure, root_zone]
+    Label:
+      type: string
+      enum: [indicador_exposicion_climatica, balance_hidrico_zona_radicular]
+    CellState:
+      type: string
+      enum: [critical, non_critical, insufficient_data, not_evaluable]
+    CriterionStatus:
+      type: string
+      enum: [evaluable, provisional, not_evaluable]
+    RankingStatus:
+      type: string
+      enum: [ok, insufficient]
+    StabilityFlag:
+      type: string
+      enum: [stable, moderate, unstable, insufficient]
+    VoiApplicability:
+      type: string
+      enum: [evaluable, already_measured, not_applicable]
+    VoiOutcome:
+      type: string
+      enum: [ranking_stable, ranking_sensitive, insufficient_info]
+    AdaptationMode:
+      type: string
+      enum: [none, onset_rule]
+    HumidityAssumption:
+      type: string
+      enum: [not_applicable, constant_rh, constant_ea]
+    StrategyAxis:
+      type: string
+      enum: [association, rotation, planting_date, variety, cover_crop]
+    WindowMode:
+      type: string
+      enum: [candidate_dates, fixed_season_window, relative_to_previous_harvest]
+    IndicatorKind:
+      type: string
+      enum: [exposure, root_zone, climate_input, soil_property, criterion, ranking, economic]
+    Period:
+      type: object
+      properties:
+        start: { type: string, format: date }
+        end: { type: string, format: date }
+      additionalProperties: false
+    SourceRef:
+      type: object
+      required: [code, product_name, institution, is_nasa]
+      properties:
+        code: { type: string }
+        product_name: { type: string }
+        institution: { type: string }
+        is_nasa: { type: boolean }
+        version: { type: [string, 'null'] }
+        citation: { type: [string, 'null'] }
+        url: { type: [string, 'null'], format: uri }
+      additionalProperties: true
+    ProvenanceInfo:
+      type: object
+      required: [provenance, evidence, evidence_rule, sources, method, assumptions, limitations]
+      properties:
+        provenance: { $ref: '#/components/schemas/Provenance' }
+        evidence: { $ref: '#/components/schemas/Evidence' }
+        evidence_rule: { type: string }
+        sources:
+          type: array
+          items: { $ref: '#/components/schemas/SourceRef' }
+        dataset_version: { type: [string, 'null'] }
+        period: { oneOf: [{ $ref: '#/components/schemas/Period' }, { type: 'null' }] }
+        spatial_res: { type: [string, 'null'] }
+        temporal_res: { type: [string, 'null'] }
+        method: { type: string }
+        retrieved_at: { type: [string, 'null'], format: date-time }
+        missing_pct:
+          oneOf: [{ $ref: '#/components/schemas/IndicatorNumber' }, { type: 'null' }]
+          description: "R4 draft resolution: missing percentage is an Indicator when shown; its own provenance may omit this optional field."
+        assumptions:
+          type: array
+          items: { type: string }
+        limitations:
+          type: array
+          items: { type: string }
+        run_id: { type: [string, 'null'], format: uuid }
+      additionalProperties: true
+    ScenarioTag:
+      type: object
+      required: [scenario_id, label, delta_t_c, precip_factor, onset_delay_days, humidity_assumption, adaptation_mode, method_doc, engine_version, executed_at]
+      properties:
+        scenario_id: { type: string }
+        label:
+          type: string
+          const: escenario sintético
+        delta_t_c: { $ref: '#/components/schemas/IndicatorNumber', description: 'R4 draft wraps the scenario parameter as an Indicator per SPEC-01.' }
+        precip_factor: { $ref: '#/components/schemas/IndicatorNumber', description: 'R4 draft wraps the scenario parameter as an Indicator per SPEC-01.' }
+        onset_delay_days: { $ref: '#/components/schemas/IndicatorInteger', description: 'R4 draft wraps the scenario parameter as an Indicator per SPEC-01.' }
+        humidity_assumption: { $ref: '#/components/schemas/HumidityAssumption' }
+        adaptation_mode: { $ref: '#/components/schemas/AdaptationMode' }
+        method_doc: { type: string }
+        engine_version: { type: string }
+        executed_at: { type: string, format: date-time }
+      additionalProperties: false
+    IndicatorNumber:
+      type: object
+      required: [code, label_es, label_en, value, unit, kind, provisional, provenance]
+      properties:
+        code: { type: string }
+        label_es: { type: string }
+        label_en: { type: string }
+        value: { type: [number, 'null'] }
+        unit: { type: string }
+        kind: { $ref: '#/components/schemas/IndicatorKind' }
+        label: { oneOf: [{ $ref: '#/components/schemas/Label' }, { type: 'null' }] }
+        provisional: { type: boolean }
+        reason: { type: [string, 'null'] }
+        provenance: { $ref: '#/components/schemas/ProvenanceInfo' }
+        scenario: { oneOf: [{ $ref: '#/components/schemas/ScenarioTag' }, { type: 'null' }] }
+      additionalProperties: false
+    IndicatorInteger:
+      allOf:
+        - $ref: '#/components/schemas/IndicatorNumber'
+        - type: object
+          properties:
+            value: { type: [integer, 'null'] }
+    Coverage:
+      type: object
+      description: >-
+        R4 draft resolution: each displayed numeric coverage result is an Indicator.
+      properties:
+        n_valid: { $ref: '#/components/schemas/IndicatorInteger' }
+        n_expected: { $ref: '#/components/schemas/IndicatorInteger' }
+        n_decided: { $ref: '#/components/schemas/IndicatorInteger' }
+        missing_pct: { $ref: '#/components/schemas/IndicatorNumber' }
+      additionalProperties: true
+    Sensitivity:
+      type: object
+      description: "R4 draft resolution: each sensitivity frequency is an Indicator."
+      properties:
+        low: { $ref: '#/components/schemas/IndicatorNumber' }
+        central: { $ref: '#/components/schemas/IndicatorNumber' }
+        high: { $ref: '#/components/schemas/IndicatorNumber' }
+      additionalProperties: true
+    CycleRiskDTO:
+      type: object
+      required: [strategy_version_id, cycle_idx, variety_id, freq_critical, severity_median, severity_p90, severity_cvar90, worst_year, worst_year_severity, coverage, threshold_sensitivity, peff_sensitivity, flags]
+      properties:
+        strategy_version_id: { type: string, format: uuid }
+        cycle_idx: { type: integer }
+        variety_id: { type: string, format: uuid }
+        freq_critical: { $ref: '#/components/schemas/IndicatorNumber' }
+        severity_median: { $ref: '#/components/schemas/IndicatorNumber' }
+        severity_p90: { $ref: '#/components/schemas/IndicatorNumber' }
+        severity_cvar90: { $ref: '#/components/schemas/IndicatorNumber' }
+        worst_year: { $ref: '#/components/schemas/IndicatorInteger' }
+        worst_year_severity: { $ref: '#/components/schemas/IndicatorNumber' }
+        coverage: { $ref: '#/components/schemas/Coverage' }
+        threshold_sensitivity: { $ref: '#/components/schemas/Sensitivity' }
+        peff_sensitivity:
+          type: object
+          additionalProperties: { $ref: '#/components/schemas/IndicatorNumber' }
+        flags:
+          type: array
+          items: { type: string }
+      additionalProperties: true
+    StrategyRiskDTO:
+      type: object
+      required: [strategy_version_id, name, changes_from_reference, horizon_years, overlapping_cohorts, cohort_freq_critical, water_inputs, by_cycle, consistency]
+      properties:
+        strategy_version_id: { type: string, format: uuid }
+        name: { type: string }
+        changes_from_reference:
+          type: array
+          items: { $ref: '#/components/schemas/StrategyAxis' }
+        horizon_years: { type: integer }
+        overlapping_cohorts: { type: boolean }
+        cohort_freq_critical: { $ref: '#/components/schemas/IndicatorNumber' }
+        water_inputs:
+          $ref: '#/components/schemas/OpenObject'
+          description: Exact subfields are not specified in §15.
+        by_cycle:
+          type: array
+          items: { $ref: '#/components/schemas/CycleRiskDTO' }
+        consistency:
+          type: string
+          enum: [consistente, variable, fallos_en_años_desfavorables, no_comparable]
+      additionalProperties: true
+    HeatmapDTO:
+      type: object
+      required: [view, strategy_version_id, scenario, mode, label, plant_md, years, state, severity, pct_critical_by_date, n_decided_by_date, thresholds_used, provenance]
+      properties:
+        view:
+          type: string
+          enum: [cycle, strategy]
+        strategy_version_id: { type: string, format: uuid }
+        cycle_idx: { type: [integer, 'null'] }
+        variety_id: { type: [string, 'null'], format: uuid }
+        scenario: { $ref: '#/components/schemas/ScenarioTag' }
+        mode: { $ref: '#/components/schemas/Mode' }
+        label: { $ref: '#/components/schemas/Label' }
+        plant_md:
+          type: array
+          items: { type: string }
+        years:
+          type: array
+          items: { type: integer, description: 'Raw axis value in §15; see SPEC-01.' }
+        state:
+          type: array
+          items:
+            type: array
+            items: { $ref: '#/components/schemas/CellState' }
+        severity:
+          type: array
+          description: "R4 draft resolution: each numeric cell is an Indicator."
+          items:
+            type: array
+            items: { oneOf: [{ $ref: '#/components/schemas/IndicatorNumber' }, { type: 'null' }] }
+        pct_critical_by_date:
+          type: array
+          description: "R4 draft resolution: each percentage is an Indicator."
+          items: { oneOf: [{ $ref: '#/components/schemas/IndicatorNumber' }, { type: 'null' }] }
+        n_decided_by_date:
+          type: array
+          description: "R4 draft resolution: each count is an Indicator."
+          items: { $ref: '#/components/schemas/IndicatorInteger' }
+        aggregation_rule: { type: [string, 'null'] }
+        thresholds_used:
+          type: array
+          items: { $ref: '#/components/schemas/ThresholdUsed' }
+        consistent_window:
+          oneOf: [{ $ref: '#/components/schemas/ConsistentWindow' }, { type: 'null' }]
+        provenance: { $ref: '#/components/schemas/ProvenanceInfo' }
+      additionalProperties: true
+    DekadPoint:
+      type: object
+      properties:
+        idx: { type: integer }
+        start: { type: string, format: date }
+        end: { type: string, format: date }
+        pef_mm: { $ref: '#/components/schemas/IndicatorNumber' }
+        etc_mm: { $ref: '#/components/schemas/IndicatorNumber' }
+        exposure_mm: { $ref: '#/components/schemas/IndicatorNumber' }
+        critical_stage: { type: [string, 'null'] }
+        over_threshold: { type: [boolean, 'null'] }
+      additionalProperties: true
+    DekadChartDTO:
+      type: object
+      required: [strategy_version_id, cohort_year, cycle_idx, plant_date, scenario, dekads, stage_bands, cumulative, provenance]
+      properties:
+        strategy_version_id: { type: string, format: uuid }
+        cohort_year: { type: integer }
+        cycle_idx: { type: integer }
+        plant_date: { type: string, format: date }
+        scenario: { $ref: '#/components/schemas/ScenarioTag' }
+        dekads:
+          type: array
+          items: { $ref: '#/components/schemas/DekadPoint' }
+        stage_bands:
+          type: array
+          items:
+            $ref: '#/components/schemas/StageBand'
+          description: Field names are not specified in §15.
+        etc_system_exploratory:
+          type: [array, 'null']
+          items: { oneOf: [{ $ref: '#/components/schemas/IndicatorNumber' }, { type: 'null' }] }
+          description: Exploratory association series in §15; presentation needs R2/R3 resolution.
+        cumulative:
+          type: array
+          items:
+            $ref: '#/components/schemas/CumPoint'
+          description: Field names are not specified in §15.
+        provenance:
+          $ref: '#/components/schemas/OpenObject'
+          description: DekadProvenance fields are not specified in §15.
+      additionalProperties: true
+    Criterion:
+      type: string
+      enum: [water, soil, food, income]
+    CriterionCell:
+      type: object
+      properties:
+        status: { $ref: '#/components/schemas/CriterionStatus' }
+        indicator: { oneOf: [{ $ref: '#/components/schemas/IndicatorNumber' }, { type: 'null' }] }
+        normalised: { oneOf: [{ $ref: '#/components/schemas/IndicatorNumber' }, { type: 'null' }] }
+      additionalProperties: true
+    RankedStrategy:
+      type: object
+      required: [rank, total, strategy_version_id, name]
+      properties:
+        strategy_version_id: { type: string, format: uuid }
+        name: { type: string }
+        rank: { $ref: '#/components/schemas/IndicatorInteger' }
+        total: { $ref: '#/components/schemas/IndicatorNumber' }
+        criteria:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CriterionCell'
+      additionalProperties: true
+    StabilityDTO:
+      type: object
+      required: [flag, top1_share, rank_corr_mean, conflicts, interpretation_es]
+      properties:
+        flag: { $ref: '#/components/schemas/StabilityFlag' }
+        top1_share:
+          type: object
+          additionalProperties: { $ref: '#/components/schemas/IndicatorNumber' }
+        rank_corr_mean: { $ref: '#/components/schemas/IndicatorNumber' }
+        conflicts:
+          type: array
+          items: { $ref: '#/components/schemas/Conflict' }
+        interpretation_es: { type: string }
+      additionalProperties: true
+    Weights:
+      type: object
+      required: [water, soil, food, income]
+      properties:
+        water: { type: number, minimum: 0, maximum: 1 }
+        soil: { type: number, minimum: 0, maximum: 1 }
+        food: { type: number, minimum: 0, maximum: 1 }
+        income: { type: number, minimum: 0, maximum: 1 }
+      additionalProperties: false
+    RankRequest:
+      type: object
+      required: [scenario_id, weights, missing_policy, stability]
+      properties:
+        scenario_id: { type: string }
+        adaptation_mode:
+          $ref: '#/components/schemas/AdaptationMode'
+          default: none
+        weights: { $ref: '#/components/schemas/Weights' }
+        missing_policy:
+          type: string
+          enum: [common_support, exclude_incomplete]
+          default: common_support
+        stability:
+          $ref: '#/components/schemas/StabilityRequest'
+          description: StabilityRequest fields are named but not defined in §15.
+      additionalProperties: false
+    RankResponse:
+      type: object
+      required: [ranking_id, status, criteria_used, weights, ranking, provisional, decision_log, stability, explanations]
+      properties:
+        ranking_id: { type: string, format: uuid }
+        status: { $ref: '#/components/schemas/RankingStatus' }
+        criteria_used:
+          type: array
+          items: { $ref: '#/components/schemas/Criterion' }
+        weights: { $ref: '#/components/schemas/Weights' }
+        weights_effective: { oneOf: [{ $ref: '#/components/schemas/Weights' }, { type: 'null' }] }
+        weight_coverage: { oneOf: [{ $ref: '#/components/schemas/IndicatorNumber' }, { type: 'null' }] }
+        ranking:
+          type: array
+          items:
+            $ref: '#/components/schemas/RankedStrategy'
+        partial_table:
+          type: [array, 'null']
+          items: { $ref: '#/components/schemas/PartialRow' }
+        top_margin: { oneOf: [{ $ref: '#/components/schemas/IndicatorNumber' }, { type: 'null' }] }
+        margin_within_uncertainty: { type: [boolean, 'null'] }
+        evidence: { $ref: '#/components/schemas/Evidence' }
+        provisional: { type: boolean }
+        decision_log:
+          type: array
+          items: { $ref: '#/components/schemas/Decision' }
+        stability:
+          $ref: '#/components/schemas/StabilityDTO'
+        explanations:
+          type: array
+          items: { $ref: '#/components/schemas/PairExplanation' }
+      additionalProperties: true
+    SoilPropertyStatusDTO:
+      type: object
+      required: [property_code, status]
+      properties:
+        property_code: { type: string }
+        status: { $ref: '#/components/schemas/PropertyStatus' }
+        value: { oneOf: [{ $ref: '#/components/schemas/IndicatorNumber' }, { type: 'null' }] }
+        method: { type: [string, 'null'] }
+        depth_cm:
+          type: [array, 'null']
+          prefixItems:
+            - { $ref: '#/components/schemas/IndicatorInteger' }
+            - { $ref: '#/components/schemas/IndicatorInteger' }
+          minItems: 2
+          maxItems: 2
+        sampled_at: { type: [string, 'null'], format: date }
+        representativeness: { type: [string, 'null'] }
+        age_years: { oneOf: [{ $ref: '#/components/schemas/IndicatorNumber' }, { type: 'null' }] }
+        max_age_years: { oneOf: [{ $ref: '#/components/schemas/IndicatorInteger' }, { type: 'null' }] }
+      additionalProperties: true
+    Hypothetical:
+      type: object
+      required: [value, label]
+      properties:
+        value: { $ref: '#/components/schemas/IndicatorNumber' }
+        label:
+          type: string
+          const: valor hipotético, no medido
+        top_strategy_id: { type: [string, 'null'], format: uuid }
+        excluded:
+          type: array
+          items: { type: string, format: uuid }
+      additionalProperties: true
+    SoilVoiResponse:
+      type: object
+      required: [property_code, property_status, applicability, lab_recommended, rationale_es]
+      properties:
+        property_code:
+          type: string
+          const: ph
+        property_status: { $ref: '#/components/schemas/PropertyStatus' }
+        applicability: { $ref: '#/components/schemas/VoiApplicability' }
+        outcome: { oneOf: [{ $ref: '#/components/schemas/VoiOutcome' }, { type: 'null' }] }
+        hypotheticals:
+          type: [array, 'null']
+          items: { $ref: '#/components/schemas/Hypothetical' }
+        lab_recommended: { type: boolean }
+        rationale_es: { type: string }
+        range_citation: { type: [string, 'null'] }
+      additionalProperties: true
+    ReportRequestDraft:
+      type: object
+      required: [run_id, locale, privacy_level]
+      properties:
+        run_id: { type: string, format: uuid }
+        ranking_id: { type: [string, 'null'], format: uuid }
+        locale:
+          type: string
+          enum: [es, es+en]
+        privacy_level:
+          type: string
+          enum: [internal, public]
+      additionalProperties: false
+    ReportSection:
+      type: object
+      additionalProperties: true
+      description: ReportSection fields are not specified in §15.
+    ReportDTO:
+      type: object
+      required: [report_id, run_id, locale, privacy_level, pdf_url, sha256, sections, annex]
+      properties:
+        report_id: { type: string, format: uuid }
+        run_id: { type: string, format: uuid }
+        locale:
+          type: string
+          enum: [es, es+en]
+        privacy_level:
+          type: string
+          enum: [internal, public]
+        pdf_url: { type: string, format: uri-reference }
+        sha256: { type: string, pattern: '^[0-9a-fA-F]{64}$' }
+        sections:
+          type: array
+          items: { $ref: '#/components/schemas/ReportSection' }
+        annex:
+          type: array
+          items: { $ref: '#/components/schemas/ReportSection' }
+      additionalProperties: true

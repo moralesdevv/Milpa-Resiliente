@@ -1,0 +1,2 @@
+parcel_code,sample_date,depth_from_cm,depth_to_cm,lab,ph,ph_method,om_pct,om_method,sand_pct,silt_pct,clay_pct,texture_method,cec_cmol_kg,cec_method,effective_root_depth_cm,awc_mm_per_m,awc_method
+P-014,2025-03-12,0,20,Laboratorio X,5.8,H2O_1:2.5,,,42,31,27,hidrometro,,,60,,

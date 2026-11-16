@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>MILPA RESILIENTE — Informe de decisión (plantilla técnica provisional)</title>
+<meta name="dcterms.created" content="{{ created }}">
+<meta name="dcterms.modified" content="{{ created }}">
+<meta name="generator" content="milpa-api {{ template_version }}">
+<style>{{ css }}</style>
+</head>
+<body>
+{% if r.provisional_banner %}
+<div class="banner">PLANTILLA TÉCNICA PROVISIONAL ({{ template_version }}) — solo para pruebas de R3. No es la plantilla final de producto (pendiente de R4) y el contenido no proviene del modelo de informe de R2.</div>
+{% endif %}
+
+<section class="page-main">
+  <h1>Informe de decisión — {{ r.zone_name }}</h1>
+  <p class="meta">Nivel de privacidad: <strong>{{ r.privacy_level }}</strong></p>
+  {% if show_internal and r.internal %}
+  <p class="meta">
+    {% if r.internal.farmer_display_name %}Agricultor/a: {{ r.internal.farmer_display_name }}. {% endif %}
+    {% if r.internal.parcel_code %}Parcela: {{ r.internal.parcel_code }}.{% endif %}
+  </p>
+  {% endif %}
+
+  <h2>Resumen</h2>
+  <p>{{ r.summary_es }}</p>
+  {% if bilingual %}<h2 lang="en">Summary</h2><p lang="en">{{ r.summary_en }}</p>{% endif %}
+
+  {% for s in r.sections %}
+  <h2>{{ s.title_es }}{% if bilingual and s.title_en %} / <span lang="en">{{ s.title_en }}</span>{% endif %}</h2>
+  <p>{{ s.body_es }}</p>
+  {% if bilingual and s.body_en %}<p lang="en">{{ s.body_en }}</p>{% endif %}
+  {% if s.items %}<ul>{% for i in s.items %}<li>{{ i }}</li>{% endfor %}</ul>{% endif %}
+  {% endfor %}
+
+  <p class="disclaimer">{{ disclaimer_es }}{% if bilingual %}<br><span lang="en">{{ disclaimer_en }}</span>{% endif %}</p>
+</section>
+
+<section class="annex">
+  <h1>Anexo técnico</h1>
+
+  <h2>Identificadores de reproducibilidad</h2>
+  <table class="kv">
+    <tr><th>run_id</th><td>{{ r.run_id if r.run_id else "— (sin corrida asociada)" }}</td></tr>
+    <tr><th>code_version</th><td>{{ r.hashes.code_version }}</td></tr>
+    <tr><th>region_config_hash</th><td class="mono">{{ r.hashes.region_config_hash }}</td></tr>
+    <tr><th>catalog_hash</th><td class="mono">{{ r.hashes.catalog_hash }}</td></tr>
+    <tr><th>data_hash</th><td class="mono">{{ r.hashes.data_hash }}</td></tr>
+    <tr><th>params_hash</th><td class="mono">{{ r.hashes.params_hash }}</td></tr>
+    <tr><th>seed</th><td>{{ r.hashes.seed }}</td></tr>
+  </table>
+
+  {% for s in r.annex %}
+  <h2>{{ s.title_es }}</h2>
+  <p>{{ s.body_es }}</p>
+  {% if s.items %}<ul>{% for i in s.items %}<li>{{ i }}</li>{% endfor %}</ul>{% endif %}
+  {% endfor %}
+
+  <h2>Procedencia y evidencia</h2>
+  {% if r.provenance_notes %}<ul>{% for p in r.provenance_notes %}<li>{{ p }}</li>{% endfor %}</ul>{% else %}<p>Sin notas de procedencia en la entrada.</p>{% endif %}
+
+  <h2>Supuestos</h2>
+  {% if r.assumptions %}<ul>{% for a in r.assumptions %}<li>{{ a }}</li>{% endfor %}</ul>{% else %}<p>Ninguno declarado.</p>{% endif %}
+
+  <h2>Limitaciones</h2>
+  {% if r.limitations %}<ul>{% for l in r.limitations %}<li>{{ l }}</li>{% endfor %}</ul>{% else %}<p>Ninguna declarada.</p>{% endif %}
+
+  <h2>Referencias</h2>
+  {% if r.references %}<ol>{% for ref in r.references %}<li>{{ ref.text }}{% if ref.product_version %} (versión del producto: {{ ref.product_version }}){% endif %}</li>{% endfor %}</ol>{% else %}<p>Sin referencias en la entrada.</p>{% endif %}
+</section>
+</body>
+</html>

@@ -1,0 +1,1455 @@
+{
+ "note": "DTO de resultado cuyo dueño es R2. FORMA PROPUESTA, no firmada por R2; R3 no los produce (503 hasta que exista milpa_core).",
+ "roots": [
+  "ClimateHistoryDTO",
+  "DekadChartDTO",
+  "HeatmapDTO",
+  "PageStrategyRiskDTO",
+  "RankResponse",
+  "SoilVoiResponse",
+  "ScenarioTag"
+ ],
+ "schemas": {
+  "CellState": {
+   "enum": [
+    "critical",
+    "non_critical",
+    "insufficient_data",
+    "not_evaluable"
+   ],
+   "type": "string"
+  },
+  "ClimateHistoryDTO": {
+   "additionalProperties": true,
+   "properties": {
+    "message": {
+     "type": "string"
+    },
+    "provenance": {
+     "$ref": "#/components/schemas/ProvenanceInfo"
+    },
+    "state": {
+     "type": "string"
+    },
+    "trends": {
+     "items": {
+      "$ref": "#/components/schemas/ClimateTrend"
+     },
+     "type": "array"
+    },
+    "years": {
+     "items": {
+      "$ref": "#/components/schemas/ClimateYear"
+     },
+     "type": "array"
+    }
+   },
+   "type": "object"
+  },
+  "ClimateTrend": {
+   "additionalProperties": false,
+   "properties": {
+    "change_per_decade": {
+     "$ref": "#/components/schemas/IndicatorNumber"
+    },
+    "description_es": {
+     "type": "string"
+    },
+    "variable": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "variable",
+    "change_per_decade",
+    "description_es"
+   ],
+   "type": "object"
+  },
+  "ClimateYear": {
+   "additionalProperties": false,
+   "properties": {
+    "et0_mm": {
+     "$ref": "#/components/schemas/IndicatorNumber"
+    },
+    "n_valid_days": {
+     "$ref": "#/components/schemas/IndicatorInteger"
+    },
+    "precip_mm": {
+     "$ref": "#/components/schemas/IndicatorNumber"
+    },
+    "year": {
+     "type": "integer"
+    }
+   },
+   "required": [
+    "year",
+    "precip_mm",
+    "et0_mm",
+    "n_valid_days"
+   ],
+   "type": "object"
+  },
+  "Conflict": {
+   "additionalProperties": false,
+   "properties": {
+    "criteria": {
+     "items": {
+      "$ref": "#/components/schemas/Criterion"
+     },
+     "type": "array"
+    },
+    "text_en": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "text_es": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "text_es"
+   ],
+   "type": "object"
+  },
+  "ConsistentWindow": {
+   "additionalProperties": false,
+   "properties": {
+    "end_md": {
+     "type": "string"
+    },
+    "start_md": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "start_md",
+    "end_md"
+   ],
+   "type": "object"
+  },
+  "Coverage": {
+   "additionalProperties": true,
+   "description": "R4 draft resolution: each displayed numeric coverage result is an Indicator.",
+   "properties": {
+    "missing_pct": {
+     "$ref": "#/components/schemas/IndicatorNumber"
+    },
+    "n_decided": {
+     "$ref": "#/components/schemas/IndicatorInteger"
+    },
+    "n_expected": {
+     "$ref": "#/components/schemas/IndicatorInteger"
+    },
+    "n_valid": {
+     "$ref": "#/components/schemas/IndicatorInteger"
+    }
+   },
+   "type": "object"
+  },
+  "Criterion": {
+   "enum": [
+    "water",
+    "soil",
+    "food",
+    "income"
+   ],
+   "type": "string"
+  },
+  "CriterionCell": {
+   "additionalProperties": true,
+   "properties": {
+    "indicator": {
+     "oneOf": [
+      {
+       "$ref": "#/components/schemas/IndicatorNumber"
+      },
+      {
+       "type": "null"
+      }
+     ]
+    },
+    "normalised": {
+     "oneOf": [
+      {
+       "$ref": "#/components/schemas/IndicatorNumber"
+      },
+      {
+       "type": "null"
+      }
+     ]
+    },
+    "status": {
+     "$ref": "#/components/schemas/CriterionStatus"
+    }
+   },
+   "type": "object"
+  },
+  "CriterionStatus": {
+   "enum": [
+    "evaluable",
+    "provisional",
+    "not_evaluable"
+   ],
+   "type": "string"
+  },
+  "CumPoint": {
+   "additionalProperties": true,
+   "properties": {
+    "etc_cum_mm": {
+     "$ref": "#/components/schemas/IndicatorNumber"
+    },
+    "idx": {
+     "type": "integer"
+    },
+    "pef_cum_mm": {
+     "$ref": "#/components/schemas/IndicatorNumber"
+    }
+   },
+   "required": [
+    "idx",
+    "pef_cum_mm",
+    "etc_cum_mm"
+   ],
+   "type": "object"
+  },
+  "CycleRiskDTO": {
+   "additionalProperties": true,
+   "properties": {
+    "coverage": {
+     "$ref": "#/components/schemas/Coverage"
+    },
+    "cycle_idx": {
+     "type": "integer"
+    },
+    "flags": {
+     "items": {
+      "type": "string"
+     },
+     "type": "array"
+    },
+    "freq_critical": {
+     "$ref": "#/components/schemas/IndicatorNumber"
+    },
+    "peff_sensitivity": {
+     "additionalProperties": {
+      "$ref": "#/components/schemas/IndicatorNumber"
+     },
+     "type": "object"
+    },
+    "severity_cvar90": {
+     "$ref": "#/components/schemas/IndicatorNumber"
+    },
+    "severity_median": {
+     "$ref": "#/components/schemas/IndicatorNumber"
+    },
+    "severity_p90": {
+     "$ref": "#/components/schemas/IndicatorNumber"
+    },
+    "strategy_version_id": {
+     "format": "uuid",
+     "type": "string"
+    },
+    "threshold_sensitivity": {
+     "$ref": "#/components/schemas/Sensitivity"
+    },
+    "variety_id": {
+     "format": "uuid",
+     "type": "string"
+    },
+    "worst_year": {
+     "$ref": "#/components/schemas/IndicatorInteger"
+    },
+    "worst_year_severity": {
+     "$ref": "#/components/schemas/IndicatorNumber"
+    }
+   },
+   "required": [
+    "strategy_version_id",
+    "cycle_idx",
+    "variety_id",
+    "freq_critical",
+    "severity_median",
+    "severity_p90",
+    "severity_cvar90",
+    "worst_year",
+    "worst_year_severity",
+    "coverage",
+    "threshold_sensitivity",
+    "peff_sensitivity",
+    "flags"
+   ],
+   "type": "object"
+  },
+  "Decision": {
+   "additionalProperties": false,
+   "properties": {
+    "criterion": {
+     "oneOf": [
+      {
+       "$ref": "#/components/schemas/Criterion"
+      },
+      {
+       "type": "null"
+      }
+     ]
+    },
+    "kind": {
+     "enum": [
+      "criterion_excluded",
+      "weights_renormalised",
+      "strategy_kept",
+      "other"
+     ],
+     "type": "string"
+    },
+    "message_en": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "message_es": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "kind",
+    "message_es"
+   ],
+   "type": "object"
+  },
+  "DekadChartDTO": {
+   "additionalProperties": true,
+   "properties": {
+    "cohort_year": {
+     "type": "integer"
+    },
+    "cumulative": {
+     "description": "Field names are not specified in §15.",
+     "items": {
+      "$ref": "#/components/schemas/CumPoint"
+     },
+     "type": "array"
+    },
+    "cycle_idx": {
+     "type": "integer"
+    },
+    "dekads": {
+     "items": {
+      "$ref": "#/components/schemas/DekadPoint"
+     },
+     "type": "array"
+    },
+    "etc_system_exploratory": {
+     "description": "Exploratory association series in §15; presentation needs R2/R3 resolution.",
+     "items": {
+      "oneOf": [
+       {
+        "$ref": "#/components/schemas/IndicatorNumber"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "type": [
+      "array",
+      "null"
+     ]
+    },
+    "plant_date": {
+     "format": "date",
+     "type": "string"
+    },
+    "provenance": {
+     "$ref": "#/components/schemas/OpenObject",
+     "description": "DekadProvenance fields are not specified in §15."
+    },
+    "scenario": {
+     "$ref": "#/components/schemas/ScenarioTag"
+    },
+    "stage_bands": {
+     "description": "Field names are not specified in §15.",
+     "items": {
+      "$ref": "#/components/schemas/StageBand"
+     },
+     "type": "array"
+    },
+    "strategy_version_id": {
+     "format": "uuid",
+     "type": "string"
+    }
+   },
+   "required": [
+    "strategy_version_id",
+    "cohort_year",
+    "cycle_idx",
+    "plant_date",
+    "scenario",
+    "dekads",
+    "stage_bands",
+    "cumulative",
+    "provenance"
+   ],
+   "type": "object"
+  },
+  "DekadPoint": {
+   "additionalProperties": true,
+   "properties": {
+    "critical_stage": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "end": {
+     "format": "date",
+     "type": "string"
+    },
+    "etc_mm": {
+     "$ref": "#/components/schemas/IndicatorNumber"
+    },
+    "exposure_mm": {
+     "$ref": "#/components/schemas/IndicatorNumber"
+    },
+    "idx": {
+     "type": "integer"
+    },
+    "over_threshold": {
+     "type": [
+      "boolean",
+      "null"
+     ]
+    },
+    "pef_mm": {
+     "$ref": "#/components/schemas/IndicatorNumber"
+    },
+    "start": {
+     "format": "date",
+     "type": "string"
+    }
+   },
+   "type": "object"
+  },
+  "Evidence": {
+   "enum": [
+    "A",
+    "B",
+    "C",
+    null
+   ],
+   "type": [
+    "string",
+    "null"
+   ]
+  },
+  "HeatmapDTO": {
+   "additionalProperties": true,
+   "properties": {
+    "aggregation_rule": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "consistent_window": {
+     "oneOf": [
+      {
+       "$ref": "#/components/schemas/ConsistentWindow"
+      },
+      {
+       "type": "null"
+      }
+     ]
+    },
+    "cycle_idx": {
+     "type": [
+      "integer",
+      "null"
+     ]
+    },
+    "label": {
+     "$ref": "#/components/schemas/Label"
+    },
+    "mode": {
+     "$ref": "#/components/schemas/Mode"
+    },
+    "n_decided_by_date": {
+     "description": "R4 draft resolution: each count is an Indicator.",
+     "items": {
+      "$ref": "#/components/schemas/IndicatorInteger"
+     },
+     "type": "array"
+    },
+    "pct_critical_by_date": {
+     "description": "R4 draft resolution: each percentage is an Indicator.",
+     "items": {
+      "oneOf": [
+       {
+        "$ref": "#/components/schemas/IndicatorNumber"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "type": "array"
+    },
+    "plant_md": {
+     "items": {
+      "type": "string"
+     },
+     "type": "array"
+    },
+    "provenance": {
+     "$ref": "#/components/schemas/ProvenanceInfo"
+    },
+    "scenario": {
+     "$ref": "#/components/schemas/ScenarioTag"
+    },
+    "severity": {
+     "description": "R4 draft resolution: each numeric cell is an Indicator.",
+     "items": {
+      "items": {
+       "oneOf": [
+        {
+         "$ref": "#/components/schemas/IndicatorNumber"
+        },
+        {
+         "type": "null"
+        }
+       ]
+      },
+      "type": "array"
+     },
+     "type": "array"
+    },
+    "state": {
+     "items": {
+      "items": {
+       "$ref": "#/components/schemas/CellState"
+      },
+      "type": "array"
+     },
+     "type": "array"
+    },
+    "strategy_version_id": {
+     "format": "uuid",
+     "type": "string"
+    },
+    "thresholds_used": {
+     "items": {
+      "$ref": "#/components/schemas/ThresholdUsed"
+     },
+     "type": "array"
+    },
+    "variety_id": {
+     "format": "uuid",
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "view": {
+     "enum": [
+      "cycle",
+      "strategy"
+     ],
+     "type": "string"
+    },
+    "years": {
+     "items": {
+      "description": "Raw axis value in §15; see SPEC-01.",
+      "type": "integer"
+     },
+     "type": "array"
+    }
+   },
+   "required": [
+    "view",
+    "strategy_version_id",
+    "scenario",
+    "mode",
+    "label",
+    "plant_md",
+    "years",
+    "state",
+    "severity",
+    "pct_critical_by_date",
+    "n_decided_by_date",
+    "thresholds_used",
+    "provenance"
+   ],
+   "type": "object"
+  },
+  "HumidityAssumption": {
+   "enum": [
+    "not_applicable",
+    "constant_rh",
+    "constant_ea"
+   ],
+   "type": "string"
+  },
+  "Hypothetical": {
+   "additionalProperties": true,
+   "properties": {
+    "excluded": {
+     "items": {
+      "format": "uuid",
+      "type": "string"
+     },
+     "type": "array"
+    },
+    "label": {
+     "const": "valor hipotético, no medido",
+     "type": "string"
+    },
+    "top_strategy_id": {
+     "format": "uuid",
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "value": {
+     "$ref": "#/components/schemas/IndicatorNumber"
+    }
+   },
+   "required": [
+    "value",
+    "label"
+   ],
+   "type": "object"
+  },
+  "IndicatorInteger": {
+   "allOf": [
+    {
+     "$ref": "#/components/schemas/IndicatorNumber"
+    },
+    {
+     "properties": {
+      "value": {
+       "type": [
+        "integer",
+        "null"
+       ]
+      }
+     },
+     "type": "object"
+    }
+   ]
+  },
+  "IndicatorKind": {
+   "enum": [
+    "exposure",
+    "root_zone",
+    "climate_input",
+    "soil_property",
+    "criterion",
+    "ranking",
+    "economic"
+   ],
+   "type": "string"
+  },
+  "IndicatorNumber": {
+   "additionalProperties": false,
+   "properties": {
+    "code": {
+     "type": "string"
+    },
+    "kind": {
+     "$ref": "#/components/schemas/IndicatorKind"
+    },
+    "label": {
+     "oneOf": [
+      {
+       "$ref": "#/components/schemas/Label"
+      },
+      {
+       "type": "null"
+      }
+     ]
+    },
+    "label_en": {
+     "type": "string"
+    },
+    "label_es": {
+     "type": "string"
+    },
+    "provenance": {
+     "$ref": "#/components/schemas/ProvenanceInfo"
+    },
+    "provisional": {
+     "type": "boolean"
+    },
+    "reason": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "scenario": {
+     "oneOf": [
+      {
+       "$ref": "#/components/schemas/ScenarioTag"
+      },
+      {
+       "type": "null"
+      }
+     ]
+    },
+    "unit": {
+     "type": "string"
+    },
+    "value": {
+     "type": [
+      "number",
+      "null"
+     ]
+    }
+   },
+   "required": [
+    "code",
+    "label_es",
+    "label_en",
+    "value",
+    "unit",
+    "kind",
+    "provisional",
+    "provenance"
+   ],
+   "type": "object"
+  },
+  "Label": {
+   "enum": [
+    "indicador_exposicion_climatica",
+    "balance_hidrico_zona_radicular"
+   ],
+   "type": "string"
+  },
+  "Mode": {
+   "enum": [
+    "exposure",
+    "root_zone"
+   ],
+   "type": "string"
+  },
+  "OpenObject": {
+   "additionalProperties": true,
+   "description": "Payload not fully specified in the architecture PDF. Kept open in this R4 draft; do not infer or present its fields as official.",
+   "type": "object"
+  },
+  "PageStrategyRiskDTO": {
+   "additionalProperties": false,
+   "properties": {
+    "items": {
+     "items": {
+      "$ref": "#/components/schemas/StrategyRiskDTO"
+     },
+     "type": "array"
+    },
+    "next_cursor": {
+     "type": [
+      "string",
+      "null"
+     ]
+    }
+   },
+   "required": [
+    "items",
+    "next_cursor"
+   ],
+   "type": "object"
+  },
+  "PairExplanation": {
+   "additionalProperties": false,
+   "properties": {
+    "a_strategy_id": {
+     "type": "string"
+    },
+    "b_strategy_id": {
+     "type": "string"
+    },
+    "text_en": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "text_es": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "a_strategy_id",
+    "b_strategy_id",
+    "text_es"
+   ],
+   "type": "object"
+  },
+  "PartialRow": {
+   "additionalProperties": false,
+   "properties": {
+    "name": {
+     "type": "string"
+    },
+    "reason": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "strategy_version_id": {
+     "type": "string"
+    },
+    "values": {
+     "additionalProperties": {
+      "oneOf": [
+       {
+        "$ref": "#/components/schemas/IndicatorNumber"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "type": "object"
+    }
+   },
+   "required": [
+    "strategy_version_id",
+    "name",
+    "values"
+   ],
+   "type": "object"
+  },
+  "Period": {
+   "additionalProperties": false,
+   "properties": {
+    "end": {
+     "format": "date",
+     "type": "string"
+    },
+    "start": {
+     "format": "date",
+     "type": "string"
+    }
+   },
+   "type": "object"
+  },
+  "Provenance": {
+   "enum": [
+    "medido",
+    "satelital",
+    "estimado",
+    "modelado",
+    "declarado",
+    "desconocido"
+   ],
+   "type": "string"
+  },
+  "ProvenanceInfo": {
+   "additionalProperties": true,
+   "properties": {
+    "assumptions": {
+     "items": {
+      "type": "string"
+     },
+     "type": "array"
+    },
+    "dataset_version": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "evidence": {
+     "$ref": "#/components/schemas/Evidence"
+    },
+    "evidence_rule": {
+     "type": "string"
+    },
+    "limitations": {
+     "items": {
+      "type": "string"
+     },
+     "type": "array"
+    },
+    "method": {
+     "type": "string"
+    },
+    "missing_pct": {
+     "description": "R4 draft resolution: missing percentage is an Indicator when shown; its own provenance may omit this optional field.",
+     "oneOf": [
+      {
+       "$ref": "#/components/schemas/IndicatorNumber"
+      },
+      {
+       "type": "null"
+      }
+     ]
+    },
+    "period": {
+     "oneOf": [
+      {
+       "$ref": "#/components/schemas/Period"
+      },
+      {
+       "type": "null"
+      }
+     ]
+    },
+    "provenance": {
+     "$ref": "#/components/schemas/Provenance"
+    },
+    "retrieved_at": {
+     "format": "date-time",
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "run_id": {
+     "format": "uuid",
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "sources": {
+     "items": {
+      "$ref": "#/components/schemas/SourceRef"
+     },
+     "type": "array"
+    },
+    "spatial_res": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "temporal_res": {
+     "type": [
+      "string",
+      "null"
+     ]
+    }
+   },
+   "required": [
+    "provenance",
+    "evidence",
+    "evidence_rule",
+    "sources",
+    "method",
+    "assumptions",
+    "limitations"
+   ],
+   "type": "object"
+  },
+  "RankResponse": {
+   "additionalProperties": true,
+   "properties": {
+    "criteria_used": {
+     "items": {
+      "$ref": "#/components/schemas/Criterion"
+     },
+     "type": "array"
+    },
+    "decision_log": {
+     "items": {
+      "$ref": "#/components/schemas/Decision"
+     },
+     "type": "array"
+    },
+    "evidence": {
+     "$ref": "#/components/schemas/Evidence"
+    },
+    "explanations": {
+     "items": {
+      "$ref": "#/components/schemas/PairExplanation"
+     },
+     "type": "array"
+    },
+    "margin_within_uncertainty": {
+     "type": [
+      "boolean",
+      "null"
+     ]
+    },
+    "partial_table": {
+     "items": {
+      "$ref": "#/components/schemas/PartialRow"
+     },
+     "type": [
+      "array",
+      "null"
+     ]
+    },
+    "provisional": {
+     "type": "boolean"
+    },
+    "ranking": {
+     "items": {
+      "$ref": "#/components/schemas/RankedStrategy"
+     },
+     "type": "array"
+    },
+    "ranking_id": {
+     "format": "uuid",
+     "type": "string"
+    },
+    "stability": {
+     "$ref": "#/components/schemas/StabilityDTO"
+    },
+    "status": {
+     "$ref": "#/components/schemas/RankingStatus"
+    },
+    "top_margin": {
+     "oneOf": [
+      {
+       "$ref": "#/components/schemas/IndicatorNumber"
+      },
+      {
+       "type": "null"
+      }
+     ]
+    },
+    "weight_coverage": {
+     "oneOf": [
+      {
+       "$ref": "#/components/schemas/IndicatorNumber"
+      },
+      {
+       "type": "null"
+      }
+     ]
+    },
+    "weights": {
+     "$ref": "#/components/schemas/Weights"
+    },
+    "weights_effective": {
+     "oneOf": [
+      {
+       "$ref": "#/components/schemas/Weights"
+      },
+      {
+       "type": "null"
+      }
+     ]
+    }
+   },
+   "required": [
+    "ranking_id",
+    "status",
+    "criteria_used",
+    "weights",
+    "ranking",
+    "provisional",
+    "decision_log",
+    "stability",
+    "explanations"
+   ],
+   "type": "object"
+  },
+  "RankedStrategy": {
+   "additionalProperties": true,
+   "properties": {
+    "criteria": {
+     "additionalProperties": {
+      "$ref": "#/components/schemas/CriterionCell"
+     },
+     "type": "object"
+    },
+    "name": {
+     "type": "string"
+    },
+    "rank": {
+     "$ref": "#/components/schemas/IndicatorInteger"
+    },
+    "strategy_version_id": {
+     "format": "uuid",
+     "type": "string"
+    },
+    "total": {
+     "$ref": "#/components/schemas/IndicatorNumber"
+    }
+   },
+   "required": [
+    "rank",
+    "total",
+    "strategy_version_id",
+    "name"
+   ],
+   "type": "object"
+  },
+  "RankingStatus": {
+   "enum": [
+    "ok",
+    "insufficient"
+   ],
+   "type": "string"
+  },
+  "ScenarioTag": {
+   "additionalProperties": false,
+   "properties": {
+    "adaptation_mode": {
+     "$ref": "#/components/schemas/AdaptationMode"
+    },
+    "delta_t_c": {
+     "$ref": "#/components/schemas/IndicatorNumber",
+     "description": "R4 draft wraps the scenario parameter as an Indicator per SPEC-01."
+    },
+    "engine_version": {
+     "type": "string"
+    },
+    "executed_at": {
+     "format": "date-time",
+     "type": "string"
+    },
+    "humidity_assumption": {
+     "$ref": "#/components/schemas/HumidityAssumption"
+    },
+    "label": {
+     "const": "escenario sintético",
+     "type": "string"
+    },
+    "method_doc": {
+     "type": "string"
+    },
+    "onset_delay_days": {
+     "$ref": "#/components/schemas/IndicatorInteger",
+     "description": "R4 draft wraps the scenario parameter as an Indicator per SPEC-01."
+    },
+    "precip_factor": {
+     "$ref": "#/components/schemas/IndicatorNumber",
+     "description": "R4 draft wraps the scenario parameter as an Indicator per SPEC-01."
+    },
+    "scenario_id": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "scenario_id",
+    "label",
+    "delta_t_c",
+    "precip_factor",
+    "onset_delay_days",
+    "humidity_assumption",
+    "adaptation_mode",
+    "method_doc",
+    "engine_version",
+    "executed_at"
+   ],
+   "type": "object"
+  },
+  "Sensitivity": {
+   "additionalProperties": true,
+   "description": "R4 draft resolution: each sensitivity frequency is an Indicator.",
+   "properties": {
+    "central": {
+     "$ref": "#/components/schemas/IndicatorNumber"
+    },
+    "high": {
+     "$ref": "#/components/schemas/IndicatorNumber"
+    },
+    "low": {
+     "$ref": "#/components/schemas/IndicatorNumber"
+    }
+   },
+   "type": "object"
+  },
+  "SoilVoiResponse": {
+   "additionalProperties": true,
+   "properties": {
+    "applicability": {
+     "$ref": "#/components/schemas/VoiApplicability"
+    },
+    "hypotheticals": {
+     "items": {
+      "$ref": "#/components/schemas/Hypothetical"
+     },
+     "type": [
+      "array",
+      "null"
+     ]
+    },
+    "lab_recommended": {
+     "type": "boolean"
+    },
+    "outcome": {
+     "oneOf": [
+      {
+       "$ref": "#/components/schemas/VoiOutcome"
+      },
+      {
+       "type": "null"
+      }
+     ]
+    },
+    "property_code": {
+     "const": "ph",
+     "type": "string"
+    },
+    "property_status": {
+     "$ref": "#/components/schemas/PropertyStatus"
+    },
+    "range_citation": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "rationale_es": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "property_code",
+    "property_status",
+    "applicability",
+    "lab_recommended",
+    "rationale_es"
+   ],
+   "type": "object"
+  },
+  "SourceRef": {
+   "additionalProperties": true,
+   "properties": {
+    "citation": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "code": {
+     "type": "string"
+    },
+    "institution": {
+     "type": "string"
+    },
+    "is_nasa": {
+     "type": "boolean"
+    },
+    "product_name": {
+     "type": "string"
+    },
+    "url": {
+     "format": "uri",
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "version": {
+     "type": [
+      "string",
+      "null"
+     ]
+    }
+   },
+   "required": [
+    "code",
+    "product_name",
+    "institution",
+    "is_nasa"
+   ],
+   "type": "object"
+  },
+  "StabilityDTO": {
+   "additionalProperties": true,
+   "properties": {
+    "conflicts": {
+     "items": {
+      "$ref": "#/components/schemas/Conflict"
+     },
+     "type": "array"
+    },
+    "flag": {
+     "$ref": "#/components/schemas/StabilityFlag"
+    },
+    "interpretation_es": {
+     "type": "string"
+    },
+    "rank_corr_mean": {
+     "$ref": "#/components/schemas/IndicatorNumber"
+    },
+    "top1_share": {
+     "additionalProperties": {
+      "$ref": "#/components/schemas/IndicatorNumber"
+     },
+     "type": "object"
+    }
+   },
+   "required": [
+    "flag",
+    "top1_share",
+    "rank_corr_mean",
+    "conflicts",
+    "interpretation_es"
+   ],
+   "type": "object"
+  },
+  "StabilityFlag": {
+   "enum": [
+    "stable",
+    "moderate",
+    "unstable",
+    "insufficient"
+   ],
+   "type": "string"
+  },
+  "StageBand": {
+   "additionalProperties": true,
+   "properties": {
+    "critical": {
+     "type": "boolean"
+    },
+    "end": {
+     "format": "date",
+     "type": "string"
+    },
+    "stage": {
+     "type": "string"
+    },
+    "start": {
+     "format": "date",
+     "type": "string"
+    }
+   },
+   "required": [
+    "stage",
+    "start",
+    "end",
+    "critical"
+   ],
+   "type": "object"
+  },
+  "StrategyAxis": {
+   "enum": [
+    "association",
+    "rotation",
+    "planting_date",
+    "variety",
+    "cover_crop"
+   ],
+   "type": "string"
+  },
+  "StrategyRiskDTO": {
+   "additionalProperties": true,
+   "properties": {
+    "by_cycle": {
+     "items": {
+      "$ref": "#/components/schemas/CycleRiskDTO"
+     },
+     "type": "array"
+    },
+    "changes_from_reference": {
+     "items": {
+      "$ref": "#/components/schemas/StrategyAxis"
+     },
+     "type": "array"
+    },
+    "cohort_freq_critical": {
+     "$ref": "#/components/schemas/IndicatorNumber"
+    },
+    "consistency": {
+     "enum": [
+      "consistente",
+      "variable",
+      "fallos_en_años_desfavorables",
+      "no_comparable"
+     ],
+     "type": "string"
+    },
+    "horizon_years": {
+     "type": "integer"
+    },
+    "name": {
+     "type": "string"
+    },
+    "overlapping_cohorts": {
+     "type": "boolean"
+    },
+    "strategy_version_id": {
+     "format": "uuid",
+     "type": "string"
+    },
+    "water_inputs": {
+     "$ref": "#/components/schemas/OpenObject",
+     "description": "Exact subfields are not specified in §15."
+    }
+   },
+   "required": [
+    "strategy_version_id",
+    "name",
+    "changes_from_reference",
+    "horizon_years",
+    "overlapping_cohorts",
+    "cohort_freq_critical",
+    "water_inputs",
+    "by_cycle",
+    "consistency"
+   ],
+   "type": "object"
+  },
+  "ThresholdUsed": {
+   "additionalProperties": false,
+   "properties": {
+    "citation": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "peff_method": {
+     "type": "string"
+    },
+    "provisional": {
+     "type": "boolean"
+    },
+    "stage": {
+     "type": "string"
+    },
+    "unit": {
+     "type": "string"
+    },
+    "value": {
+     "type": "number"
+    }
+   },
+   "required": [
+    "stage",
+    "value",
+    "unit",
+    "peff_method",
+    "provisional"
+   ],
+   "type": "object"
+  },
+  "VoiApplicability": {
+   "enum": [
+    "evaluable",
+    "already_measured",
+    "not_applicable"
+   ],
+   "type": "string"
+  },
+  "VoiOutcome": {
+   "enum": [
+    "ranking_stable",
+    "ranking_sensitive",
+    "insufficient_info"
+   ],
+   "type": "string"
+  }
+ },
+ "source": "references/R4/contracts/openapi.v0.draft.yaml (borrador local de R4 derivado del README §15)",
+ "uses_r3_schemas": [
+  "AdaptationMode",
+  "PropertyStatus",
+  "Weights"
+ ]
+}

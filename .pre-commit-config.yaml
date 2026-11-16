@@ -1,0 +1,22 @@
+# Hooks locales (README §22: escaneo de secretos en CI y en pre-commit).
+# Instalación: `uv tool install pre-commit && pre-commit install` (requiere repositorio Git).
+# ESTADO: configurado, NO ejecutado en esta sesión (el directorio aún no es un repositorio Git).
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.17.5
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.21.2
+    hooks:
+      - id: gitleaks
+  - repo: local
+    hooks:
+      - id: openapi-snapshot
+        name: OpenAPI versionado = generado
+        entry: sh -c 'uv run --all-packages python -m api.cli openapi --out docs/openapi/openapi.json && git diff --exit-code docs/openapi/openapi.json'
+        language: system
+        pass_filenames: false
+        files: ^apps/api/src/

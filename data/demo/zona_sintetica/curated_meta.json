@@ -1,0 +1,18 @@
+{
+  "zone": "zona_sintetica",
+  "input_hash": "1fb5dd90db7f859bf89dfa38e70644c52d852cb1cce1b49745ee296755efb0dd",
+  "data_hash": "a64b22fff8deee6e537727a4907876af9976f9ccb99e10cf266558fd4530cea4",
+  "raw_sha256": [
+    "86e12c70a7c29161374362b4d8a84dc7b610ef86e8617141c28e1e7aa700b38e"
+  ],
+  "et0_source": "milpa_r1.et0_fao56 (respaldo local; confirmar con R2)",
+  "n_days": 9131,
+  "parquet": true,
+  "notes": {
+    "unit_warnings": []
+  },
+  "limitations": [
+    "lluvia = POWER PRECTOTCORR (IMERG pendiente)",
+    "unidad de día POWER vs UTC-6 [Verificar]"
+  ]
+}

@@ -1,0 +1,2 @@
+Datos SINTÉTICOS rotulados: fixture de prueba, no representa un suelo ni un clima reales.
+Sin coordenadas de parcelas ni datos personales.

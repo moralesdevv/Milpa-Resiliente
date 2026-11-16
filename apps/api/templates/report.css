@@ -1,0 +1,27 @@
+/* Estilos de impresión del informe. Sin fuentes ni imágenes externas (WeasyPrint con url_fetcher local). */
+@page { size: A4; margin: 14mm 15mm; @bottom-center { content: "MILPA RESILIENTE 3.3 · " counter(page) " / " counter(pages); font-size: 8pt; color: #555; } }
+html { font-family: "DejaVu Sans", "Liberation Sans", sans-serif; font-size: 9pt; line-height: 1.35; color: #1b2f28; }
+h1 { font-size: 15pt; margin: 2pt 0 4pt; }
+h2 { font-size: 10.5pt; margin: 8pt 0 3pt; border-bottom: 0.5pt solid #b9c7bd; padding-bottom: 1pt; }
+p, ul, ol { margin: 2pt 0; }
+ul, ol { padding-left: 14pt; }
+code { font-size: 7.5pt; word-break: break-all; }
+.eyebrow { font-size: 7.5pt; letter-spacing: .06em; text-transform: uppercase; color: #46665a; margin: 0; }
+.fixed-notice { font-weight: 700; }
+.page-main { page-break-after: always; }
+.annex h1 { margin-top: 0; }
+table { width: 100%; border-collapse: collapse; margin: 3pt 0; font-size: 8pt; }
+th, td { border: 0.5pt solid #c6d1c9; padding: 2pt 3pt; text-align: left; vertical-align: top; }
+thead th { background: #e6efe8; }
+.mode-banner { margin: 3pt 0; padding: 3pt 5pt; background: #e3f0e9; border-left: 3pt solid #176449; }
+.provisional-banner { margin: 3pt 0; padding: 3pt 5pt; background: #fbebdf; border-left: 3pt solid #b75e2a; font-weight: 700; }
+/* Los estados no dependen solo del color: llevan texto. */
+.stability-unstable strong::before { content: "○ "; }
+.stability-moderate strong::before { content: "◐ "; }
+.stability-stable strong::before { content: "● "; }
+.stability-insufficient strong::before { content: "? "; }
+.conflict { margin-left: 6pt; font-style: italic; }
+.repro { margin-top: 8pt; padding-top: 3pt; border-top: 0.5pt solid #b9c7bd; font-size: 7pt; }
+/* El informe público nunca muestra nombre de agricultor ni código de parcela. */
+.privacy-public [data-private] { display: none; }
+.references { font-size: 8pt; }
