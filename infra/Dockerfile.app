@@ -95,3 +95,7 @@ COPY infra infra
 COPY conftest.py README.md docker-compose.yml .env.example ./
 RUN uv sync --frozen --all-groups --package milpa-api --package milpa-etl --package milpa-core
 CMD ["pytest", "-q", "-p", "no:cacheprovider"]
+
+# --- default: la última etapa es la que construye un `docker build` sin --target (PaaS como Render) ----
+# Debe ser siempre `runtime`; CI usa `--target test` y compose `target: runtime` de forma explícita.
+FROM runtime AS default
