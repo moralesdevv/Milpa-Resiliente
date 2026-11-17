@@ -2,7 +2,17 @@
 
 **Climate-resilient planting and rotation decisions for smallholder maize–bean (*milpa*) farmers in Guatemala's Dry Corridor — built on NASA Earth observations.**
 
-> NASA Space Apps Challenge submission · Status: **working MVP, sandbox mode** · All scientific results are *provisional* (evidence level C) until local validation — see [Limitations](#limitations-and-honest-status).
+<h2 align="center">
+  <a href="https://milpa-resiliente-yk1n.onrender.com/">▶ OPEN THE LIVE DEMO</a><br>
+  <sub><a href="https://milpa-resiliente-yk1n.onrender.com/">https://milpa-resiliente-yk1n.onrender.com/</a></sub>
+</h2>
+
+<p align="center">
+  Press <b>Launch demo</b> on the home page: it runs the real scientific engine on the curated NASA climate series of the pilot zone and opens the workspace. No sign-in is needed.<br>
+  Health check: <a href="https://milpa-resiliente-yk1n.onrender.com/healthz"><code>/healthz</code></a> · How it is hosted and what it took: <a href="#hosted-demo-render--neon-what-it-took">see below</a>
+</p>
+
+> NASA Space Apps Challenge submission · Challenge: *Field Shift: Adapting Farms with NASA Data* · Status: **working MVP, sandbox mode** · All scientific results are *provisional* (evidence level C) until local validation — see [Limitations](#11-limitations-and-honest-status). This is an independent project, not affiliated with or endorsed by NASA.
 
 ---
 
@@ -32,10 +42,10 @@ Honesty is a design rule: missing data is shown as *not evaluable*, never silent
 |---|---|---|
 | **NASA POWER** (daily, AG community: T2M_MAX/MIN, T2MDEW, RH2M, WS2M, ALLSKY_SFC_SW_DWN, PRECTOTCORR; MERRA-2 / CERES) | Base climate 2001–2025, ET0 inputs, fallback precipitation | **Implemented and used** (`milpa-etl fetch power`, no key required) |
 | **GPM IMERG Final Run V07** (`GPM_3IMERGDF`, 0.1°) | Primary precipitation where available (2021 →) | **Implemented** in the ETL; needs an Earthdata token (`EARTHDATA_TOKEN`, never stored in the repo) |
-| Copernicus GLO-30 DEM (ESA, not NASA) | Zone elevation/slope | ETL command exists (`fetch dem`); pilot zone elevation is still a placeholder |
+| Copernicus GLO-30 DEM (ESA, not NASA) | Zone elevation/slope | **Registered for the pilot zone** with `fetch dem` (mean elevation 816 m, mean slope 39 %, tile SHA-256 recorded) |
 | SoilGrids (ISRIC), local weather stations, MODIS/HLS/SMAP/NEX-GDDP, Guatemalan agency data | Soil, validation, vegetation, projections | **Not implemented** (documented as such; nothing is faked) |
 
-Pilot zone in the demo database: `chiquimula_prueba` (Chiquimula department; **approximate test polygon**). The curated series covers 2001-01-01 → 2025-12-31 (9,131 days). Known data caveats are listed in [`docs/DATA_SOURCES.md`](docs/DATA_SOURCES.md) (e.g. 81 % of days use POWER rainfall because IMERG starts in 2021; 9 POWER outlier days).
+Pilot zone in the hosted demo: `camotan_jocotan` (Camotán–Jocotán area, Chiquimula department), represented by a single POWER/IMERG cell whose footprint is approximate. The curated series covers 2001-01-01 → 2025-12-31 (9,131 days): primary rainfall is GPM IMERG Final V07 (available to 2025-09-30) with POWER rainfall as fallback on 92 days (about 1 %); 9 POWER outlier days are flagged. Known data caveats are listed in [`docs/DATA_SOURCES.md`](docs/DATA_SOURCES.md).
 
 ## 4. Architecture
 
@@ -112,6 +122,41 @@ cd apps/web && npm ci && npm run build
 
 Then `POST /v1/zones/{zone_id}/runs` (body: `period_start`, `period_end`, `seed`) creates a base run as a job; `POST /v1/runs/{id}/scenarios` computes the 45-scenario grid. Tests: `make test-docker` or `pytest apps/api/tests tests -m "not slow"`.
 
+### Hosted demo (Render + Neon): what it took
+
+The public demo at **https://milpa-resiliente-yk1n.onrender.com/** is one Docker container plus a managed database. Nothing else is needed (no Redis, queue or object store).
+
+| Piece | Service | Notes |
+|---|---|---|
+| Database | **Neon** — serverless PostgreSQL 16 with PostGIS 3.3 | Two roles: the owner (used only for migrations) and `milpa_app` (`NOSUPERUSER NOBYPASSRLS`), so Row-Level Security is enforced for the API |
+| Application | **Render** web service built from [`infra/Dockerfile.app`](infra/Dockerfile.app) | FastAPI serves the API and the compiled React app on one port (8000), as a single process |
+
+**What had to be in place**
+
+1. **Database prepared once:** the database and owner role, `CREATE EXTENSION postgis`, and the unprivileged application role (`NOSUPERUSER NOBYPASSRLS NOCREATEDB NOCREATEROLE`).
+2. **Environment variables in the host dashboard** (values are never stored in the repository):
+
+   | Variable | Purpose |
+   |---|---|
+   | `DATABASE_URL` | Application role (`milpa_app`), `?sslmode=require` |
+   | `MIGRATION_DATABASE_URL` | Owner role, used only at start-up and removed from the API process |
+   | `JWT_SECRET` | Random string of at least 32 characters |
+   | `DEMO_PUBLIC_ACCESS=true`, `MILPA_MODE=sandbox` | Public demo session; results labelled sandbox / provisional |
+   | `PORT=8000` | The port the container listens on |
+   | `TRUST_FORWARDED_FOR=true`, `RATE_LIMIT_PER_MIN` | Behind the host's proxy every visitor would otherwise share one IP and exhaust the per-IP rate limit |
+   | `OPENBLAS_NUM_THREADS=1` | Keeps the scientific worker's memory footprint small |
+
+3. **Container start-up** ([`infra/entrypoint.sh`](infra/entrypoint.sh)), idempotent on every boot: Alembic migrations (owner role) → register the R2 engine catalog and the 45 scenario definitions → create the public demo account → register the pilot zone with the curated NASA series, provenance and DEM ([`infra/scripts/bootstrap-demo.sh`](infra/scripts/bootstrap-demo.sh)) → drop the owner credentials → start a single `uvicorn` process.
+4. **Fixes that were required to get it online:**
+   - the Dockerfile's last stage was the test stage, so a plain `docker build` (what PaaS hosts run) built the wrong image — a final `default` stage now points to `runtime`;
+   - the web build stage did not copy `regions/`, but `apps/web/src/lib/boundary.ts` imports the municipal boundary GeoJSON from there, so `vite build` failed;
+   - the rate limiter counts static files too and, behind a proxy, sees one IP — hence `TRUST_FORWARDED_FOR` and a higher limit;
+   - the agronomic rules file is resolved relative to the repository root, so the API must start from there (the container's `WORKDIR` does).
+
+**How it was checked before going public:** the same chain (migrations to revision `0014`, engine registration, demo user, pilot-zone bootstrap) was run against the Neon database from a development machine; `/healthz` answered `ok` using the unprivileged role; and the *Launch demo → MVP workspace* flow ran in headless Chromium. After deployment, `/healthz`, the home page and `POST /v1/auth/demo-session` answer correctly and a base run on the hosted instance completes in roughly 30 seconds.
+
+Full deployment notes: [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md).
+
 ## 9. Results on the real pilot data (sandbox)
 
 From an actual run on `chiquimula_prueba` (2021–2025 window, seed 42): base run ≈ 3 s; all **45 scenarios** computed and persisted; 7 strategies (E1 reference maize … E7 two-year rotation) evaluated over 422 cycle results; ranking stable under weight perturbation **but based on the water criterion only**, because soil, food and income criteria lack evidence in the sandbox catalogs (they are reported as *not evaluable*).
@@ -124,10 +169,10 @@ The engine is vectorised NumPy over daily series; scenario grids are independent
 
 - **Everything is sandbox / evidence C.** Thresholds are calibrated on a synthetic series and Kc values are FAO-56 candidates without per-crop citations; several decisions marked *[Proposed R2]* need agronomic confirmation.
 - Rainfall is satellite/reanalysis, **not validated against a local station**.
-- The pilot polygon, elevation and slope are placeholders; SoilGrids/stations/other NASA products are not integrated.
+- The pilot zone is a single POWER/IMERG cell with an approximate footprint; SoilGrids, local stations and other NASA products are not integrated. Real station data for Camotán and validation with Guatemalan agronomic institutions are still pending.
 - Runs with a **parcel** (declared/measured soil) are not wired to the engine yet; soil, food and income criteria are therefore not evaluable.
-- The web adapters for the real engine payloads are built and type-checked, but the four screens have **not been fully verified end-to-end in a browser** yet.
-- Docker image with the engine, GitHub Actions and Playwright-against-real-API have not been run. See [`docs/FINAL_PROJECT_AUDIT.md`](docs/FINAL_PROJECT_AUDIT.md).
+- The *Launch demo → MVP workspace* flow and the main screens were exercised in headless Chromium; **no usability test with farmers or technicians has been done**.
+- The Docker image is built and running on Render, but the GitHub Actions workflow and the Playwright-against-real-API suite have not been run. The hosted instance has not been load-tested: the 45-scenario grid is the most memory-intensive step, so a small instance may need `JOB_MAX_WORKERS=1` or more RAM. See [`docs/FINAL_PROJECT_AUDIT.md`](docs/FINAL_PROJECT_AUDIT.md).
 
 ## 12. Impact
 
