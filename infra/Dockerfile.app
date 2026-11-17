@@ -36,6 +36,8 @@ COPY package.json package-lock.json ./
 COPY apps/web/package.json apps/web/package.json
 RUN npm ci --workspace @milpa-resiliente/web --include-workspace-root --no-audit --no-fund
 COPY apps/web apps/web
+# src/lib/boundary.ts importa regions/jocotan_chiquimula_boundary.geojson (?raw) desde fuera de apps/web
+COPY regions regions
 # los tipos de la API (src/api/types.gen.ts) ya están versionados: no se regeneran aquí
 RUN cd apps/web && npx tsc -b && npx vite build
 
