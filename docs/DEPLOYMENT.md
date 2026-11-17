@@ -20,6 +20,10 @@ cuenta demo, y ejecuta `infra/scripts/bootstrap-demo.sh` (idempotente): copia lo
 (NASA POWER + GPM IMERG), registra manifiesto, zona, procedencia y elevación/pendiente del DEM Copernicus GLO-30. No descarga nada.
 - Cualquier PaaS con Docker + PostgreSQL con PostGIS (Render, Railway, Fly.io…) sirve: construya `infra/Dockerfile.app` (destino `runtime`),
   defina las mismas variables (`DATABASE_URL` del rol sin privilegios, `MIGRATION_DATABASE_URL` del propietario solo para el arranque) y exponga el puerto 8000. Compruebe `/healthz`.
+- Con PostgreSQL gestionado (p. ej. Neon): cree antes el rol `milpa_app` (`NOSUPERUSER NOBYPASSRLS`) y la extensión `postgis`; las dos URL
+  llevan `?sslmode=require`. Detrás del proxy del PaaS defina `TRUST_FORWARDED_FOR=true` (si no, todos los visitantes comparten la IP del proxy
+  y el límite por IP se agota) y suba `RATE_LIMIT_PER_MIN` (p. ej. 600: el límite cuenta también los estáticos de la SPA). El cálculo corre en un
+  proceso aparte y necesita memoria libre suficiente; con instancias muy pequeñas fije `OPENBLAS_NUM_THREADS=1`.
 - El token **EARTHDATA_TOKEN no es necesario** para la demo (los datos IMERG ya están curados y no se redistribuyen en bruto); las ingestas nuevas sí lo necesitan.
 - Las teselas del mapa vienen de CARTO (datos de OpenStreetMap, con atribución); para otro proveedor defina `VITE_MAP_TILE_URL`/`VITE_MAP_ATTRIBUTION` al construir.
 - Estado de verificación: ver `docs/FINAL_PROJECT_AUDIT.md` (la construcción de la imagen se anota ahí con su resultado real).
